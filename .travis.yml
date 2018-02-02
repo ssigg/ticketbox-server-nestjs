@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+- stable
+sudo: false
+script:
+- npm install
+- tsc --sourceMap false
+deploy:
+  provider: heroku
+  api_key:
+    secure: F7LgJU1kZGZo+IEuCUzqR0su4g+5ceXPfbhr1j4L2PW2itrAKl6a9bY4QgDuAsEAlzqqvXTkw7euvzvFlSkTa+iuyUcc+cYRInbLTFpaU0um7znqs7I+/8K9e32BZFn/QjodAG+orqDZ4VmSEylCsDHHK4jhawo4myRO8OtLHDLtZAnZs+bA6R5A4fJvbVVEBDDKcf+ejTKK85p3XA3Cy3xvF1gJ6JIpxEDuyAQQjhFC9CmQ4qC7jUtlq1X+UFTCzFGceo4Cy7zSiOZDLhkf9E2wTYKbZB/qDy2i4aLn8ZCJzT1wdeKFhqN+aF82qpGA287TTdtBUQNJFGynwQ9JwhfaG/8FS/h/tHK90kDslu0Tj3q9Xv32Pn+LH2PjidQ+qKS9U/4RqyGUPSe+eGMXB8ACFmx7lQAke6lFZ25Tcn5w+g7M33uLjpinq4gnpSm6dgsfy47Rhg/ghZ5mjQNVbMitaCBzj1bGL/ei+BScsfTBueBX8rG4PAQyTTZ/SRG4zKb3JEVgQdGmhsn0UABxQdRMmRsIuHpFCx/Klf+Sg5jKTAFpUFGpsRIqqpjOQEwPjdMGl7qMP3E/N7Fcx1nqZsRX0Gda8KkF0WZ1PpPrzL1Q0qaQsnR4xBqeIJipHu6rUK6JSzxIZ21zmaFdlpwqn2iP3otmmknCa8C1koNHahQ=
+  app: ticketbox-server-nestjs
+  on:
+    repo: ssigg/ticketbox-server-nestjs
+  skip_cleanup: true

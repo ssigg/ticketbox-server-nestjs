@@ -1,0 +1,42 @@
+{
+  "name": "ticketbox-server-nestjs",
+  "version": "0.1.0",
+  "description": "Ticketbox server using Nest",
+  "license": "MIT",
+  "scripts": {
+    "start:customer": "node customer.js",
+    "start:admin": "node admin.js",
+    "start:watch:customer": "nodemon --config nodemon-customer.json",
+    "start:watch:admin": "nodemon --config nodemon-admin.json",
+    "prestart:prod:customer": "tsc --sourceMap false",
+    "start:prod:customer": "node dist/customer.js"
+  },
+  "dependencies": {
+    "@nestjs/common": "^4.4.0",
+    "@nestjs/core": "^4.4.0",
+    "@nestjs/microservices": "^4.4.0",
+    "@nestjs/testing": "^4.4.0",
+    "@nestjs/typeorm": "^2.0.0",
+    "@nestjs/websockets": "^4.4.0",
+    "html-pdf": "^2.2.0",
+    "mustache": "^2.3.0",
+    "nodemailer": "^4.4.1",
+    "pg": "^7.4.1",
+    "qrcode": "^1.2.0",
+    "redis": "^2.7.1",
+    "reflect-metadata": "^0.1.10",
+    "rxjs": "^5.4.0",
+    "sqlite": "^2.9.0",
+    "typeorm": "^0.1.9",
+    "typescript": "^2.5.2"
+  },
+  "devDependencies": {
+    "@types/html-pdf": "^2.1.2",
+    "@types/mustache": "^0.8.30",
+    "@types/node": "^8.0.28",
+    "@types/nodemailer": "^4.3.1",
+    "@types/qrcode": "^0.8.0",
+    "nodemon": "^1.12.1",
+    "ts-node": "^3.3.0"
+  }
+}
