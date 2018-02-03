@@ -1,0 +1,16 @@
+{
+    "version": "0.1.0",
+    "configurations": [
+        {
+            "type": "node",
+            "protocol": "inspector",
+            "request": "launch",
+            "name": "Launch Program",
+            "program": "${workspaceFolder}/index.js",
+            "preLaunchTask": "tsc",
+            "outFiles": [
+                "${workspaceFolder}/dist/**/*.js"
+            ]
+        }
+    ]
+}

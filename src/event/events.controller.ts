@@ -3,7 +3,7 @@ import { EventsService } from "./events.service";
 import { Event } from "./event.entity";
 
 @Controller('events')
-export class EventsCommonController {
+export class EventsController {
     constructor(private readonly eventsService: EventsService) { }
     
     @Get()
@@ -20,6 +20,16 @@ export class EventsCommonController {
 @Controller('admin/events')
 export class EventsAdminController {
     constructor(private readonly eventsService: EventsService) { }
+
+    @Get()
+    public findAll(): Promise<Event[]> {
+        return this.eventsService.findAll();
+    }
+
+    @Get(':id')
+    public find(@Param() params): Promise<Event> {
+        return this.eventsService.find(params.id);
+    }
 
     @Delete(':id')
     public delete(@Param() params): Promise<void> {

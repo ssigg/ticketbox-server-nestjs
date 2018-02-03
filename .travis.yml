@@ -3,8 +3,7 @@ node_js:
 - stable
 sudo: false
 script:
-- npm install
-- tsc --sourceMap false
+- npm test
 deploy:
   provider: heroku
   api_key:

@@ -1,16 +1,21 @@
 {
   "name": "ticketbox-server-nestjs",
   "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ssigg/ticketbox-server-nestjs"
+  },
   "description": "Ticketbox server using Nest",
   "license": "MIT",
   "scripts": {
-    "postinstall": "tsc --sourceMap false",
-    "start:customer": "node customer.js",
-    "start:admin": "node admin.js",
-    "start:watch:customer": "nodemon --config nodemon-customer.json",
-    "start:watch:admin": "nodemon --config nodemon-admin.json",
-    "prestart:prod:customer": "tsc --sourceMap false",
-    "start:prod:customer": "node dist/customer.js"
+    "postinstall": "tsc",
+    "start": "node index.js",
+    "start:watch": "nodemon",
+    "prestart:prod": "tsc",
+    "start:prod": "node dist/index.js",
+    "pretest": "npm install",
+    "test": "jasmine-ts src/**/*.spec.ts",
+    "test:local": "./node_modules/.bin/jasmine-ts src/**/*.spec.ts"
   },
   "dependencies": {
     "@nestjs/common": "^4.4.0",
@@ -19,24 +24,32 @@
     "@nestjs/testing": "^4.4.0",
     "@nestjs/typeorm": "^2.0.0",
     "@nestjs/websockets": "^4.4.0",
-    "html-pdf": "^2.2.0",
-    "mustache": "^2.3.0",
-    "nodemailer": "^4.4.1",
-    "pg": "^7.4.1",
-    "qrcode": "^1.2.0",
-    "redis": "^2.7.1",
-    "reflect-metadata": "^0.1.10",
-    "rxjs": "^5.4.0",
-    "sqlite": "^2.9.0",
-    "typeorm": "^0.1.9",
-    "typescript": "^2.5.2",
     "@types/html-pdf": "^2.1.2",
     "@types/mustache": "^0.8.30",
     "@types/node": "^8.0.28",
     "@types/nodemailer": "^4.3.1",
     "@types/qrcode": "^0.8.0",
+    "html-pdf": "^2.2.0",
+    "jsonwebtoken": "^8.1.1",
+    "mustache": "^2.3.0",
+    "nodemailer": "^4.4.1",
     "nodemon": "^1.12.1",
-    "ts-node": "^3.3.0"
+    "passport": "^0.4.0",
+    "passport-jwt": "^3.0.1",
+    "pg": "^7.4.1",
+    "qrcode": "^1.2.0",
+    "redis": "^2.7.1",
+    "reflect-metadata": "^0.1.12",
+    "rxjs": "^5.4.0",
+    "sqlite": "^2.9.0",
+    "ts-node": "^3.3.0",
+    "typeorm": "^0.1.9",
+    "typescript": "^2.5.2"
   },
-  "devDependencies": { }
+  "devDependencies": {
+    "@types/jasmine": "^2.8.6",
+    "jasmine": "^2.9.0",
+    "jasmine-node": "^1.14.5",
+    "jasmine-ts": "^0.2.1"
+  }
 }
