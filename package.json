@@ -4,6 +4,7 @@
   "description": "Ticketbox server using Nest",
   "license": "MIT",
   "scripts": {
+    "postinstall": "tsc --sourceMap false",
     "start:customer": "node customer.js",
     "start:admin": "node admin.js",
     "start:watch:customer": "nodemon --config nodemon-customer.json",
@@ -28,9 +29,7 @@
     "rxjs": "^5.4.0",
     "sqlite": "^2.9.0",
     "typeorm": "^0.1.9",
-    "typescript": "^2.5.2"
-  },
-  "devDependencies": {
+    "typescript": "^2.5.2",
     "@types/html-pdf": "^2.1.2",
     "@types/mustache": "^0.8.30",
     "@types/node": "^8.0.28",
@@ -38,5 +37,6 @@
     "@types/qrcode": "^0.8.0",
     "nodemon": "^1.12.1",
     "ts-node": "^3.3.0"
-  }
+  },
+  "devDependencies": { }
 }

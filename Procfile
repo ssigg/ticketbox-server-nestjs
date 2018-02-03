@@ -1,1 +1,1 @@
-web: node customer.js
+web: node dist/customer.js
