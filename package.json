@@ -15,7 +15,7 @@
     "start:prod": "node dist/index.js",
     "pretest": "npm install",
     "test": "jasmine-ts src/**/*.spec.ts",
-    "test:local": "./node_modules/.bin/jasmine-ts src/**/*.spec.ts"
+    "test:local": "./node_modules/.bin/nyc -r lcov -e .ts -x \"src/**/*.spec.ts\" ./node_modules/.bin/jasmine-ts src/**/*.spec.ts"
   },
   "dependencies": {
     "@nestjs/common": "^4.4.0",
@@ -50,6 +50,7 @@
     "@types/jasmine": "^2.8.6",
     "jasmine": "^2.9.0",
     "jasmine-node": "^1.14.5",
-    "jasmine-ts": "^0.2.1"
+    "jasmine-ts": "^0.2.1",
+    "nyc": "^11.4.1"
   }
 }
