@@ -13,7 +13,7 @@ describe('EventsController', () => {
 
     it('Fetches all events from events service', async () => {
         let eventMock = new Event();
-        let eventsServiceFindAllSpy = spyOn(eventsService, 'findAll').and.returnValue([ eventMock ]);
+        let eventsServiceFindAllSpy = spyOn(eventsService, 'findAllVisible').and.returnValue([ eventMock ]);
         let events = eventsController.findAll();
         expect(eventsServiceFindAllSpy).toHaveBeenCalledTimes(1);
         expect(await events).toEqual([ eventMock ]);

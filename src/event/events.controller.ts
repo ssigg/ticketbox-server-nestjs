@@ -8,7 +8,7 @@ export class EventsController {
     
     @Get()
     public findAll(): Promise<Event[]> {
-        return this.eventsService.findAll();
+        return this.eventsService.findAllVisible();
     }
 
     @Get(':id')

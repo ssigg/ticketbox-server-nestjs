@@ -14,6 +14,10 @@ export class EventsService {
         return await this.eventRepository.find();
     }
 
+    async findAllVisible(): Promise<Event[]> {
+        return await this.eventRepository.find({ visible: true });
+    }
+
     async find(id: number): Promise<Event> {
         return await this.eventRepository.findOneById(id);
     }

@@ -19,6 +19,14 @@ describe('EventsService', () => {
         expect(await events).toEqual([eventMock]);
     });
 
+    it('Fetches visible events from repository', async () => {
+        let eventMock = new Event();
+        let eventRepositoryFindSpy = spyOn(eventRepository, 'find').and.returnValue([eventMock]);
+        let events = eventsService.findAllVisible();
+        expect(eventRepositoryFindSpy).toHaveBeenCalledWith({ visible: true });
+        expect(await events).toEqual([eventMock]);
+    });
+
     it('Fetches event with given id from repository', async () => {
         let eventMock = new Event();
         let eventRepositoryFindOneByIdSpy = spyOn(eventRepository, 'findOneById').and.returnValue(eventMock);
