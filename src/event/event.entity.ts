@@ -12,17 +12,17 @@ export class Event {
     location: string;
 
     @Column({nullable: true})
-    locationAddress: string;
+    location_address: string;
 
     @Column({nullable: true})
-    locationDirectionsPublicTransport: string;
+    location_directions_public_transport: string;
 
     @Column({nullable: true})
-    locationDirectionsCar: string;
+    location_directions_car: string;
 
     @Column({nullable: true})
-    dateAndTime: string;
+    dateandtime: string;
 
     @Column()
-    isVisible: boolean;
+    visible: boolean;
 }
