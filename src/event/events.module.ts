@@ -1,5 +1,5 @@
 import * as passport from 'passport';
-import { Module, MiddlewaresConsumer } from "@nestjs/common";
+import { Module, MiddlewaresConsumer, RequestMethod } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Event } from "./event.entity";
 import { EventsService } from "./events.service";
@@ -24,6 +24,6 @@ export class EventsAdminModule implements NestModule {
     configure(consumer: MiddlewaresConsumer): void {
         consumer
             .apply(passport.authenticate('jwt', { session: false }))
-            .forRoutes(EventsAdminController);
+            .forRoutes({ path: '/admin/*', method: RequestMethod.ALL });
     }
  }
