@@ -1,6 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 import { DtoInterface } from "../dto.interface";
-import { isNullOrUndefined } from "util";
 
 @Entity()
 export class Event {
