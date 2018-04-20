@@ -1,6 +1,6 @@
 import { Controller, Param, Body, Get, Delete, Put, Post } from "@nestjs/common";
 import { EventsService } from "./events.service";
-import { Event } from "./event.entity";
+import { Event, EventWithBlocks } from "./event.entity";
 
 @Controller('events')
 export class EventsController {
@@ -59,6 +59,10 @@ export class EventsController {
      * @apiSuccess {String} location_directions_car Directions for car drivers
      * @apiSuccess {String} dateandtime Textual description of the event date and time
      * @apiSuccess {Boolean} visible Visibility of the event
+     * @apiSuccess {Block[]} blocks List of seating blocks
+     * @apiSuccess {String} blocks.id Block key
+     * @apiSuccess {String} blocks.name Block name
+     * @apiSuccess {Boolean} blocks.numbered Is this a numbered block?
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -70,11 +74,18 @@ export class EventsController {
      *     "location_directions_public_transport": "Use the example line",
      *     "location_directions_car": "Turn left, then right.",
      *     "dateandtime": "First sunday in march at 9 am",
-     *     "visible": true
+     *     "visible": true,
+     *     "blocks": [
+     *          {
+     *              "id": "10",
+     *              "name": "Example Block"
+     *              "numbered": false
+     *          }
+     *     ]
      * }
      */
     @Get(':id')
-    public find(@Param() params): Promise<Event> {
+    public find(@Param() params): Promise<EventWithBlocks> {
         return this.eventsService.find(params.id);
     }
 }
@@ -136,6 +147,10 @@ export class EventsAdminController {
      * @apiSuccess {String} location_directions_car Directions for car drivers
      * @apiSuccess {String} dateandtime Textual description of the event date and time
      * @apiSuccess {Boolean} visible Visibility of the event
+     * @apiSuccess {Block[]} blocks List of seating blocks
+     * @apiSuccess {String} blocks.id Block key
+     * @apiSuccess {String} blocks.name Block name
+     * @apiSuccess {Boolean} blocks.numbered Is this a numbered block?
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -147,11 +162,18 @@ export class EventsAdminController {
      *     "location_directions_public_transport": "Use the example line",
      *     "location_directions_car": "Turn left, then right.",
      *     "dateandtime": "First sunday in march at 9 am",
-     *     "visible": false
+     *     "visible": false,
+     *     "blocks": [
+     *          {
+     *              "id": "10",
+     *              "name": "Example Block"
+     *              "numbered": false
+     *          }
+     *     ]
      * }
      */
     @Get(':id')
-    public find(@Param() params): Promise<Event> {
+    public find(@Param() params): Promise<EventWithBlocks> {
         return this.eventsService.find(params.id);
     }
 

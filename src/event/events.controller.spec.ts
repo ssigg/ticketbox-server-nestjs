@@ -1,4 +1,4 @@
-import { Event } from './event.entity';
+import { Event, EventWithBlocks } from './event.entity';
 import { EventsService } from './events.service';
 import { EventsController, EventsAdminController } from './events.controller';
 
@@ -7,7 +7,7 @@ describe('EventsController', () => {
     let eventsController: EventsController;
 
     beforeEach(() => {
-        eventsService = new EventsService(null);
+        eventsService = new EventsService(null, null);
         eventsController = new EventsController(eventsService);
     });
 
@@ -20,11 +20,11 @@ describe('EventsController', () => {
     });
 
     it('Fetches event with given id from events service', async () => {
-        let eventMock = new Event();
-        let eventsServiceFindSpy = spyOn(eventsService, 'find').and.returnValue(eventMock);
+        let eventWithBlocksMock = new EventWithBlocks(new Event, []);
+        let eventsServiceFindSpy = spyOn(eventsService, 'find').and.returnValue(eventWithBlocksMock);
         let event = eventsController.find({ id: 1 });
         expect(eventsServiceFindSpy).toHaveBeenCalledWith(1);
-        expect(await event).toEqual(eventMock);
+        expect(await event).toEqual(eventWithBlocksMock);
     });
 });
 
@@ -33,7 +33,7 @@ describe('EventsAdminController', () => {
     let eventsAdminController: EventsAdminController;
 
     beforeEach(() => {
-        eventsService = new EventsService(null);
+        eventsService = new EventsService(null, null);
         eventsAdminController = new EventsAdminController(eventsService);
     });
 
@@ -46,11 +46,11 @@ describe('EventsAdminController', () => {
     });
 
     it('Fetches event with given id from events service', async () => {
-        let eventMock = new Event();
-        let eventsServiceFindSpy = spyOn(eventsService, 'find').and.returnValue(eventMock);
+        let eventWithBlocksMock = new EventWithBlocks(new Event, []);
+        let eventsServiceFindSpy = spyOn(eventsService, 'find').and.returnValue(eventWithBlocksMock);
         let event = eventsAdminController.find({ id: 1 });
         expect(eventsServiceFindSpy).toHaveBeenCalledWith(1);
-        expect(await event).toEqual(eventMock);
+        expect(await event).toEqual(eventWithBlocksMock);
     });
 
     it('Creates event', async () => {

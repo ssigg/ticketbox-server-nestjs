@@ -1,14 +1,18 @@
 import { Repository } from "typeorm";
-import { Event, EventDto } from "./event.entity";
+import { Event, EventDto, EventWithBlocks } from "./event.entity";
 import { EventsService } from "./events.service";
+import { BlocksService } from "../block/blocks.service";
+import { Block, Eventblock } from "../block/block.entities";
 
 describe('EventsService', () => {
     let eventRepository: Repository<Event>;
+    let blocksService: BlocksService;
     let eventsService: EventsService;
 
     beforeEach(() => {
         eventRepository = new Repository<Event>();
-        eventsService = new EventsService(eventRepository);
+        blocksService = new BlocksService(new Repository<Block>(), new Repository<Eventblock>());
+        eventsService = new EventsService(eventRepository, blocksService);
     });
 
     it('Fetches all events from repository', async () => {
@@ -29,10 +33,14 @@ describe('EventsService', () => {
 
     it('Fetches event with given id from repository', async () => {
         let eventMock = new Event();
+        eventMock.id = 42;
+        let eventWithBlocksMock = new EventWithBlocks(eventMock, []);
         let eventRepositoryFindOneByIdSpy = spyOn(eventRepository, 'findOneById').and.returnValue(eventMock);
-        let event = await eventsService.find(1);
+        let blocksServiceGetMergedEventblocksSpy = spyOn(blocksService, 'getMergedEventblocks').and.returnValue([]);
+        let eventWithBlocks = await eventsService.find(1);
         expect(eventRepositoryFindOneByIdSpy).toHaveBeenCalledWith(1);
-        expect(event).toEqual(eventMock);
+        expect(blocksServiceGetMergedEventblocksSpy).toHaveBeenCalledWith(42);
+        expect(eventWithBlocks).toEqual(eventWithBlocksMock);
     });
 
     it('Creates event with given property values', async () => {
