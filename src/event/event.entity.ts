@@ -1,4 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { DtoInterface } from "../dto.interface";
+import { isNullOrUndefined } from "util";
 
 @Entity()
 export class Event {
@@ -25,4 +27,38 @@ export class Event {
 
     @Column()
     visible: boolean;
+}
+
+export class EventDto implements DtoInterface<Event> {
+    name?: string;
+    location?: string;
+    location_address?: string;
+    location_directions_public_transport?: string;
+    location_directions_car?: string;
+    dateandtime?: string;
+    visible?: boolean;
+
+    updateModel(model: Event): void {
+        if (this.name !== undefined) {
+            model.name = this.name;
+        }
+        if (this.location !== undefined) {
+            model.location = this.location;
+        }
+        if (this.location_address !== undefined) {
+            model.location_address = this.location_address;
+        }
+        if (this.location_directions_public_transport !== undefined) {
+            model.location_directions_public_transport = this.location_directions_public_transport;
+        }
+        if (this.location_directions_car !== undefined) {
+            model.location_directions_car = this.location_directions_car;
+        }
+        if (this.dateandtime !== undefined) {
+            model.dateandtime = this.dateandtime;
+        }
+        if (this.visible !== undefined) {
+            model.visible = this.visible;
+        }
+    }
 }

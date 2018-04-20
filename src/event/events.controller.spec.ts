@@ -53,6 +53,24 @@ describe('EventsAdminController', () => {
         expect(await event).toEqual(eventMock);
     });
 
+    it('Creates event', async () => {
+        let eventMock = new Event();
+        let eventsServiceCreateSpy = spyOn(eventsService, 'create').and.returnValue(eventMock);
+        let body = { name: 'name', address: 'address' };
+        let event = await eventsAdminController.create(body);
+        expect(eventsServiceCreateSpy).toHaveBeenCalledWith(body);
+        expect(event).toEqual(eventMock);
+    });
+
+    it('Updates event', async () => {
+        let eventMock = new Event();
+        let eventsServiceUpdateSpy = spyOn(eventsService, 'update').and.returnValue(eventMock);
+        let body = { name: 'name', address: 'address' };
+        let event = await eventsAdminController.update({ id: 1 }, body);
+        expect(eventsServiceUpdateSpy).toHaveBeenCalledWith(1, body);
+        expect(event).toEqual(eventMock);
+    });
+
     it('Deletes an event using events service', () => {
         let eventsServiceDeleteSpy = spyOn(eventsService, 'delete');
         eventsAdminController.delete({ id: 1 });

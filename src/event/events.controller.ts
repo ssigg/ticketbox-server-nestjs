@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Delete } from "@nestjs/common";
+import { Controller, Param, Body, Get, Delete, Put, Post } from "@nestjs/common";
 import { EventsService } from "./events.service";
 import { Event } from "./event.entity";
 
@@ -29,6 +29,16 @@ export class EventsAdminController {
     @Get(':id')
     public find(@Param() params): Promise<Event> {
         return this.eventsService.find(params.id);
+    }
+
+    @Post()
+    public create(@Body() body): Promise<Event> {
+        return this.eventsService.create(body);
+    }
+
+    @Put(':id')
+    public update(@Param() params, @Body() body): Promise<Event> {
+        return this.eventsService.update(params.id, body);
     }
 
     @Delete(':id')
