@@ -3,7 +3,7 @@ node_js:
 - stable
 sudo: false
 script:
-- npm test
+- ./node_modules/.bin/nyc -r lcov -e .ts -x \"src/**/*.spec.ts\" ./node_modules/.bin/jasmine-ts src/**/*.spec.ts | ./node_modules/.bin/coveralls
 deploy:
   provider: heroku
   api_key:
