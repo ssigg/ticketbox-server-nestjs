@@ -22,16 +22,16 @@ export class EventsService {
         return await this.eventRepository.findOneById(id);
     }
 
-    async create(eventDto: EventDto): Promise<Event> {
+    async create(dto: EventDto): Promise<Event> {
         let event = await this.eventRepository.create();
-        eventDto.updateModel(event);
+        dto.updateModel(event);
         let savedEvent = await this.eventRepository.save(event);
         return savedEvent;
     }
 
-    async update(id: number, eventDto: EventDto): Promise<Event> {
+    async update(id: number, dto: EventDto): Promise<Event> {
         let event = await this.eventRepository.findOneById(id);
-        eventDto.updateModel(event);
+        dto.updateModel(event);
         let savedEvent = await this.eventRepository.save(event);
         return savedEvent;
     }

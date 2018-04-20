@@ -38,14 +38,29 @@ describe('EventsService', () => {
     it('Creates event with given property values', async () => {
         let eventMock = new Event();
         let eventDtoMock = new EventDto();
-        let eventDtoUpdateModelSpy = spyOn(eventDtoMock, 'updateModel');
+        eventDtoMock.name = 'dto.name';
+        eventDtoMock.location = 'dto.loc';
+        eventDtoMock.location_address = 'dto.loc.addr.';
+        eventDtoMock.location_directions_car = 'dto.loc.dir.car';
+        eventDtoMock.location_directions_public_transport = 'dto.loc.dir.pub.trsp.';
+        eventDtoMock.dateandtime = 'model.dat';
+        eventDtoMock.visible = true;
+
         let eventRepositoryCreateSpy = spyOn(eventRepository, 'create').and.returnValue(eventMock);
         let eventRepositorySaveSpy = spyOn(eventRepository, 'save').and.returnValue(eventMock);
         let event = await eventsService.create(eventDtoMock);
+        
         expect(eventRepositoryCreateSpy).toHaveBeenCalledTimes(1);
-        expect(eventDtoUpdateModelSpy).toHaveBeenCalledWith(eventMock);
         expect(eventRepositorySaveSpy).toHaveBeenCalledWith(eventMock);
+        
         expect(event).toEqual(eventMock);
+        expect(event.name).toEqual(eventDtoMock.name);
+        expect(event.location).toEqual(eventDtoMock.location);
+        expect(event.location_address).toEqual(eventDtoMock.location_address);
+        expect(event.location_directions_car).toEqual(eventDtoMock.location_directions_car);
+        expect(event.location_directions_public_transport).toEqual(eventDtoMock.location_directions_public_transport);
+        expect(event.dateandtime).toEqual(eventDtoMock.dateandtime);
+        expect(event.visible).toEqual(eventDtoMock.visible);
     });
 
     it('Updates event with given property values', async () => {
@@ -70,14 +85,18 @@ describe('EventsService', () => {
         let eventRepositoryFindOneByIdSpy = spyOn(eventRepository, 'findOneById').and.returnValue(eventMock);
         let eventRepositorySaveSpy = spyOn(eventRepository, 'save').and.returnValue(eventMock);
         let event = await eventsService.update(1, eventDtoMock);
+
+        expect(eventRepositoryFindOneByIdSpy).toHaveBeenCalledTimes(1);
+        expect(eventRepositorySaveSpy).toHaveBeenCalledWith(eventMock);
         
-        expect(eventMock.name).toEqual(eventDtoMock.name);
-        expect(eventMock.location).toEqual(eventDtoMock.location);
-        expect(eventMock.location_address).toEqual(eventDtoMock.location_address);
-        expect(eventMock.location_directions_car).toEqual(eventDtoMock.location_directions_car);
-        expect(eventMock.location_directions_public_transport).toEqual(eventDtoMock.location_directions_public_transport);
-        expect(eventMock.dateandtime).toEqual(eventDtoMock.dateandtime);
-        expect(eventMock.visible).toEqual(eventDtoMock.visible);
+        expect(event).toEqual(eventMock);
+        expect(event.name).toEqual(eventDtoMock.name);
+        expect(event.location).toEqual(eventDtoMock.location);
+        expect(event.location_address).toEqual(eventDtoMock.location_address);
+        expect(event.location_directions_car).toEqual(eventDtoMock.location_directions_car);
+        expect(event.location_directions_public_transport).toEqual(eventDtoMock.location_directions_public_transport);
+        expect(event.dateandtime).toEqual(eventDtoMock.dateandtime);
+        expect(event.visible).toEqual(eventDtoMock.visible);
     });
 
     it('Updates event with false visibility', async () => {
