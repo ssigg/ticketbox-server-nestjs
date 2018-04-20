@@ -14,7 +14,7 @@
     "prestart:prod": "tsc",
     "start:prod": "node dist/index.js",
     "pretest": "npm install",
-    "test": "jasmine-ts src/**/*.spec.ts",
+    "test": "nyc -e .ts -x \"src/**/*.spec.ts\" jasmine-ts src/**/*.spec.ts",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "test:local": "./node_modules/.bin/nyc -r lcov -e .ts -x \"src/**/*.spec.ts\" ./node_modules/.bin/jasmine-ts src/**/*.spec.ts"
   },
