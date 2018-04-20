@@ -30,14 +30,25 @@ export class BlocksService {
         return await this.blockRepository.delete({ id: id });
     }
 
-    async createEventblock(dto: BlockDto): Promise<Block> {
-        let block = await this.blockRepository.create();
-        dto.updateModel(block);
-        let savedBlock = await this.blockRepository.save(block);
-        return savedBlock;
+    async createEventblock(dto: EventblockDto): Promise<Eventblock> {
+        let eventblock = await this.eventblockRepository.create();
+        dto.updateModel(eventblock);
+        let savedEventblock = await this.eventblockRepository.save(eventblock);
+        return savedEventblock;
     }
 
-    async getMergedEventblocks(event_id: number): Promise<ThinMergedEventblock[]> {
+    async updateEventblock(id: number, dto: EventblockDto): Promise<Eventblock> {
+        let eventblock = await this.eventblockRepository.findOneById(id);
+        dto.updateModel(eventblock);
+        let savedEventblock = await this.eventblockRepository.save(eventblock);
+        return savedEventblock;
+    }
+
+    async deleteEventblock(id: number): Promise<void> {
+        return await this.eventblockRepository.delete({ id: id });
+    }
+
+    async getThinMergedEventblocks(event_id: number): Promise<ThinMergedEventblock[]> {
         let eventblocks = await this.eventblockRepository.find({ event_id: event_id });
         let eventblocksWithBlocks = await Promise.all(eventblocks.map(async eb => {
             let block = await this.blockRepository.findOneById(eb.block_id);
@@ -50,20 +61,9 @@ export class BlocksService {
             if (matching !== undefined) { // we found a block to merge
                 matching.id = matching.id + '-' + eb.block.id;
             } else { // no block found, create a new one
-                mergedEventblocks.push(new MergedEventblock(eb.block.id.toString(), eb.block.name, eb.block.numbered, null, eb.block.seatplan_image_data_url, []));
+                mergedEventblocks.push(new MergedEventblock('' + eb.block.id, eb.block.name, eb.block.numbered, null, eb.block.seatplan_image_data_url, []));
             }
         });
         return mergedEventblocks;
-    }
-
-    async updateEventblock(id: number, dto: EventblockDto): Promise<Eventblock> {
-        let eventblock = await this.eventblockRepository.findOneById(id);
-        dto.updateModel(eventblock);
-        let savedEventblock = await this.eventblockRepository.save(eventblock);
-        return savedEventblock;
-    }
-
-    async deleteEventblock(id: number): Promise<void> {
-        return await this.eventblockRepository.delete({ id: id });
     }
 }

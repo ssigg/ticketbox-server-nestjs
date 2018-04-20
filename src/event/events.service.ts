@@ -22,7 +22,7 @@ export class EventsService {
 
     async find(id: number): Promise<EventWithBlocks> {
         let event = await this.eventRepository.findOneById(id);
-        let thinMergedEventBlocks = await this.blocksService.getMergedEventblocks(event.id);
+        let thinMergedEventBlocks = await this.blocksService.getThinMergedEventblocks(event.id);
         return new EventWithBlocks(event, thinMergedEventBlocks);
     }
 

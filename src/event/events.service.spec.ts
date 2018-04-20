@@ -36,7 +36,7 @@ describe('EventsService', () => {
         eventMock.id = 42;
         let eventWithBlocksMock = new EventWithBlocks(eventMock, []);
         let eventRepositoryFindOneByIdSpy = spyOn(eventRepository, 'findOneById').and.returnValue(eventMock);
-        let blocksServiceGetMergedEventblocksSpy = spyOn(blocksService, 'getMergedEventblocks').and.returnValue([]);
+        let blocksServiceGetMergedEventblocksSpy = spyOn(blocksService, 'getThinMergedEventblocks').and.returnValue([]);
         let eventWithBlocks = await eventsService.find(1);
         expect(eventRepositoryFindOneByIdSpy).toHaveBeenCalledWith(1);
         expect(blocksServiceGetMergedEventblocksSpy).toHaveBeenCalledWith(42);
@@ -118,7 +118,7 @@ describe('EventsService', () => {
         let eventRepositorySaveSpy = spyOn(eventRepository, 'save').and.returnValue(eventMock);
         let event = await eventsService.update(1, eventDtoMock);
         
-        expect(eventMock.visible).toEqual(eventDtoMock.visible);
+        expect(event.visible).toEqual(eventDtoMock.visible);
     });
 
     it('Updates event with no visibility', async () => {
@@ -131,11 +131,10 @@ describe('EventsService', () => {
         let eventRepositorySaveSpy = spyOn(eventRepository, 'save').and.returnValue(eventMock);
         let event = await eventsService.update(1, eventDtoMock);
         
-        expect(eventMock.visible).toEqual(eventMock.visible);
+        expect(event.visible).toEqual(eventMock.visible);
     });
 
     it('Deletes event with given id using repository', async () => {
-        let eventMock = new Event();
         let eventRepositoryDeleteSpy = spyOn(eventRepository, 'delete');
         await eventsService.delete(1);
         expect(eventRepositoryDeleteSpy).toHaveBeenCalledWith({ id: 1 });
