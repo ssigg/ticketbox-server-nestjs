@@ -134,6 +134,27 @@ describe('BlocksService', () => {
         expect(eventblock.event_id).toEqual(eventblockDtoMock.event_id);
     });
 
+    it('Updates eventblock with no property values', async () => {
+        let eventblockMock = new Eventblock();
+        eventblockMock.block_id = 1;
+        eventblockMock.category_id = 2;
+        eventblockMock.event_id = 3;
+
+        let eventblockDtoMock = new EventblockDto();
+
+        let eventblockRepositoryFindOneByIdSpy = spyOn(eventblockRepository, 'findOneById').and.returnValue(eventblockMock);
+        let eventblockRepositorySaveSpy = spyOn(eventblockRepository, 'save').and.returnValue(eventblockMock);
+        let eventblock = await blocksService.updateEventblock(1, eventblockDtoMock);
+
+        expect(eventblockRepositoryFindOneByIdSpy).toHaveBeenCalledTimes(1);
+        expect(eventblockRepositorySaveSpy).toHaveBeenCalledWith(eventblockMock);
+        
+        expect(eventblock).toEqual(eventblockMock);
+        expect(eventblock.block_id).toEqual(eventblockMock.block_id);
+        expect(eventblock.category_id).toEqual(eventblockMock.category_id);
+        expect(eventblock.event_id).toEqual(eventblockMock.event_id);
+    });
+
     it('Deletes eventblock with given id using repository', async () => {
         let eventblockRepositoryDeleteSpy = spyOn(eventblockRepository, 'delete');
         await blocksService.deleteEventblock(1);
