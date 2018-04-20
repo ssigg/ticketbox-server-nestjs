@@ -1,0 +1,10 @@
+{
+    "name": "Ticketbox API",
+    "version": "1.0.0",
+    "description": "Ticket reservation system API",
+    "title": "Ticketbox API",
+    "url" : "",
+    "order": [
+      "Event"
+    ]
+  }

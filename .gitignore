@@ -1,6 +1,7 @@
 dist
 node_modules
 coverage
+apidocs
 .nyc_output
 .env
 .DS_Store
