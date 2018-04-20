@@ -9,6 +9,7 @@ after_success:
 - npm run documentation
 deploy:
 - provider: script
+  skip_cleanup: true
   script: npm run documentation-deploy
   on:
     repo: ssigg/ticketbox-server-nestjs
