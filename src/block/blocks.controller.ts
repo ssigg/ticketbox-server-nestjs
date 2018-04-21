@@ -7,7 +7,7 @@ export class BlocksAdminController {
     constructor(private readonly blocksService: BlocksService) { }
 
     /**
-     * @api {get} /admin/blocks Get all blocks
+     * @api {get} /admin/blocks Get all raw blocks
      * @apiName GetBlocks
      * @apiGroup Block
      * @apiPermission admin
@@ -33,7 +33,7 @@ export class BlocksAdminController {
     }
 
     /**
-     * @api {get} /admin/blocks/:id Get one block
+     * @api {get} /admin/blocks/:id Get one raw block
      * @apiName GetBlock
      * @apiGroup Block
      * @apiPermission admin
@@ -59,7 +59,7 @@ export class BlocksAdminController {
     }
 
     /**
-     * @api {post} /admin/blocks Create block
+     * @api {post} /admin/blocks Create raw block
      * @apiName CreateBlock
      * @apiGroup Block
      * @apiPermission admin
@@ -96,7 +96,7 @@ export class BlocksAdminController {
     }
 
     /**
-     * @api {put} /admin/blocks/:id Update block
+     * @api {put} /admin/blocks/:id Update raw block
      * @apiName UpdateBlock
      * @apiGroup Block
      * @apiPermission admin
@@ -134,7 +134,7 @@ export class BlocksAdminController {
     }
 
     /**
-     * @api {delete} /admin/blocks/:id Delete block
+     * @api {delete} /admin/blocks/:id Delete raw block
      * @apiName DeleteBlock
      * @apiGroup Block
      * @apiPermission admin

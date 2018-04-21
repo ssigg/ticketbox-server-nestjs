@@ -8,8 +8,9 @@ export class EventblocksController {
 
     /**
      * @api {get} /eventsblocks/:key Get one block
-     * @apiName GetBlocks
+     * @apiName GetEventBlock
      * @apiGroup Block
+     * @apiPermission none
      * @apiVersion 1.0.0
      * 
      * @apiParam {String} key Block key
