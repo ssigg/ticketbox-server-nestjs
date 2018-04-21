@@ -70,13 +70,26 @@ export class EventblockDto implements DtoInterface<Eventblock> {
     }
 }
 
-export interface ThinMergedEventblock {
+export interface ThinMergedEventblockInterface {
     id: string;
     name: string;
     numbered: boolean;
 }
 
-export class MergedEventblock implements ThinMergedEventblock {
+export class ThinMergedEventblock implements ThinMergedEventblockInterface {
+    constructor(id: string, name: string, numbered: boolean, seatplan_image_data_url: string) {
+        this.id = id;
+        this.name = name;
+        this.numbered = numbered;
+        this.seatplan_image_data_url = seatplan_image_data_url;
+    }
+    id: string;
+    name: string;
+    numbered: boolean;
+    seatplan_image_data_url: string;
+}
+
+export class MergedEventblock implements ThinMergedEventblockInterface {
     constructor(id: string, name: string, numbered: boolean, event: Event, seatplan_image_data_url: string, parts: MergedEventblockPart[] ){
         this.id = id;
         this.name = name;

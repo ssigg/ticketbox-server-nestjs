@@ -1,7 +1,7 @@
 import { Component } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm/repository/Repository";
-import { Block, Eventblock, BlockDto, EventblockDto, ThinMergedEventblock, MergedEventblock } from "./block.entities";
+import { Block, Eventblock, BlockDto, EventblockDto, ThinMergedEventblockInterface, ThinMergedEventblock } from "./block.entities";
 
 @Component()
 export class BlocksService {
@@ -48,10 +48,10 @@ export class BlocksService {
         return await this.eventblockRepository.delete({ id: id });
     }
 
-    async getThinMergedEventblocks(event_id: number): Promise<ThinMergedEventblock[]> {
+    async getThinMergedEventblocks(event_id: number): Promise<ThinMergedEventblockInterface[]> {
         let eventblocks = await this.eventblockRepository.find({ event_id: event_id });
         let augmentedEventblocks = await Promise.all(eventblocks.map(async eb => await this.augmentEventblock(eb)));
-        let mergedEventblocks = this.mergeAugmentedEventblocks(augmentedEventblocks);
+        let mergedEventblocks = augmentedEventblocks.reduce<ThinMergedEventblock[]>((pv, cv, ci, a) => this.appendBlock(pv, cv), []);
         return mergedEventblocks;
     }
 
@@ -60,22 +60,18 @@ export class BlocksService {
         return { eventblock: eventBlock, block: block };
     }
 
-    private mergeAugmentedEventblocks(augmentedEventblocks: { eventblock: Eventblock, block: Block }[]): MergedEventblock[] {
-        return augmentedEventblocks.reduce<MergedEventblock[]>((pv, cv, ci, a) => this.appendBlock(pv, cv), []);
-    }
-
-    private appendBlock(previousValue: MergedEventblock[], newValue: { eventblock: Eventblock, block: Block }): MergedEventblock[] {
+    private appendBlock(previousValue: ThinMergedEventblock[], newValue: { eventblock: Eventblock, block: Block }): ThinMergedEventblock[] {
         let block = newValue.block;
         let matching = previousValue.find(mb => this.canMerge(mb, block));
         if (matching !== undefined) { // we found a block to merge
             matching.id = matching.id + '-' + block.id;
         } else { // no block found, create a new one
-            previousValue.push(new MergedEventblock('' + block.id, block.name, block.numbered, null, block.seatplan_image_data_url, []));
+            previousValue.push(new ThinMergedEventblock('' + block.id, block.name, block.numbered, block.seatplan_image_data_url));
         }
         return previousValue;
     }
 
-    private canMerge(mergedEventblock: MergedEventblock, block: Block) {
+    private canMerge(mergedEventblock: ThinMergedEventblock, block: Block) {
         return mergedEventblock.name == block.name &&
                mergedEventblock.numbered == block.numbered &&
                mergedEventblock.seatplan_image_data_url == block.seatplan_image_data_url;
