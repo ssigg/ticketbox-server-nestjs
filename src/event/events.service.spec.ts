@@ -1,11 +1,12 @@
 import { Repository } from "typeorm";
 import { EventsService } from "./events.service";
 import { BlocksService } from "../block/blocks.service";
-import { EventblocksService } from "../block/eventblocks.service";
+import { EventblocksService } from "../eventblock/eventblocks.service";
 import { Event, EventDto, EventWithBlocks } from "./event.entity";
-import { Block, Eventblock } from "../block/block.entities";
+import { Block } from "../block/block.entity";
 import { Category } from "../category/category.entity";
 import { Seat } from "../seat/seat.entity";
+import { Eventblock } from "../eventblock/eventblock.entity";
 
 describe('EventsService', () => {
     let eventRepository: Repository<Event>;
@@ -15,7 +16,7 @@ describe('EventsService', () => {
 
     beforeEach(() => {
         eventRepository = new Repository<Event>();
-        blocksService = new BlocksService(new Repository<Block>(), new Repository<Eventblock>());
+        blocksService = new BlocksService(new Repository<Block>());
         eventblocksService = new EventblocksService(new Repository<Event>(), new Repository<Category>(), new Repository<Block>(), new Repository<Eventblock>(), new Repository<Seat>());
         eventsService = new EventsService(eventRepository, blocksService, eventblocksService);
     });

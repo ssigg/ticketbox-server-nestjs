@@ -4,20 +4,24 @@ import { EventsCommonModule, EventsAdminModule } from './event/events.module';
 import { AuthModule } from './auth/auth.module';
 import { CorsMiddleware } from './cors.middleware';
 import { Event } from './event/event.entity';
-import { Block, Eventblock } from './block/block.entities';
+import { Block } from './block/block.entity';
 import { Seat } from './seat/seat.entity';
+import { BlocksAdminModule } from './block/blocks.module';
+import { Category } from './category/category.entity';
+import { Eventblock } from './eventblock/eventblock.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      entities: [ Event, Block, Eventblock, Seat ],
+      entities: [ Event, Category, Block, Eventblock, Seat ],
       url: process.env.DATABASE_URL,
       synchronize: true,
     }),
     AuthModule,
     EventsCommonModule,
-    EventsAdminModule
+    EventsAdminModule,
+    BlocksAdminModule
   ],
   controllers: [],
   components: [],

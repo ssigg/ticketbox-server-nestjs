@@ -2,7 +2,8 @@ import { Repository } from "typeorm";
 import { Event } from "../event/event.entity";
 import { Category } from "../category/category.entity";
 import { Seat } from "../seat/seat.entity";
-import { Block, BlockDto, Eventblock, EventblockDto, MergedEventblockPart } from "./block.entities";
+import { Block, BlockDto } from "../block/block.entity";
+import { Eventblock, EventblockDto, MergedEventblockPart } from "./eventblock.entity";
 import { EventblocksService } from "./eventblocks.service";
 
 describe('BlocksService', () => {
@@ -31,7 +32,7 @@ describe('BlocksService', () => {
 
         let eventblockRepositoryCreateSpy = spyOn(eventblockRepository, 'create').and.returnValue(eventblockMock);
         let eventblockRepositorySaveSpy = spyOn(eventblockRepository, 'save').and.returnValue(eventblockMock);
-        let eventblock = await eventblocksService.createEventblock(eventblockDtoMock);
+        let eventblock = await eventblocksService.create(eventblockDtoMock);
         
         expect(eventblockRepositoryCreateSpy).toHaveBeenCalledTimes(1);
         expect(eventblockRepositorySaveSpy).toHaveBeenCalledWith(eventblockMock);
@@ -55,7 +56,7 @@ describe('BlocksService', () => {
 
         let eventblockRepositoryFindOneByIdSpy = spyOn(eventblockRepository, 'findOneById').and.returnValue(eventblockMock);
         let eventblockRepositorySaveSpy = spyOn(eventblockRepository, 'save').and.returnValue(eventblockMock);
-        let eventblock = await eventblocksService.updateEventblock(1, eventblockDtoMock);
+        let eventblock = await eventblocksService.update(1, eventblockDtoMock);
 
         expect(eventblockRepositoryFindOneByIdSpy).toHaveBeenCalledTimes(1);
         expect(eventblockRepositorySaveSpy).toHaveBeenCalledWith(eventblockMock);
@@ -76,7 +77,7 @@ describe('BlocksService', () => {
 
         let eventblockRepositoryFindOneByIdSpy = spyOn(eventblockRepository, 'findOneById').and.returnValue(eventblockMock);
         let eventblockRepositorySaveSpy = spyOn(eventblockRepository, 'save').and.returnValue(eventblockMock);
-        let eventblock = await eventblocksService.updateEventblock(1, eventblockDtoMock);
+        let eventblock = await eventblocksService.update(1, eventblockDtoMock);
 
         expect(eventblockRepositoryFindOneByIdSpy).toHaveBeenCalledTimes(1);
         expect(eventblockRepositorySaveSpy).toHaveBeenCalledWith(eventblockMock);
@@ -89,7 +90,7 @@ describe('BlocksService', () => {
 
     it('Deletes eventblock with given id using repository', async () => {
         let eventblockRepositoryDeleteSpy = spyOn(eventblockRepository, 'delete');
-        await eventblocksService.deleteEventblock(1);
+        await eventblocksService.delete(1);
         expect(eventblockRepositoryDeleteSpy).toHaveBeenCalledWith({ id: 1 });
     });
 

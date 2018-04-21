@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Event, EventDto, EventWithBlocks } from "./event.entity";
 import { Repository } from "typeorm/repository/Repository";
 import { BlocksService } from "../block/blocks.service";
-import { EventblocksService } from "../block/eventblocks.service";
+import { EventblocksService } from "../eventblock/eventblocks.service";
 
 @Component()
 export class EventsService {

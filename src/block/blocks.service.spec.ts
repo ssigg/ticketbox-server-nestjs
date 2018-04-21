@@ -1,17 +1,15 @@
 import { Repository } from "typeorm";
 import { Seat } from "../seat/seat.entity";
-import { Block, BlockDto, Eventblock, EventblockDto } from "./block.entities";
+import { Block, BlockDto } from "./block.entity";
 import { BlocksService } from "./blocks.service";
 
 describe('BlocksService', () => {
     let blockRepository: Repository<Block>;
-    let eventblockRepository: Repository<Eventblock>;
     let blocksService: BlocksService;
 
     beforeEach(() => {
         blockRepository = new Repository<Block>();
-        eventblockRepository = new Repository<Eventblock>();
-        blocksService = new BlocksService(blockRepository, eventblockRepository);
+        blocksService = new BlocksService(blockRepository);
     });
 
     it('Creates block with given property values', async () => {
@@ -23,7 +21,7 @@ describe('BlocksService', () => {
 
         let blockRepositoryCreateSpy = spyOn(blockRepository, 'create').and.returnValue(blockMock);
         let blockRepositorySaveSpy = spyOn(blockRepository, 'save').and.returnValue(blockMock);
-        let block = await blocksService.createBlock(blockDtoMock);
+        let block = await blocksService.create(blockDtoMock);
         
         expect(blockRepositoryCreateSpy).toHaveBeenCalledTimes(1);
         expect(blockRepositorySaveSpy).toHaveBeenCalledWith(blockMock);
@@ -47,7 +45,7 @@ describe('BlocksService', () => {
 
         let blockRepositoryFindOneByIdSpy = spyOn(blockRepository, 'findOneById').and.returnValue(blockMock);
         let blockRepositorySaveSpy = spyOn(blockRepository, 'save').and.returnValue(blockMock);
-        let block = await blocksService.updateBlock(1, blockDtoMock);
+        let block = await blocksService.update(1, blockDtoMock);
 
         expect(blockRepositoryFindOneByIdSpy).toHaveBeenCalledTimes(1);
         expect(blockRepositorySaveSpy).toHaveBeenCalledWith(blockMock);
@@ -67,7 +65,7 @@ describe('BlocksService', () => {
 
         let blockRepositoryFindOneByIdSpy = spyOn(blockRepository, 'findOneById').and.returnValue(blockMock);
         let blockRepositorySaveSpy = spyOn(blockRepository, 'save').and.returnValue(blockMock);
-        let block = await blocksService.updateBlock(1, blockDtoMock);
+        let block = await blocksService.update(1, blockDtoMock);
         
         expect(block.numbered).toEqual(blockDtoMock.numbered);
     });
@@ -80,14 +78,14 @@ describe('BlocksService', () => {
 
         let blockRepositoryFindOneByIdSpy = spyOn(blockRepository, 'findOneById').and.returnValue(blockMock);
         let blockRepositorySaveSpy = spyOn(blockRepository, 'save').and.returnValue(blockMock);
-        let block = await blocksService.updateBlock(1, blockDtoMock);
+        let block = await blocksService.update(1, blockDtoMock);
         
         expect(block.numbered).toEqual(blockMock.numbered);
     });
 
     it('Deletes block with given id using repository', async () => {
         let blockRepositoryDeleteSpy = spyOn(blockRepository, 'delete');
-        await blocksService.deleteBlock(1);
+        await blocksService.delete(1);
         expect(blockRepositoryDeleteSpy).toHaveBeenCalledWith({ id: 1 });
     });
 });

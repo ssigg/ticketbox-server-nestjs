@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 import { DtoInterface } from "../dto.interface";
-import { ThinMergedEventblockInterface } from "../block/block.entities";
+import { ThinMergedEventblockInterface } from "../eventblock/eventblock.entity";
 
 @Entity()
 export class Event {

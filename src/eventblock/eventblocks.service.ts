@@ -2,7 +2,8 @@ import { Component } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Event } from "../event/event.entity";
-import { Block, Eventblock, BlockDto, EventblockDto, ThinMergedEventblockInterface, ThinMergedEventblock, MergedEventblock, MergedEventblockPart, ComparableMergedEventblockInterface } from "./block.entities";
+import { Block, BlockDto } from "../block/block.entity";
+import { Eventblock, EventblockDto, ThinMergedEventblockInterface, ThinMergedEventblock, MergedEventblock, MergedEventblockPart, ComparableMergedEventblockInterface } from "./eventblock.entity";
 import { Category } from "../category/category.entity";
 import { Seat } from "../seat/seat.entity";
 
@@ -21,21 +22,21 @@ export class EventblocksService {
         private readonly seatRepository: Repository<Seat>
     ) { }
 
-    async createEventblock(dto: EventblockDto): Promise<Eventblock> {
+    async create(dto: EventblockDto): Promise<Eventblock> {
         let eventblock = await this.eventblockRepository.create();
         dto.updateModel(eventblock);
         let savedEventblock = await this.eventblockRepository.save(eventblock);
         return savedEventblock;
     }
 
-    async updateEventblock(id: number, dto: EventblockDto): Promise<Eventblock> {
+    async update(id: number, dto: EventblockDto): Promise<Eventblock> {
         let eventblock = await this.eventblockRepository.findOneById(id);
         dto.updateModel(eventblock);
         let savedEventblock = await this.eventblockRepository.save(eventblock);
         return savedEventblock;
     }
 
-    async deleteEventblock(id: number): Promise<void> {
+    async delete(id: number): Promise<void> {
         return await this.eventblockRepository.delete({ id: id });
     }
 
