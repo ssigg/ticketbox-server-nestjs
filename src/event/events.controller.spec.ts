@@ -40,17 +40,17 @@ describe('EventsAdminController', () => {
     it('Fetches all events from events service', async () => {
         let eventMock = new Event();
         let eventsServiceFindAllSpy = spyOn(eventsService, 'findAll').and.returnValue([ eventMock ]);
-        let events = eventsAdminController.findAll();
+        let events = await eventsAdminController.findAll();
         expect(eventsServiceFindAllSpy).toHaveBeenCalledTimes(1);
-        expect(await events).toEqual([ eventMock ]);
+        expect(events).toEqual([ eventMock ]);
     });
 
     it('Fetches event with given id from events service', async () => {
         let eventWithBlocksMock = new EventWithBlocks(new Event, []);
         let eventsServiceFindSpy = spyOn(eventsService, 'find').and.returnValue(eventWithBlocksMock);
-        let event = eventsAdminController.find({ id: 1 });
+        let event = await eventsAdminController.find({ id: 1 });
         expect(eventsServiceFindSpy).toHaveBeenCalledWith(1);
-        expect(await event).toEqual(eventWithBlocksMock);
+        expect(event).toEqual(eventWithBlocksMock);
     });
 
     it('Creates event using events service', async () => {
