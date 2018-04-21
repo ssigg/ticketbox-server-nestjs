@@ -7,17 +7,22 @@ import { EventsController, EventsAdminController } from "./events.controller";
 import { NestModule } from "@nestjs/common/interfaces";
 import { AuthService } from '../auth/auth.service';
 import { JwtStrategy } from '../auth/jwt.strategy';
+import { EventblocksService } from '../eventblock/eventblocks.service';
+import { Category } from '../category/category.entity';
+import { Block } from '../block/block.entity';
+import { Eventblock } from '../eventblock/eventblock.entity';
+import { Seat } from '../seat/seat.entity';
 
 @Module({
-    imports: [ TypeOrmModule.forFeature([ Event ]) ],
-    components: [ EventsService ],
+    imports: [ TypeOrmModule.forFeature([ Event, Category, Block, Eventblock, Seat ]) ],
+    components: [ EventsService, EventblocksService ],
     controllers: [ EventsController ]
 })
 export class EventsModule { }
 
 @Module({
-    imports: [ TypeOrmModule.forFeature([ Event ]) ],
-    components: [ AuthService, JwtStrategy, EventsService ],
+    imports: [ TypeOrmModule.forFeature([ Event, Category, Block, Eventblock, Seat ]) ],
+    components: [ AuthService, JwtStrategy, EventsService, EventblocksService ],
     controllers: [ EventsAdminController ]
 })
 export class EventsAdminModule implements NestModule {

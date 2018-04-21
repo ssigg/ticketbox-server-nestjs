@@ -10,7 +10,6 @@ export class EventsService {
     constructor(
         @InjectRepository(Event)
         private readonly eventRepository: Repository<Event>,
-        private readonly blocksService: BlocksService,
         private readonly eventblocksService: EventblocksService
     ) { }
 

@@ -10,15 +10,13 @@ import { Eventblock } from "../eventblock/eventblock.entity";
 
 describe('EventsService', () => {
     let eventRepository: Repository<Event>;
-    let blocksService: BlocksService;
     let eventblocksService: EventblocksService;
     let eventsService: EventsService;
 
     beforeEach(() => {
         eventRepository = new Repository<Event>();
-        blocksService = new BlocksService(new Repository<Block>());
         eventblocksService = new EventblocksService(new Repository<Event>(), new Repository<Category>(), new Repository<Block>(), new Repository<Eventblock>(), new Repository<Seat>());
-        eventsService = new EventsService(eventRepository, blocksService, eventblocksService);
+        eventsService = new EventsService(eventRepository, eventblocksService);
     });
 
     it('Fetches all events from repository', async () => {
