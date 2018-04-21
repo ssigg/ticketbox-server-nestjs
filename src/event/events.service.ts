@@ -3,13 +3,15 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Event, EventDto, EventWithBlocks } from "./event.entity";
 import { Repository } from "typeorm/repository/Repository";
 import { BlocksService } from "../block/blocks.service";
+import { EventblocksService } from "../block/eventblocks.service";
 
 @Component()
 export class EventsService {
     constructor(
         @InjectRepository(Event)
         private readonly eventRepository: Repository<Event>,
-        private readonly blocksService: BlocksService
+        private readonly blocksService: BlocksService,
+        private readonly eventblocksService: EventblocksService
     ) { }
 
     async findAll(): Promise<Event[]> {
@@ -22,7 +24,7 @@ export class EventsService {
 
     async find(id: number): Promise<EventWithBlocks> {
         let event = await this.eventRepository.findOneById(id);
-        let thinMergedEventBlocks = await this.blocksService.getThinMergedEventblocks(event.id);
+        let thinMergedEventBlocks = await this.eventblocksService.getThinMergedEventblocks(event.id);
         return new EventWithBlocks(event, thinMergedEventBlocks);
     }
 

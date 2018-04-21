@@ -7,7 +7,7 @@ describe('EventsController', () => {
     let eventsController: EventsController;
 
     beforeEach(() => {
-        eventsService = new EventsService(null, null);
+        eventsService = new EventsService(null, null, null);
         eventsController = new EventsController(eventsService);
     });
 
@@ -33,7 +33,7 @@ describe('EventsAdminController', () => {
     let eventsAdminController: EventsAdminController;
 
     beforeEach(() => {
-        eventsService = new EventsService(null, null);
+        eventsService = new EventsService(null, null, null);
         eventsAdminController = new EventsAdminController(eventsService);
     });
 

@@ -1,18 +1,23 @@
 import { Repository } from "typeorm";
-import { Event, EventDto, EventWithBlocks } from "./event.entity";
 import { EventsService } from "./events.service";
 import { BlocksService } from "../block/blocks.service";
+import { EventblocksService } from "../block/eventblocks.service";
+import { Event, EventDto, EventWithBlocks } from "./event.entity";
 import { Block, Eventblock } from "../block/block.entities";
+import { Category } from "../category/category.entity";
+import { Seat } from "../seat/seat.entity";
 
 describe('EventsService', () => {
     let eventRepository: Repository<Event>;
     let blocksService: BlocksService;
+    let eventblocksService: EventblocksService;
     let eventsService: EventsService;
 
     beforeEach(() => {
         eventRepository = new Repository<Event>();
         blocksService = new BlocksService(new Repository<Block>(), new Repository<Eventblock>());
-        eventsService = new EventsService(eventRepository, blocksService);
+        eventblocksService = new EventblocksService(new Repository<Event>(), new Repository<Category>(), new Repository<Block>(), new Repository<Eventblock>(), new Repository<Seat>());
+        eventsService = new EventsService(eventRepository, blocksService, eventblocksService);
     });
 
     it('Fetches all events from repository', async () => {
@@ -36,7 +41,7 @@ describe('EventsService', () => {
         eventMock.id = 42;
         let eventWithBlocksMock = new EventWithBlocks(eventMock, []);
         let eventRepositoryFindOneByIdSpy = spyOn(eventRepository, 'findOneById').and.returnValue(eventMock);
-        let blocksServiceGetMergedEventblocksSpy = spyOn(blocksService, 'getThinMergedEventblocks').and.returnValue([]);
+        let blocksServiceGetMergedEventblocksSpy = spyOn(eventblocksService, 'getThinMergedEventblocks').and.returnValue([]);
         let eventWithBlocks = await eventsService.find(1);
         expect(eventRepositoryFindOneByIdSpy).toHaveBeenCalledWith(1);
         expect(blocksServiceGetMergedEventblocksSpy).toHaveBeenCalledWith(42);
