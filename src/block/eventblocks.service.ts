@@ -41,7 +41,7 @@ export class EventblocksService {
 
     async getThinMergedEventblocks(event_id: number): Promise<ThinMergedEventblockInterface[]> {
         let eventblocks = await this.eventblockRepository.find({ event_id: event_id });
-        let augmentedEventblocks = await Promise.all(eventblocks.map(async eb => await this.augmentEventblockWithBlock(eb)));
+        let augmentedEventblocks = await Promise.all(eventblocks.map(async eb => await this.augmentEventblockThin(eb)));
         let mergedEventblocks = augmentedEventblocks.reduce<ThinMergedEventblock[]>((pv, cv, ci, a) => this.appendBlock(pv, cv), []);
         return mergedEventblocks;
     }
@@ -49,17 +49,17 @@ export class EventblocksService {
     async getMergedEventblock(key: string): Promise<MergedEventblock> {
         let keyParts = key.split('-');
         let eventblocks = await Promise.all(keyParts.map(async p => await this.eventblockRepository.findOneById(p)));
-        let augmentedEventblocks = await Promise.all(eventblocks.map(async eb => await this.augmentEventblock(eb)));
+        let augmentedEventblocks = await Promise.all(eventblocks.map(async eb => await this.augmentEventblockFull(eb)));
         let mergedEventblock = augmentedEventblocks.reduce<MergedEventblock[]>((pv, cv, ci, a) => this.appendBlock(pv, cv), [])[0];
         return mergedEventblock;
     }
 
-    private async augmentEventblockWithBlock(eventblock: Eventblock): Promise<ThinAugmentedEventblock> {
+    private async augmentEventblockThin(eventblock: Eventblock): Promise<ThinAugmentedEventblock> {
         let block = await this.blockRepository.findOneById(eventblock.block_id);
         return new ThinAugmentedEventblock(eventblock, block);
     }
 
-    private async augmentEventblock(eventblock: Eventblock): Promise<AugmentedEventblock> {
+    private async augmentEventblockFull(eventblock: Eventblock): Promise<AugmentedEventblock> {
         let block = await this.blockRepository.findOneById(eventblock.block_id);
         let event = await this.eventRepository.findOneById(eventblock.event_id);
         let category = await this.categoryRepository.findOneById(eventblock.category_id);
