@@ -38,8 +38,8 @@ export class Seat {
 }
 
 export class SeatDto implements DtoInterface<Seat> {
-    block_id?: number;
-    name?: string;
+    block_id: number;
+    name: string;
     x0?: number;
     y0?: number;
     x1?: number;
@@ -50,12 +50,9 @@ export class SeatDto implements DtoInterface<Seat> {
     y3?: number;
     
     updateModel(model: Seat): void {
-        if (this.block_id !== undefined) {
-            model.block_id = this.block_id;
-        }
-        if (this.name !== undefined) {
-            model.name = this.name;
-        }
+        model.block_id = this.block_id;
+        model.name = this.name;
+        
         if (this.x0 !== undefined) {
             model.x0 = this.x0;
         }

@@ -4,16 +4,16 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { NestModule } from "@nestjs/common/interfaces";
 import { AuthService } from '../auth/auth.service';
 import { JwtStrategy } from '../auth/jwt.strategy';
-import { CategoriesAdminController } from './categories.controller';
-import { CategoriesService } from './categories.service';
-import { Category } from './category.entity';
+import { SeatsAdminController } from './seats.controller';
+import { SeatsService } from './seats.service';
+import { Seat } from './seat.entity';
 
 @Module({
-    imports: [ TypeOrmModule.forFeature([ Category ]) ],
-    components: [ AuthService, JwtStrategy, CategoriesService ],
-    controllers: [ CategoriesAdminController ]
+    imports: [ TypeOrmModule.forFeature([ Seat ]) ],
+    components: [ AuthService, JwtStrategy, SeatsService ],
+    controllers: [ SeatsAdminController ]
 })
-export class CategoriesAdminModule implements NestModule {
+export class SeatsAdminModule implements NestModule {
     configure(consumer: MiddlewaresConsumer): void {
         consumer
             .apply(passport.authenticate('jwt', { session: false }))

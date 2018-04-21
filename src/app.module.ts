@@ -11,6 +11,7 @@ import { BlocksAdminModule } from './block/blocks.module';
 import { Category } from './category/category.entity';
 import { Eventblock } from './eventblock/eventblock.entity';
 import { EventblocksModule } from './eventblock/eventblocks.module';
+import { SeatsAdminModule } from './seat/seats.module';
 
 @Module({
   imports: [
@@ -25,7 +26,8 @@ import { EventblocksModule } from './eventblock/eventblocks.module';
     CategoriesAdminModule,
     EventsAdminModule,
     BlocksAdminModule,
-    EventblocksModule
+    EventblocksModule,
+    SeatsAdminModule
   ],
   controllers: [],
   components: [],
