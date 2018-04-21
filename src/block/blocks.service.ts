@@ -60,18 +60,19 @@ export class BlocksService {
         return { eventblock: eventBlock, block: block };
     }
 
-    private mergeAugmentedEventblocks(eventblocksWithBlocks: { eventblock: Eventblock, block: Block }[]): MergedEventblock[] {
-        let mergedEventblocks: MergedEventblock[] = [];
-        eventblocksWithBlocks.forEach(eb => {
-            let block = eb.block;
-            let matching = mergedEventblocks.find(mb => this.canMerge(mb, block))
-            if (matching !== undefined) { // we found a block to merge
-                matching.id = matching.id + '-' + block.id;
-            } else { // no block found, create a new one
-                mergedEventblocks.push(new MergedEventblock('' + block.id, block.name, block.numbered, null, block.seatplan_image_data_url, []));
-            }
-        });
-        return mergedEventblocks;
+    private mergeAugmentedEventblocks(augmentedEventblocks: { eventblock: Eventblock, block: Block }[]): MergedEventblock[] {
+        return augmentedEventblocks.reduce<MergedEventblock[]>((pv, cv, ci, a) => this.appendBlock(pv, cv), []);
+    }
+
+    private appendBlock(previousValue: MergedEventblock[], newValue: { eventblock: Eventblock, block: Block }): MergedEventblock[] {
+        let block = newValue.block;
+        let matching = previousValue.find(mb => this.canMerge(mb, block));
+        if (matching !== undefined) { // we found a block to merge
+            matching.id = matching.id + '-' + block.id;
+        } else { // no block found, create a new one
+            previousValue.push(new MergedEventblock('' + block.id, block.name, block.numbered, null, block.seatplan_image_data_url, []));
+        }
+        return previousValue;
     }
 
     private canMerge(mergedEventblock: MergedEventblock, block: Block) {

@@ -187,6 +187,36 @@ describe('BlocksService', () => {
         expect(thinMergedEventblocks[0].numbered).toEqual(true);
     });
 
+    it('Merges two event blocks which are at the beginning and at the end of the list', async () => {
+        let blockMock1 = new Block();
+        blockMock1.id = 1;
+        blockMock1.name = 'a';
+        blockMock1.numbered = true;
+        blockMock1.seatplan_image_data_url = 'u';
+
+        let blockMock2 = new Block();
+        blockMock2.id = 2;
+        blockMock2.name = 'B';
+        blockMock2.numbered = true;
+        blockMock2.seatplan_image_data_url = 'u';
+
+        let blockMock3 = new Block();
+        blockMock3.id = 3;
+        blockMock3.name = 'a';
+        blockMock3.numbered = true;
+        blockMock3.seatplan_image_data_url = 'u';
+
+        let eventblockRepositoryFindSpy = spyOn(eventblockRepository, 'find').and.returnValue([ new Eventblock(), new Eventblock(), new Eventblock() ]);
+        let blockRepositoryFindOneByIdSpy = spyOn(blockRepository, 'findOneById').and.returnValues(blockMock1, blockMock2, blockMock3);
+        let thinMergedEventblocks = await blocksService.getThinMergedEventblocks(1);
+
+        expect(eventblockRepositoryFindSpy).toHaveBeenCalledTimes(1);
+        expect(blockRepositoryFindOneByIdSpy).toHaveBeenCalledTimes(3);
+        expect(thinMergedEventblocks.length).toEqual(2);
+        expect(thinMergedEventblocks.map(b => b.id)).toContain("1-3");
+        expect(thinMergedEventblocks.map(b => b.id)).toContain("2");
+    });
+
     it('Does not merge two event blocks when name is not equal', async () => {
         let blockMock1 = new Block();
         blockMock1.id = 1;
