@@ -76,7 +76,11 @@ export interface ThinMergedEventblockInterface {
     numbered: boolean;
 }
 
-export class ThinMergedEventblock implements ThinMergedEventblockInterface {
+export interface ComparableMergedEventblockInterface extends ThinMergedEventblockInterface {
+    seatplan_image_data_url: string;
+}
+
+export class ThinMergedEventblock implements ComparableMergedEventblockInterface {
     constructor(id: string, name: string, numbered: boolean, seatplan_image_data_url: string) {
         this.id = id;
         this.name = name;
@@ -89,7 +93,7 @@ export class ThinMergedEventblock implements ThinMergedEventblockInterface {
     seatplan_image_data_url: string;
 }
 
-export class MergedEventblock implements ThinMergedEventblockInterface {
+export class MergedEventblock implements ComparableMergedEventblockInterface {
     constructor(id: string, name: string, numbered: boolean, event: Event, seatplan_image_data_url: string, parts: MergedEventblockPart[] ){
         this.id = id;
         this.name = name;
@@ -107,6 +111,11 @@ export class MergedEventblock implements ThinMergedEventblockInterface {
 }
 
 export class MergedEventblockPart {
+    constructor(id: number, category: Category, seats: Seat[]) {
+        this.id = id;
+        this.category = category;
+        this.seats = seats;
+    }
     id: number;
     category: Category;
     seats: Seat[];

@@ -1,16 +1,25 @@
 import { Repository } from "typeorm";
+import { Event } from "../event/event.entity";
+import { Category } from "../category/category.entity";
+import { Seat } from "../seat/seat.entity";
 import { Block, BlockDto, Eventblock, EventblockDto } from "./block.entities";
 import { BlocksService } from "./blocks.service";
 
 describe('BlocksService', () => {
+    let eventRepository: Repository<Event>;
+    let categoryRepository: Repository<Category>;
     let blockRepository: Repository<Block>;
     let eventblockRepository: Repository<Eventblock>;
+    let seatRepository: Repository<Seat>;
     let blocksService: BlocksService;
 
     beforeEach(() => {
+        eventRepository = new Repository<Event>();
+        categoryRepository = new Repository<Category>();
         blockRepository = new Repository<Block>();
         eventblockRepository = new Repository<Eventblock>();
-        blocksService = new BlocksService(blockRepository, eventblockRepository);
+        seatRepository = new Repository<Seat>();
+        blocksService = new BlocksService(eventRepository, categoryRepository, blockRepository, eventblockRepository, seatRepository);
     });
 
     it('Creates block with given property values', async () => {
@@ -162,19 +171,21 @@ describe('BlocksService', () => {
     });
 
     it('Merges two event blocks when name, numbered and seatplan properties are equal', async () => {
+        let eventblockMock1 = new Eventblock();
+        eventblockMock1.id = 1;
         let blockMock1 = new Block();
-        blockMock1.id = 1;
         blockMock1.name = 'a';
         blockMock1.numbered = true;
         blockMock1.seatplan_image_data_url = 'u';
 
+        let eventblockMock2 = new Eventblock();
+        eventblockMock2.id = 2;
         let blockMock2 = new Block();
-        blockMock2.id = 2;
         blockMock2.name = 'a';
         blockMock2.numbered = true;
         blockMock2.seatplan_image_data_url = 'u';
 
-        let eventblockRepositoryFindSpy = spyOn(eventblockRepository, 'find').and.returnValue([ new Eventblock(), new Eventblock() ]);
+        let eventblockRepositoryFindSpy = spyOn(eventblockRepository, 'find').and.returnValue([ eventblockMock1, eventblockMock2 ]);
         let blockRepositoryFindOneByIdSpy = spyOn(blockRepository, 'findOneById').and.returnValues(blockMock1, blockMock2);
         let thinMergedEventblocks = await blocksService.getThinMergedEventblocks(1);
 
@@ -188,25 +199,28 @@ describe('BlocksService', () => {
     });
 
     it('Merges two event blocks which are at the beginning and at the end of the list', async () => {
+        let eventblockMock1 = new Eventblock();
+        eventblockMock1.id = 1;
         let blockMock1 = new Block();
-        blockMock1.id = 1;
         blockMock1.name = 'a';
         blockMock1.numbered = true;
         blockMock1.seatplan_image_data_url = 'u';
 
+        let eventblockMock2 = new Eventblock();
+        eventblockMock2.id = 2;
         let blockMock2 = new Block();
-        blockMock2.id = 2;
         blockMock2.name = 'B';
         blockMock2.numbered = true;
         blockMock2.seatplan_image_data_url = 'u';
 
+        let eventblockMock3 = new Eventblock();
+        eventblockMock3.id = 3;
         let blockMock3 = new Block();
-        blockMock3.id = 3;
         blockMock3.name = 'a';
         blockMock3.numbered = true;
         blockMock3.seatplan_image_data_url = 'u';
 
-        let eventblockRepositoryFindSpy = spyOn(eventblockRepository, 'find').and.returnValue([ new Eventblock(), new Eventblock(), new Eventblock() ]);
+        let eventblockRepositoryFindSpy = spyOn(eventblockRepository, 'find').and.returnValue([ eventblockMock1, eventblockMock2, eventblockMock3 ]);
         let blockRepositoryFindOneByIdSpy = spyOn(blockRepository, 'findOneById').and.returnValues(blockMock1, blockMock2, blockMock3);
         let thinMergedEventblocks = await blocksService.getThinMergedEventblocks(1);
 
@@ -219,13 +233,11 @@ describe('BlocksService', () => {
 
     it('Does not merge two event blocks when name is not equal', async () => {
         let blockMock1 = new Block();
-        blockMock1.id = 1;
         blockMock1.name = 'a';
         blockMock1.numbered = true;
         blockMock1.seatplan_image_data_url = 'u';
 
         let blockMock2 = new Block();
-        blockMock2.id = 2;
         blockMock2.name = 'b';
         blockMock2.numbered = true;
         blockMock2.seatplan_image_data_url = 'u';
@@ -240,19 +252,21 @@ describe('BlocksService', () => {
     });
 
     it('Does not merge two event blocks when numbered is not equal', async () => {
+        let eventblockMock1 = new Eventblock();
+        eventblockMock1.id = 1;
         let blockMock1 = new Block();
-        blockMock1.id = 1;
         blockMock1.name = 'a';
         blockMock1.numbered = true;
         blockMock1.seatplan_image_data_url = 'u';
 
+        let eventblockMock2 = new Eventblock();
+        eventblockMock2.id = 2;
         let blockMock2 = new Block();
-        blockMock2.id = 2;
         blockMock2.name = 'a';
         blockMock2.numbered = false;
         blockMock2.seatplan_image_data_url = 'u';
 
-        let eventblockRepositoryFindSpy = spyOn(eventblockRepository, 'find').and.returnValue([ new Eventblock(), new Eventblock() ]);
+        let eventblockRepositoryFindSpy = spyOn(eventblockRepository, 'find').and.returnValue([ eventblockMock1, eventblockMock2 ]);
         let blockRepositoryFindOneByIdSpy = spyOn(blockRepository, 'findOneById').and.returnValues(blockMock1, blockMock2);
         let thinMergedEventblocks = await blocksService.getThinMergedEventblocks(1);
 
@@ -262,19 +276,21 @@ describe('BlocksService', () => {
     });
 
     it('Does not merge two event blocks when seatplan_image_data_url are not equal', async () => {
+        let eventblockMock1 = new Eventblock();
+        eventblockMock1.id = 1;
         let blockMock1 = new Block();
-        blockMock1.id = 1;
         blockMock1.name = 'a';
         blockMock1.numbered = true;
         blockMock1.seatplan_image_data_url = 'u';
 
+        let eventblockMock2 = new Eventblock();
+        eventblockMock2.id = 2;
         let blockMock2 = new Block();
-        blockMock2.id = 2;
         blockMock2.name = 'a';
         blockMock2.numbered = true;
         blockMock2.seatplan_image_data_url = 'v';
 
-        let eventblockRepositoryFindSpy = spyOn(eventblockRepository, 'find').and.returnValue([ new Eventblock(), new Eventblock() ]);
+        let eventblockRepositoryFindSpy = spyOn(eventblockRepository, 'find').and.returnValue([ eventblockMock1, eventblockMock2 ]);
         let blockRepositoryFindOneByIdSpy = spyOn(blockRepository, 'findOneById').and.returnValues(blockMock1, blockMock2);
         let thinMergedEventblocks = await blocksService.getThinMergedEventblocks(1);
 
