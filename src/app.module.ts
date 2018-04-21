@@ -1,6 +1,6 @@
 import { Module, NestModule, RequestMethod, MiddlewaresConsumer } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { EventsCommonModule, EventsAdminModule } from './event/events.module';
+import { EventsModule, EventsAdminModule } from './event/events.module';
 import { AuthModule } from './auth/auth.module';
 import { CorsMiddleware } from './cors.middleware';
 import { Event } from './event/event.entity';
@@ -9,6 +9,7 @@ import { Seat } from './seat/seat.entity';
 import { BlocksAdminModule } from './block/blocks.module';
 import { Category } from './category/category.entity';
 import { Eventblock } from './eventblock/eventblock.entity';
+import { EventblocksModule } from './eventblock/eventblocks.module';
 
 @Module({
   imports: [
@@ -19,9 +20,10 @@ import { Eventblock } from './eventblock/eventblock.entity';
       synchronize: true,
     }),
     AuthModule,
-    EventsCommonModule,
+    EventsModule,
     EventsAdminModule,
-    BlocksAdminModule
+    BlocksAdminModule,
+    EventblocksModule
   ],
   controllers: [],
   components: [],

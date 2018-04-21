@@ -13,7 +13,7 @@ import { JwtStrategy } from '../auth/jwt.strategy';
     components: [ EventsService ],
     controllers: [ EventsController ]
 })
-export class EventsCommonModule { }
+export class EventsModule { }
 
 @Module({
     imports: [ TypeOrmModule.forFeature([ Event ]) ],
