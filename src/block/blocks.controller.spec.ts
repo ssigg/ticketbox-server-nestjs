@@ -2,7 +2,7 @@ import { BlocksService } from "./blocks.service";
 import { BlocksAdminController } from "./blocks.controller";
 import { Block } from "./block.entity";
 
-describe('EventsAdminController', () => {
+describe('BlocksAdminController', () => {
     let blocksService: BlocksService;
     let blocksAdminController: BlocksAdminController;
 

@@ -13,17 +13,17 @@ export class Category {
     color: string;
 
     @Column()
-    price: string;
+    price: number;
 
     @Column()
-    price_reduced: string;
+    price_reduced: number;
 }
 
 export class CategoryDto implements DtoInterface<Category> {
     name?: string;
     color?: string;
-    price?: string;
-    price_reduced?: string;
+    price?: number;
+    price_reduced?: number;
     
     updateModel(model: Category): void {
         if (this.name !== undefined) {

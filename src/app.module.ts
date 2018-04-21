@@ -1,6 +1,7 @@
 import { Module, NestModule, RequestMethod, MiddlewaresConsumer } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { EventsModule, EventsAdminModule } from './event/events.module';
+import { CategoriesAdminModule } from './category/categories.module';
 import { AuthModule } from './auth/auth.module';
 import { CorsMiddleware } from './cors.middleware';
 import { Event } from './event/event.entity';
@@ -21,6 +22,7 @@ import { EventblocksModule } from './eventblock/eventblocks.module';
     }),
     AuthModule,
     EventsModule,
+    CategoriesAdminModule,
     EventsAdminModule,
     BlocksAdminModule,
     EventblocksModule
