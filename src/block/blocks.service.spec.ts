@@ -12,6 +12,22 @@ describe('BlocksService', () => {
         blocksService = new BlocksService(blockRepository);
     });
 
+    it('Fetches all blocks from repository', async () => {
+        let blockMock = new Block();
+        let blockRepositoryFindSpy = spyOn(blockRepository, 'find').and.returnValue([blockMock]);
+        let blocks = await blocksService.findAll();
+        expect(blockRepositoryFindSpy).toHaveBeenCalledTimes(1);
+        expect(blocks).toEqual([blockMock]);
+    });
+
+    it('Fetches block with given id from repository', async () => {
+        let blockMock = new Block();
+        let blockRepositoryFindOneByIdSpy = spyOn(blockRepository, 'findOneById').and.returnValue(blockMock);
+        let block = await blocksService.find(1);
+        expect(blockRepositoryFindOneByIdSpy).toHaveBeenCalledWith(1);
+        expect(block).toEqual(blockMock);
+    });
+
     it('Creates block with given property values', async () => {
         let blockMock = new Block();
         let blockDtoMock = new BlockDto();

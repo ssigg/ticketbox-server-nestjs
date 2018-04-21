@@ -53,7 +53,7 @@ describe('EventsAdminController', () => {
         expect(await event).toEqual(eventWithBlocksMock);
     });
 
-    it('Creates event', async () => {
+    it('Creates event using events service', async () => {
         let eventMock = new Event();
         let eventsServiceCreateSpy = spyOn(eventsService, 'create').and.returnValue(eventMock);
         let body = { name: 'name', address: 'address' };
@@ -62,7 +62,7 @@ describe('EventsAdminController', () => {
         expect(event).toEqual(eventMock);
     });
 
-    it('Updates event', async () => {
+    it('Updates event using events service', async () => {
         let eventMock = new Event();
         let eventsServiceUpdateSpy = spyOn(eventsService, 'update').and.returnValue(eventMock);
         let body = { name: 'name', address: 'address' };
