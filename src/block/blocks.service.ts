@@ -50,20 +50,33 @@ export class BlocksService {
 
     async getThinMergedEventblocks(event_id: number): Promise<ThinMergedEventblock[]> {
         let eventblocks = await this.eventblockRepository.find({ event_id: event_id });
-        let eventblocksWithBlocks = await Promise.all(eventblocks.map(async eb => {
-            let block = await this.blockRepository.findOneById(eb.block_id);
-            return { eventblock: eb, block: block };
-        }));
+        let augmentedEventblocks = await Promise.all(eventblocks.map(async eb => await this.augmentEventblock(eb)));
+        let mergedEventblocks = this.mergeAugmentedEventblocks(augmentedEventblocks);
+        return mergedEventblocks;
+    }
 
+    private async augmentEventblock(eventBlock: Eventblock): Promise<{ eventblock: Eventblock, block: Block }> {
+        let block = await this.blockRepository.findOneById(eventBlock.block_id);
+        return { eventblock: eventBlock, block: block };
+    }
+
+    private mergeAugmentedEventblocks(eventblocksWithBlocks: { eventblock: Eventblock, block: Block }[]): MergedEventblock[] {
         let mergedEventblocks: MergedEventblock[] = [];
         eventblocksWithBlocks.forEach(eb => {
-            let matching = mergedEventblocks.find(mb => mb.name == eb.block.name && mb.numbered == eb.block.numbered && mb.seatplan_image_data_url == eb.block.seatplan_image_data_url)
+            let block = eb.block;
+            let matching = mergedEventblocks.find(mb => this.canMerge(mb, block))
             if (matching !== undefined) { // we found a block to merge
-                matching.id = matching.id + '-' + eb.block.id;
+                matching.id = matching.id + '-' + block.id;
             } else { // no block found, create a new one
-                mergedEventblocks.push(new MergedEventblock('' + eb.block.id, eb.block.name, eb.block.numbered, null, eb.block.seatplan_image_data_url, []));
+                mergedEventblocks.push(new MergedEventblock('' + block.id, block.name, block.numbered, null, block.seatplan_image_data_url, []));
             }
         });
         return mergedEventblocks;
+    }
+
+    private canMerge(mergedEventblock: MergedEventblock, block: Block) {
+        return mergedEventblock.name == block.name &&
+               mergedEventblock.numbered == block.numbered &&
+               mergedEventblock.seatplan_image_data_url == block.seatplan_image_data_url;
     }
 }
