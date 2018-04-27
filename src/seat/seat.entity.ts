@@ -79,3 +79,22 @@ export class SeatDto implements DtoInterface<Seat> {
         }
     }
 }
+
+export class AugmentedSeat {
+    constructor(seat: Seat, state: SeatState, reservation_id?: number) {
+        this.seat = seat;
+        this.state = state;
+        this.reservation_id = reservation_id;
+    }
+    seat: Seat;
+    state: SeatState;
+    reservation_id?: number;
+}
+
+export enum SeatState {
+    Free = 'free',
+    Reserved = 'reserved',
+    ReservedByMyself = 'reservedbymyself',
+    Ordered = 'ordered',
+    Sold = 'sold'
+}

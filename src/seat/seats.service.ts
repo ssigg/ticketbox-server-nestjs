@@ -1,14 +1,18 @@
 
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm/repository/Repository";
-import { Seat, SeatDto } from "./seat.entity";
+import { Event } from "../event/event.entity";
+import { Seat, SeatDto, AugmentedSeat, SeatState } from "./seat.entity";
 import { Component } from "@nestjs/common";
+import { Reservation, OrderKind } from "../reservation/reservation.entity";
 
 @Component()
 export class SeatsService {
     constructor(
         @InjectRepository(Seat)
-        private readonly seatRepository: Repository<Seat>
+        private readonly seatRepository: Repository<Seat>,
+        @InjectRepository(Reservation)
+        private readonly reservationRepository: Repository<Reservation>,
     ) { }
 
     async findAllInBlock(blockId: number): Promise<Seat[]> {
@@ -22,6 +26,28 @@ export class SeatsService {
 
     async delete(id: number): Promise<void> {
         return await this.seatRepository.delete({ id: id });
+    }
+
+    public async augmentSeat(seat: Seat, event: Event): Promise<AugmentedSeat> {
+        let reservation = await this.reservationRepository.findOne({ seat_id: seat.id, event_id: event.id });
+        
+        if (reservation === undefined) {
+            return new AugmentedSeat(seat, SeatState.Free);
+        } else if (reservation.order_id !== undefined) {
+            if (reservation.order_kind === OrderKind.Reservation) {
+                return new AugmentedSeat(seat, SeatState.Ordered);
+            } else if (reservation.order_kind === OrderKind.BoxofficePurchase) {
+                return new AugmentedSeat(seat, SeatState.Sold);
+            } else if (reservation.order_kind === OrderKind.CustomerPurchase) {
+                return new AugmentedSeat(seat, SeatState.Sold);
+            } else {
+                throw Error('Unknown order kind: ' + reservation.order_kind);
+            }
+        // } else if (reservation.token === this.tokenProvider.provide()) { // TODO: Implement TokenProvider
+        //     return new AugmentedSeat(seat, SeatState.ReservedByMyself);
+        } else {
+            return new AugmentedSeat(seat, SeatState.Reserved, reservation.id);
+        }
     }
 
     private async createOneSeat(dto: SeatDto): Promise<Seat> {

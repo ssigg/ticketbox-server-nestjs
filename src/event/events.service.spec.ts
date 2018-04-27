@@ -7,6 +7,7 @@ import { Block } from "../block/block.entity";
 import { Category } from "../category/category.entity";
 import { Seat } from "../seat/seat.entity";
 import { Eventblock } from "../eventblock/eventblock.entity";
+import { Reservation } from "../reservation/reservation.entity";
 
 describe('EventsService', () => {
     let eventRepository: Repository<Event>;
@@ -15,7 +16,7 @@ describe('EventsService', () => {
 
     beforeEach(() => {
         eventRepository = new Repository<Event>();
-        eventblocksService = new EventblocksService(new Repository<Event>(), new Repository<Category>(), new Repository<Block>(), new Repository<Eventblock>(), new Repository<Seat>());
+        eventblocksService = new EventblocksService(new Repository<Event>(), new Repository<Category>(), new Repository<Block>(), new Repository<Eventblock>(), new Repository<Seat>(), new Repository<Reservation>());
         eventsService = new EventsService(eventRepository, eventblocksService);
     });
 

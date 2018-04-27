@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 import { DtoInterface } from "../dto.interface";
 import { Event } from "../event/event.entity";
 import { Category } from "../category/category.entity";
-import { Seat } from "../seat/seat.entity";
+import { Seat, AugmentedSeat } from "../seat/seat.entity";
 
 
 @Entity()
@@ -79,12 +79,12 @@ export class MergedEventblock implements ComparableMergedEventblockInterface {
 }
 
 export class MergedEventblockPart {
-    constructor(id: number, category: Category, seats: Seat[]) {
+    constructor(id: number, category: Category, seats: AugmentedSeat[]) {
         this.id = id;
         this.category = category;
         this.seats = seats;
     }
     id: number;
     category: Category;
-    seats: Seat[];
+    seats: AugmentedSeat[];
 }

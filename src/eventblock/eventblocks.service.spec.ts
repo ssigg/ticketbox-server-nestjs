@@ -1,17 +1,21 @@
 import { Repository } from "typeorm";
 import { Event } from "../event/event.entity";
 import { Category } from "../category/category.entity";
-import { Seat } from "../seat/seat.entity";
+import { Seat, AugmentedSeat, SeatState } from "../seat/seat.entity";
 import { Block, BlockDto } from "../block/block.entity";
 import { Eventblock, EventblockDto, MergedEventblockPart } from "./eventblock.entity";
 import { EventblocksService } from "./eventblocks.service";
+import { Reservation } from "../reservation/reservation.entity";
+import { SeatsService } from "../seat/seats.service";
 
-describe('BlocksService', () => {
+describe('EventblocksService', () => {
     let eventRepository: Repository<Event>;
     let categoryRepository: Repository<Category>;
     let blockRepository: Repository<Block>;
     let eventblockRepository: Repository<Eventblock>;
     let seatRepository: Repository<Seat>;
+    let reservationRepository: Repository<Reservation>;
+    let seatsService: SeatsService;
     let eventblocksService: EventblocksService;
 
     beforeEach(() => {
@@ -20,7 +24,9 @@ describe('BlocksService', () => {
         blockRepository = new Repository<Block>();
         eventblockRepository = new Repository<Eventblock>();
         seatRepository = new Repository<Seat>();
-        eventblocksService = new EventblocksService(eventRepository, categoryRepository, blockRepository, eventblockRepository, seatRepository);
+        reservationRepository = new Repository<Reservation>();
+        seatsService = new SeatsService(seatRepository, reservationRepository);
+        eventblocksService = new EventblocksService(eventRepository, categoryRepository, blockRepository, eventblockRepository, seatRepository, seatsService);
     });
 
     it('Creates eventblock with given property values', async () => {
@@ -240,7 +246,9 @@ describe('BlocksService', () => {
         blockMock1.seatplan_image_data_url = 'u';
 
         let seatMock11 = new Seat();
+        let augmentedSeatMock11 = new AugmentedSeat(seatMock11, SeatState.Free);
         let seatMock12 = new Seat();
+        let augmentedSeatMock12 = new AugmentedSeat(seatMock12, SeatState.Free);
 
         let eventblockMock2 = new Eventblock();
         eventblockMock2.id = 2;
@@ -254,13 +262,16 @@ describe('BlocksService', () => {
         blockMock2.seatplan_image_data_url = 'u';
 
         let seatMock21 = new Seat();
+        let augmentedSeatMock21 = new AugmentedSeat(seatMock21, SeatState.Free);
         let seatMock22 = new Seat();
+        let augmentedSeatMock22 = new AugmentedSeat(seatMock22, SeatState.Free);
 
         let eventblockRepositoryFindOneByIdSpy = spyOn(eventblockRepository, 'findOneById').and.returnValues(eventblockMock1, eventblockMock2);
         let blockRepositoryFindOneByIdSpy = spyOn(blockRepository, 'findOneById').and.returnValues(blockMock1, blockMock2);
         let eventRepositoryFindOneByIdSpy = spyOn(eventRepository, 'findOneById').and.returnValue(eventMock);
         let categoryRepositoryFindOneByIdSpy = spyOn(categoryRepository, 'findOneById').and.returnValues(categoryMock1, categoryMock2);
         let seatRepositoryFindSpy = spyOn(seatRepository, 'find').and.returnValues([ seatMock11, seatMock12 ], [ seatMock21, seatMock22 ]);
+        let reservationRepositoryFindOneSpy = spyOn(reservationRepository, 'findOne').and.returnValues(undefined, undefined, undefined, undefined);
         
         let mergedEventblock = await eventblocksService.getMergedEventblock('1-2');
 
@@ -270,7 +281,7 @@ describe('BlocksService', () => {
         expect(mergedEventblock.numbered).toEqual(true);
         expect(mergedEventblock.seatplan_image_data_url).toEqual('u');
         expect(mergedEventblock.event).toEqual(eventMock);
-        expect(mergedEventblock.parts).toContain(new MergedEventblockPart(1, categoryMock1, [ seatMock11, seatMock12 ]));
-        expect(mergedEventblock.parts).toContain(new MergedEventblockPart(2, categoryMock2, [ seatMock21, seatMock22 ]));
+        expect(mergedEventblock.parts).toContain(new MergedEventblockPart(1, categoryMock1, [ augmentedSeatMock11, augmentedSeatMock12 ]));
+        expect(mergedEventblock.parts).toContain(new MergedEventblockPart(2, categoryMock2, [ augmentedSeatMock21, augmentedSeatMock22 ]));
     });
 });
