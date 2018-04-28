@@ -7,9 +7,10 @@ import { JwtStrategy } from '../auth/jwt.strategy';
 import { SeatsAdminController } from './seats.controller';
 import { SeatsService } from './seats.service';
 import { Seat } from './seat.entity';
+import { Reservation } from '../reservation/reservation.entity';
 
 @Module({
-    imports: [ TypeOrmModule.forFeature([ Seat ]) ],
+    imports: [ TypeOrmModule.forFeature([ Seat, Reservation ]) ],
     components: [ AuthService, JwtStrategy, SeatsService ],
     controllers: [ SeatsAdminController ]
 })

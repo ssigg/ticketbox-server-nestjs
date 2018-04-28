@@ -12,12 +12,13 @@ import { Category } from './category/category.entity';
 import { Eventblock } from './eventblock/eventblock.entity';
 import { EventblocksModule } from './eventblock/eventblocks.module';
 import { SeatsAdminModule } from './seat/seats.module';
+import { Reservation } from './reservation/reservation.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      entities: [ Event, Category, Block, Eventblock, Seat ],
+      entities: [ Event, Category, Block, Eventblock, Seat, Reservation ],
       url: process.env.DATABASE_URL,
       synchronize: true,
     }),

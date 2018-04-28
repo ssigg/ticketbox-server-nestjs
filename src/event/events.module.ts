@@ -12,17 +12,19 @@ import { Category } from '../category/category.entity';
 import { Block } from '../block/block.entity';
 import { Eventblock } from '../eventblock/eventblock.entity';
 import { Seat } from '../seat/seat.entity';
+import { SeatsService } from '../seat/seats.service';
+import { Reservation } from '../reservation/reservation.entity';
 
 @Module({
-    imports: [ TypeOrmModule.forFeature([ Event, Category, Block, Eventblock, Seat ]) ],
-    components: [ EventsService, EventblocksService ],
+    imports: [ TypeOrmModule.forFeature([ Event, Category, Block, Eventblock, Seat, Reservation ]) ],
+    components: [ EventsService, EventblocksService, SeatsService ],
     controllers: [ EventsController ]
 })
 export class EventsModule { }
 
 @Module({
-    imports: [ TypeOrmModule.forFeature([ Event, Category, Block, Eventblock, Seat ]) ],
-    components: [ AuthService, JwtStrategy, EventsService, EventblocksService ],
+    imports: [ TypeOrmModule.forFeature([ Event, Category, Block, Eventblock, Seat, Reservation ]) ],
+    components: [ AuthService, JwtStrategy, EventsService, EventblocksService, SeatsService ],
     controllers: [ EventsAdminController ]
 })
 export class EventsAdminModule implements NestModule {

@@ -8,10 +8,12 @@ import { Category } from '../category/category.entity';
 import { Eventblock } from './eventblock.entity';
 import { Seat } from '../seat/seat.entity';
 import { Block } from '../block/block.entity';
+import { SeatsService } from '../seat/seats.service';
+import { Reservation } from '../reservation/reservation.entity';
 
 @Module({
-    imports: [ TypeOrmModule.forFeature([ Event, Category, Block, Eventblock, Seat ]) ],
-    components: [ EventblocksService ],
+    imports: [ TypeOrmModule.forFeature([ Event, Category, Block, Eventblock, Seat, Reservation ]) ],
+    components: [ EventblocksService, SeatsService ],
     controllers: [ EventblocksController ]
 })
 export class EventblocksModule { }
