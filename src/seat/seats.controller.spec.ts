@@ -7,7 +7,7 @@ describe('SeatsAdminController', () => {
     let seatsAdminController: SeatsAdminController;
 
     beforeEach(() => {
-        seatsService = new SeatsService(null);
+        seatsService = new SeatsService(null, null);
         seatsAdminController = new SeatsAdminController(seatsService);
     });
 
