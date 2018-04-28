@@ -273,7 +273,7 @@ describe('EventblocksService', () => {
         let seatRepositoryFindSpy = spyOn(seatRepository, 'find').and.returnValues([ seatMock11, seatMock12 ], [ seatMock21, seatMock22 ]);
         let reservationRepositoryFindOneSpy = spyOn(reservationRepository, 'findOne').and.returnValues(undefined, undefined, undefined, undefined);
         
-        let mergedEventblock = await eventblocksService.getMergedEventblock('1-2');
+        let mergedEventblock = await eventblocksService.getMergedEventblock('1-2', 'token');
 
         expect(mergedEventblock.id).toContain('1');
         expect(mergedEventblock.id).toContain('2');
@@ -283,5 +283,36 @@ describe('EventblocksService', () => {
         expect(mergedEventblock.event).toEqual(eventMock);
         expect(mergedEventblock.parts).toContain(new MergedEventblockPart(1, categoryMock1, [ augmentedSeatMock11, augmentedSeatMock12 ]));
         expect(mergedEventblock.parts).toContain(new MergedEventblockPart(2, categoryMock2, [ augmentedSeatMock21, augmentedSeatMock22 ]));
+    });
+
+    it('Returns undefined when an event block cannot be found', async () => {
+        let eventMock = new Event();
+        let categoryMock1 = new Category();
+        
+        let eventblockMock1 = new Eventblock();
+        eventblockMock1.id = 1;
+        eventblockMock1.block_id = 11;
+        eventblockMock1.event_id = 21;
+        eventblockMock1.category_id = 31;
+
+        let blockMock1 = new Block();
+        blockMock1.name = 'a';
+        blockMock1.numbered = true;
+        blockMock1.seatplan_image_data_url = 'u';
+
+        let seatMock11 = new Seat();
+        let augmentedSeatMock11 = new AugmentedSeat(seatMock11, SeatState.Free);
+        let seatMock12 = new Seat();
+        let augmentedSeatMock12 = new AugmentedSeat(seatMock12, SeatState.Free);
+
+        let eventblockRepositoryFindOneByIdSpy = spyOn(eventblockRepository, 'findOneById').and.returnValues(eventblockMock1, undefined);
+        let blockRepositoryFindOneByIdSpy = spyOn(blockRepository, 'findOneById').and.returnValue(blockMock1);
+        let eventRepositoryFindOneByIdSpy = spyOn(eventRepository, 'findOneById').and.returnValue(eventMock);
+        let categoryRepositoryFindOneByIdSpy = spyOn(categoryRepository, 'findOneById').and.returnValue(categoryMock1);
+        let seatRepositoryFindSpy = spyOn(seatRepository, 'find').and.returnValue([ seatMock11, seatMock12 ]);
+        let reservationRepositoryFindOneSpy = spyOn(reservationRepository, 'findOne').and.returnValues(undefined, undefined);
+        
+        let mergedEventblock = await eventblocksService.getMergedEventblock('1-2', 'token');
+        expect(mergedEventblock).toEqual(undefined);
     });
 });

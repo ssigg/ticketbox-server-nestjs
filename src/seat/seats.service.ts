@@ -28,7 +28,7 @@ export class SeatsService {
         return await this.seatRepository.delete({ id: id });
     }
 
-    public async augmentSeat(seat: Seat, event: Event): Promise<AugmentedSeat> {
+    async augmentSeat(seat: Seat, event: Event, token: string): Promise<AugmentedSeat> {
         let reservation = await this.reservationRepository.findOne({ seat_id: seat.id, event_id: event.id });
         
         if (reservation === undefined) {
@@ -43,10 +43,10 @@ export class SeatsService {
             } else {
                 throw Error('Unknown order kind: ' + reservation.order_kind);
             }
-        // } else if (reservation.token === this.tokenProvider.provide()) { // TODO: Implement TokenProvider
-        //     return new AugmentedSeat(seat, SeatState.ReservedByMyself);
+        } else if (reservation.token === token) {
+            return new AugmentedSeat(seat, SeatState.ReservedByMyself, reservation.id);
         } else {
-            return new AugmentedSeat(seat, SeatState.Reserved, reservation.id);
+            return new AugmentedSeat(seat, SeatState.Reserved);
         }
     }
 

@@ -1,6 +1,7 @@
-import { Controller, Get, Param } from "@nestjs/common";
+import { Controller, Get, Param, HttpStatus, Session } from "@nestjs/common";
 import { EventblocksService } from "./eventblocks.service";
 import { MergedEventblock } from "./eventblock.entity";
+import { HttpException } from "@nestjs/common";
 
 @Controller('eventblocks')
 export class EventblocksController {
@@ -100,9 +101,22 @@ export class EventblocksController {
      *       }
      *   ]
      * }
+     * 
+     * @apiError NotFound The eventblock with this key or at least one part of it could not be found.
+     * 
+     * @apiErrorExample {json} Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *    "statusCode": 404,
+     *    "message": "The eventblock with this key or at least one part of it could not be found."
+     * }
      */
     @Get(':key')
-    public find(@Param() params): Promise<MergedEventblock> {
-        return this.eventblocksService.getMergedEventblock(params.key);
+    public async find(@Param() params, @Session() session: { token: string }): Promise<MergedEventblock> {
+        let mergedEventblock = await this.eventblocksService.getMergedEventblock(params.key, session.token);
+        if (mergedEventblock === undefined) {
+            throw new HttpException('The eventblock with this key or at least one part of it could not be found.', HttpStatus.NOT_FOUND);
+        }
+        return mergedEventblock;
     }
 }

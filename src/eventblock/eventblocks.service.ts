@@ -55,20 +55,24 @@ export class EventblocksService {
         return new ThinAugmentedEventblock(eventblock, block);
     }
 
-    async getMergedEventblock(key: string): Promise<MergedEventblock> {
+    async getMergedEventblock(key: string, token: string): Promise<MergedEventblock> {
         let keyParts = key.split('-');
         let eventblocks = await Promise.all(keyParts.map(async p => await this.eventblockRepository.findOneById(p)));
-        let augmentedEventblocks = await Promise.all(eventblocks.map(async eb => await this.augmentEventblockFull(eb)));
-        let mergedEventblock = augmentedEventblocks.reduce<MergedEventblock[]>((pv, cv, ci, a) => this.appendBlock(pv, cv), [])[0];
-        return mergedEventblock;
+        if (!eventblocks.some(eb => eb == undefined)) {
+            let augmentedEventblocks = await Promise.all(eventblocks.map(async eb => await this.augmentEventblockFull(eb, token)));
+            let mergedEventblock = augmentedEventblocks.reduce<MergedEventblock[]>((pv, cv, ci, a) => this.appendBlock(pv, cv), [])[0];
+            return mergedEventblock;
+        } else {
+            return undefined;
+        }
     }
 
-    private async augmentEventblockFull(eventblock: Eventblock): Promise<AugmentedEventblock> {
+    private async augmentEventblockFull(eventblock: Eventblock, token: string): Promise<AugmentedEventblock> {
         let block = await this.blockRepository.findOneById(eventblock.block_id);
         let event = await this.eventRepository.findOneById(eventblock.event_id);
         let category = await this.categoryRepository.findOneById(eventblock.category_id);
         let seats = await this.seatRepository.find({ block_id: eventblock.block_id });
-        let augmentedSeats = await Promise.all(seats.map(async s => await this.seatsService.augmentSeat(s, event)));
+        let augmentedSeats = await Promise.all(seats.map(async s => await this.seatsService.augmentSeat(s, event, token)));
         return new AugmentedEventblock(eventblock, event, block, category, augmentedSeats);
     }
 

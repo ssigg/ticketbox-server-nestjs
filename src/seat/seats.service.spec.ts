@@ -97,7 +97,7 @@ describe('SeatsService', () => {
         let eventMock = new Event();
         let reservationRepositoryFindOneSpy = spyOn(reservationRepository, 'findOne').and.returnValue(undefined);
         
-        let augmentedSeat = await seatsService.augmentSeat(seatMock, eventMock);
+        let augmentedSeat = await seatsService.augmentSeat(seatMock, eventMock, 'token');
 
         expect(augmentedSeat.seat).toEqual(seatMock);
         expect(augmentedSeat.state).toEqual(SeatState.Free);
@@ -113,7 +113,7 @@ describe('SeatsService', () => {
         reservationMock.order_kind = OrderKind.Reservation;
         let reservationRepositoryFindOneSpy = spyOn(reservationRepository, 'findOne').and.returnValue(reservationMock);
         
-        let augmentedSeat = await seatsService.augmentSeat(seatMock, eventMock);
+        let augmentedSeat = await seatsService.augmentSeat(seatMock, eventMock, 'token');
 
         expect(augmentedSeat.seat).toEqual(seatMock);
         expect(augmentedSeat.state).toEqual(SeatState.Ordered);
@@ -129,7 +129,7 @@ describe('SeatsService', () => {
         reservationMock.order_kind = OrderKind.BoxofficePurchase;
         let reservationRepositoryFindOneSpy = spyOn(reservationRepository, 'findOne').and.returnValue(reservationMock);
         
-        let augmentedSeat = await seatsService.augmentSeat(seatMock, eventMock);
+        let augmentedSeat = await seatsService.augmentSeat(seatMock, eventMock, 'token');
 
         expect(augmentedSeat.seat).toEqual(seatMock);
         expect(augmentedSeat.state).toEqual(SeatState.Sold);
@@ -145,7 +145,7 @@ describe('SeatsService', () => {
         reservationMock.order_kind = OrderKind.CustomerPurchase;
         let reservationRepositoryFindOneSpy = spyOn(reservationRepository, 'findOne').and.returnValue(reservationMock);
         
-        let augmentedSeat = await seatsService.augmentSeat(seatMock, eventMock);
+        let augmentedSeat = await seatsService.augmentSeat(seatMock, eventMock, 'token');
 
         expect(augmentedSeat.seat).toEqual(seatMock);
         expect(augmentedSeat.state).toEqual(SeatState.Sold);
@@ -159,10 +159,25 @@ describe('SeatsService', () => {
         reservationMock.id = 1;
         let reservationRepositoryFindOneSpy = spyOn(reservationRepository, 'findOne').and.returnValue(reservationMock);
         
-        let augmentedSeat = await seatsService.augmentSeat(seatMock, eventMock);
+        let augmentedSeat = await seatsService.augmentSeat(seatMock, eventMock, 'token');
 
         expect(augmentedSeat.seat).toEqual(seatMock);
         expect(augmentedSeat.state).toEqual(SeatState.Reserved);
+        expect(augmentedSeat.reservation_id).toEqual(undefined);
+    });
+
+    it('Augments a self-reserved seat', async () => {
+        let seatMock = new Seat();
+        let eventMock = new Event();
+        let reservationMock = new Reservation();
+        reservationMock.id = 1;
+        reservationMock.token = 'token';
+        let reservationRepositoryFindOneSpy = spyOn(reservationRepository, 'findOne').and.returnValue(reservationMock);
+        
+        let augmentedSeat = await seatsService.augmentSeat(seatMock, eventMock, 'token');
+
+        expect(augmentedSeat.seat).toEqual(seatMock);
+        expect(augmentedSeat.state).toEqual(SeatState.ReservedByMyself);
         expect(augmentedSeat.reservation_id).toEqual(1);
     });
 });

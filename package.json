@@ -9,6 +9,7 @@
   "license": "MIT",
   "scripts": {
     "postinstall": "tsc",
+    "prestart": "tsc",
     "start": "node index.js",
     "start:watch": "nodemon",
     "prestart:prod": "tsc",
@@ -32,6 +33,7 @@
     "@types/node": "^8.0.28",
     "@types/nodemailer": "^4.3.1",
     "@types/qrcode": "^0.8.0",
+    "cookie-session": "^2.0.0-beta.3",
     "html-pdf": "^2.2.0",
     "jsonwebtoken": "^8.1.1",
     "mustache": "^2.3.0",
@@ -46,7 +48,8 @@
     "rxjs": "^5.4.0",
     "ts-node": "^3.3.0",
     "typeorm": "^0.1.9",
-    "typescript": "^2.5.2"
+    "typescript": "^2.5.2",
+    "uuid": "^3.2.1"
   },
   "devDependencies": {
     "@types/jasmine": "^2.8.6",

@@ -4,6 +4,7 @@ import { EventsModule, EventsAdminModule } from './event/events.module';
 import { CategoriesAdminModule } from './category/categories.module';
 import { AuthModule } from './auth/auth.module';
 import { CorsMiddleware } from './cors.middleware';
+import { SessionTokenMiddleware } from './session-token.middleware';
 import { Event } from './event/event.entity';
 import { Block } from './block/block.entity';
 import { Seat } from './seat/seat.entity';
@@ -35,7 +36,7 @@ import { Reservation } from './reservation/reservation.entity';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewaresConsumer): void | MiddlewaresConsumer {
-    consumer.apply([ CorsMiddleware ]).forRoutes({
+    consumer.apply([ CorsMiddleware, SessionTokenMiddleware ]).forRoutes({
       path: '*', method: RequestMethod.ALL
     });
   }
