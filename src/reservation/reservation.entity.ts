@@ -1,7 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, Index } from "typeorm";
 import { DtoInterface } from "../dto.interface";
+import { Event } from "../event/event.entity";
+import { Seat } from "../seat/seat.entity";
+import { Category } from "../category/category.entity";
 
 @Entity()
+@Index(["seat_id", "event_id"], { unique: true })
 export class Reservation {
     @PrimaryGeneratedColumn()
     id: number;
@@ -81,4 +85,25 @@ export class AddToOrderReservationDto implements DtoInterface<Reservation> {
         model.order_id = this.order_id;
         model.order_kind = this.order_kind;
     }
+}
+
+export class AugmentedReservation {
+    constructor(id: number, unique_id: string, event: Event, seat: Seat, category: Category, isReduced: boolean, price: number, order_id: number) {
+        this.id = id;
+        this.unique_id = unique_id;
+        this.event = event;
+        this.seat = seat;
+        this.category = category;
+        this.isReduced = isReduced;
+        this.price = price;
+        this.order_id = order_id;
+    }
+    id: number;
+    unique_id: string;
+    event: Event;
+    seat: Seat;
+    category: Category;
+    isReduced: boolean;
+    price: number;
+    order_id: number;
 }

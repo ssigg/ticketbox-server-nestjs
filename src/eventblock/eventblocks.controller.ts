@@ -1,7 +1,6 @@
-import { Controller, Get, Param, HttpStatus, Session } from "@nestjs/common";
+import { Controller, Get, Param, HttpStatus, Session, HttpException } from "@nestjs/common";
 import { EventblocksService } from "./eventblocks.service";
 import { MergedEventblock } from "./eventblock.entity";
-import { HttpException } from "@nestjs/common";
 
 @Controller('eventblocks')
 export class EventblocksController {
