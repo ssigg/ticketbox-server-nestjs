@@ -1,5 +1,4 @@
 import { Entity, PrimaryGeneratedColumn, Column, Index } from "typeorm";
-import { DtoInterface } from "../dto.interface";
 import { Event } from "../event/event.entity";
 import { Seat } from "../seat/seat.entity";
 import { Category } from "../category/category.entity";

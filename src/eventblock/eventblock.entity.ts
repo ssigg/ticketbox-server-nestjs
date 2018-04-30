@@ -1,5 +1,4 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
-import { DtoInterface } from "../dto.interface";
 import { Event } from "../event/event.entity";
 import { Category } from "../category/category.entity";
 import { Seat, AugmentedSeat } from "../seat/seat.entity";

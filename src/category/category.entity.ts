@@ -1,5 +1,4 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
-import { DtoInterface } from "../dto.interface";
 
 @Entity()
 export class Category {
