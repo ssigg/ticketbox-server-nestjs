@@ -31,6 +31,6 @@ export class EventsAdminModule implements NestModule {
     configure(consumer: MiddlewaresConsumer): void {
         consumer
             .apply(passport.authenticate('jwt', { session: false }))
-            .forRoutes({ path: '/admin/*', method: RequestMethod.ALL });
+            .forRoutes({ path: '/admin/events/*', method: RequestMethod.POST & RequestMethod.GET & RequestMethod.PUT & RequestMethod.DELETE });
     }
  }

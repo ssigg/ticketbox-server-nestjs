@@ -31,10 +31,11 @@ describe('EventblocksService', () => {
 
     it('Creates eventblock with given property values', async () => {
         let eventblockMock = new Eventblock();
-        let eventblockDtoMock = new EventblockDto();
-        eventblockDtoMock.block_id = 1;
-        eventblockDtoMock.category_id = 2;
-        eventblockDtoMock.event_id = 3;
+        let eventblockDtoMock = {
+            block_id: 1,
+            category_id: 2,
+            event_id: 3
+        };
 
         let eventblockRepositoryCreateSpy = spyOn(eventblockRepository, 'create').and.returnValue(eventblockMock);
         let eventblockRepositorySaveSpy = spyOn(eventblockRepository, 'save').and.returnValue(eventblockMock);
@@ -55,10 +56,11 @@ describe('EventblocksService', () => {
         eventblockMock.category_id = 2;
         eventblockMock.event_id = 3;
 
-        let eventblockDtoMock = new EventblockDto();
-        eventblockDtoMock.block_id = 4;
-        eventblockDtoMock.category_id = 5;
-        eventblockDtoMock.event_id = 6;
+        let eventblockDtoMock = {
+            block_id: 4,
+            category_id: 5,
+            event_id: 6
+        };
 
         let eventblockRepositoryFindOneByIdSpy = spyOn(eventblockRepository, 'findOneById').and.returnValue(eventblockMock);
         let eventblockRepositorySaveSpy = spyOn(eventblockRepository, 'save').and.returnValue(eventblockMock);
@@ -79,7 +81,7 @@ describe('EventblocksService', () => {
         eventblockMock.category_id = 2;
         eventblockMock.event_id = 3;
 
-        let eventblockDtoMock = new EventblockDto();
+        let eventblockDtoMock = { };
 
         let eventblockRepositoryFindOneByIdSpy = spyOn(eventblockRepository, 'findOneById').and.returnValue(eventblockMock);
         let eventblockRepositorySaveSpy = spyOn(eventblockRepository, 'save').and.returnValue(eventblockMock);

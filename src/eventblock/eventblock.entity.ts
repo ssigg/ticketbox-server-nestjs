@@ -18,24 +18,24 @@ export class Eventblock {
 
     @Column()
     category_id: number;
+
+    updateFromDto(dto: EventblockDto): void {
+        if (dto.event_id !== undefined) {
+            this.event_id = dto.event_id;
+        }
+        if (dto.block_id !== undefined) {
+            this.block_id = dto.block_id;
+        }
+        if (dto.category_id !== undefined) {
+            this.category_id = dto.category_id;
+        }
+    }
 }
 
-export class EventblockDto implements DtoInterface<Eventblock> {
+export interface EventblockDto {
     event_id?: number;
     block_id?: number;
     category_id?: number;
-
-    updateModel(model: Eventblock): void {
-        if (this.event_id !== undefined) {
-            model.event_id = this.event_id;
-        }
-        if (this.block_id !== undefined) {
-            model.block_id = this.block_id;
-        }
-        if (this.category_id !== undefined) {
-            model.category_id = this.category_id;
-        }
-    }
 }
 
 export interface ThinMergedEventblockInterface {

@@ -30,10 +30,11 @@ describe('BlocksService', () => {
 
     it('Creates block with given property values', async () => {
         let blockMock = new Block();
-        let blockDtoMock = new BlockDto();
-        blockDtoMock.name = 'dto.name';
-        blockDtoMock.numbered = true;
-        blockDtoMock.seatplan_image_data_url = 'dto.url';
+        let blockDtoMock = {
+            name: 'dto.name',
+            numbered: true,
+            seatplan_image_data_url: 'dto.url'
+        };
 
         let blockRepositoryCreateSpy = spyOn(blockRepository, 'create').and.returnValue(blockMock);
         let blockRepositorySaveSpy = spyOn(blockRepository, 'save').and.returnValue(blockMock);
@@ -54,10 +55,11 @@ describe('BlocksService', () => {
         blockMock.numbered = true;
         blockMock.seatplan_image_data_url = 'model.url';
 
-        let blockDtoMock = new BlockDto();
-        blockDtoMock.name = 'dto.name';
-        blockDtoMock.numbered = true;
-        blockDtoMock.seatplan_image_data_url = 'dto.url';
+        let blockDtoMock = {
+            name: 'dto.name',
+            numbered: true,
+            seatplan_image_data_url: 'dto.url'
+        };
 
         let blockRepositoryFindOneByIdSpy = spyOn(blockRepository, 'findOneById').and.returnValue(blockMock);
         let blockRepositorySaveSpy = spyOn(blockRepository, 'save').and.returnValue(blockMock);
@@ -76,8 +78,9 @@ describe('BlocksService', () => {
         let blockMock = new Block();
         blockMock.numbered = true;
 
-        let blockDtoMock = new BlockDto();
-        blockDtoMock.numbered = false;
+        let blockDtoMock = {
+            numbered: false
+        };
 
         let blockRepositoryFindOneByIdSpy = spyOn(blockRepository, 'findOneById').and.returnValue(blockMock);
         let blockRepositorySaveSpy = spyOn(blockRepository, 'save').and.returnValue(blockMock);
@@ -90,7 +93,7 @@ describe('BlocksService', () => {
         let blockMock = new Block();
         blockMock.numbered = true;
 
-        let blockDtoMock = new BlockDto();
+        let blockDtoMock = { };
 
         let blockRepositoryFindOneByIdSpy = spyOn(blockRepository, 'findOneById').and.returnValue(blockMock);
         let blockRepositorySaveSpy = spyOn(blockRepository, 'save').and.returnValue(blockMock);

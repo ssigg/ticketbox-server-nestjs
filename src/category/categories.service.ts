@@ -20,14 +20,14 @@ export class CategoriesService {
 
     async create(dto: CategoryDto): Promise<Category> {
         let category = await this.categoryRepository.create();
-        dto.updateModel(category);
+        category.updateFromDto(dto);
         let savedCategory = await this.categoryRepository.save(category);
         return savedCategory;
     }
 
     async update(id: number, dto: CategoryDto): Promise<Category> {
         let category = await this.categoryRepository.findOneById(id);
-        dto.updateModel(category);
+        category.updateFromDto(dto);
         let savedCategory = await this.categoryRepository.save(category);
         return savedCategory;
     }

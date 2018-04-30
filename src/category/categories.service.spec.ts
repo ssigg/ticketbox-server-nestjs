@@ -29,11 +29,12 @@ describe('CategoriesService', () => {
 
     it('Creates category with given property values', async () => {
         let categoryMock = new Category();
-        let categoryDtoMock = new CategoryDto();
-        categoryDtoMock.name = 'dto.name';
-        categoryDtoMock.color = '#f33';
-        categoryDtoMock.price = 20;
-        categoryDtoMock.price_reduced = 10;
+        let categoryDtoMock = {
+            name: 'dto.name',
+            color: '#f33',
+            price: 20,
+            price_reduced: 10
+        };
 
         let categoryRepositoryCreateSpy = spyOn(categoryRepository, 'create').and.returnValue(categoryMock);
         let categoryRepositorySaveSpy = spyOn(categoryRepository, 'save').and.returnValue(categoryMock);
@@ -56,11 +57,12 @@ describe('CategoriesService', () => {
         categoryMock.price = 20;
         categoryMock.price_reduced = 10;
 
-        let categoryDtoMock = new CategoryDto();
-        categoryDtoMock.name = 'dto.name';
-        categoryDtoMock.color = '#3ff';
-        categoryDtoMock.price = 21;
-        categoryDtoMock.price_reduced = 11;
+        let categoryDtoMock = {
+            name: 'dto.name',
+            color: '#3ff',
+            price: 21,
+            price_reduced: 11
+        };
 
         let categoryRepositoryFindOneByIdSpy = spyOn(categoryRepository, 'findOneById').and.returnValue(categoryMock);
         let categoryRepositorySaveSpy = spyOn(categoryRepository, 'save').and.returnValue(categoryMock);
@@ -83,7 +85,7 @@ describe('CategoriesService', () => {
         categoryMock.price = 20;
         categoryMock.price_reduced = 10;
 
-        let categoryDtoMock = new CategoryDto();
+        let categoryDtoMock = { };
 
         let categoryRepositoryFindOneByIdSpy = spyOn(categoryRepository, 'findOneById').and.returnValue(categoryMock);
         let categoryRepositorySaveSpy = spyOn(categoryRepository, 'save').and.returnValue(categoryMock);

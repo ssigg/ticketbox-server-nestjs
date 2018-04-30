@@ -17,26 +17,26 @@ export class Category {
 
     @Column()
     price_reduced: number;
+
+    updateFromDto(dto: CategoryDto): void {
+        if (dto.name !== undefined) {
+            this.name = dto.name;
+        }
+        if (dto.color !== undefined) {
+            this.color = dto.color;
+        }
+        if (dto.price !== undefined) {
+            this.price = dto.price;
+        }
+        if (dto.price_reduced !== undefined) {
+            this.price_reduced = dto.price_reduced;
+        }
+    }
 }
 
-export class CategoryDto implements DtoInterface<Category> {
+export interface CategoryDto {
     name?: string;
     color?: string;
     price?: number;
     price_reduced?: number;
-    
-    updateModel(model: Category): void {
-        if (this.name !== undefined) {
-            model.name = this.name;
-        }
-        if (this.color !== undefined) {
-            model.color = this.color;
-        }
-        if (this.price !== undefined) {
-            model.price = this.price;
-        }
-        if (this.price_reduced !== undefined) {
-            model.price_reduced = this.price_reduced;
-        }
-    }
 }

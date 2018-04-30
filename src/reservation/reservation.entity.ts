@@ -39,6 +39,26 @@ export class Reservation {
 
     @Column()
     timestamp: number;
+
+    updateFromCreationDto(dto: CreateReservationDto): void {
+        this.seat_id = dto.seat_id;
+        this.event_id = dto.event_id;
+        this.category_id = dto.category_id;
+        this.unique_id = dto.unique_id;
+        this.token = dto.token;
+        this.is_reduced = dto.is_reduced;
+        this.is_scanned = dto.is_scanned;
+        this.timestamp = dto.timestamp;
+    }
+
+    updateFromUpdateReductionDto(dto: UpdateReductionReservationDto): void {
+        this.is_reduced = dto.is_reduced;
+    }
+
+    updateFromAddToOrderDto(dto: AddToOrderReservationDto): void {
+        this.order_id = dto.order_id;
+        this.order_kind = dto.order_kind;
+    }
 }
 
 export enum OrderKind {
@@ -47,7 +67,7 @@ export enum OrderKind {
     CustomerPurchase = 'customer-purchase'
 }
 
-export class CreateReservationDto implements DtoInterface<Reservation> {
+export interface CreateReservationDto {
     seat_id: number;
     event_id: number;
     category_id: number;
@@ -56,35 +76,15 @@ export class CreateReservationDto implements DtoInterface<Reservation> {
     is_reduced: boolean;
     is_scanned: boolean;
     timestamp: number;
-
-    updateModel(model: Reservation): void {
-        model.seat_id = this.seat_id;
-        model.event_id = this.event_id;
-        model.category_id = this.category_id;
-        model.unique_id = this.unique_id;
-        model.token = this.token;
-        model.is_reduced = this.is_reduced;
-        model.is_scanned = this.is_scanned;
-        model.timestamp = this.timestamp;
-    }
 }
 
-export class UpdateReductionReservationDto implements DtoInterface<Reservation> {
+export interface UpdateReductionReservationDto {
     is_reduced: boolean;
-
-    updateModel(model: Reservation): void {
-        model.is_reduced = this.is_reduced;
-    }
 }
 
-export class AddToOrderReservationDto implements DtoInterface<Reservation> {
+export interface AddToOrderReservationDto {
     order_id: number;
     order_kind: OrderKind;
-
-    updateModel(model: Reservation): void {
-        model.order_id = this.order_id;
-        model.order_kind = this.order_kind;
-    }
 }
 
 export class AugmentedReservation {

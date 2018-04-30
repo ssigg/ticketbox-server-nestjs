@@ -29,18 +29,19 @@ export class ReservationsService {
     }
 
     async create(event_id: number, seat_id: number, category_id: number, token: Token): Promise<AugmentedReservation> {
-        let dto = new CreateReservationDto();
-        dto.event_id = event_id;
-        dto.seat_id = seat_id;
-        dto.category_id = category_id;
-        dto.token = token.value;
-        dto.unique_id = this.uuidFactory.create();
-        dto.is_reduced = false;
-        dto.is_scanned = false;
-        dto.timestamp = token.timestamp
+        let dto = {
+            event_id: event_id,
+            seat_id: seat_id,
+            category_id: category_id,
+            token: token.value,
+            unique_id: this.uuidFactory.create(),
+            is_reduced: false,
+            is_scanned: false,
+            timestamp: token.timestamp
+        };
 
         let reservation = await this.reservationRepository.create();
-        dto.updateModel(reservation);
+        reservation.updateFromCreationDto(dto);
         let savedReservation = await this.reservationRepository.save(reservation);
         let augmentedReservation = await this.augmentReservation(savedReservation);
         return augmentedReservation;
@@ -49,7 +50,7 @@ export class ReservationsService {
     async updateReduction(id: number, token: Token, dto: UpdateReductionReservationDto): Promise<AugmentedReservation> {
         let reservation = await this.reservationRepository.findOne({ id: id, token: token.value, order_id: undefined });
         if (reservation !== undefined) {
-            dto.updateModel(reservation);
+            reservation.updateFromUpdateReductionDto(dto);
             let savedReservation = await this.reservationRepository.save(reservation);
             let augmentedReservation = await this.augmentReservation(savedReservation);
             return augmentedReservation;
@@ -61,7 +62,7 @@ export class ReservationsService {
     async addToOrder(id: number, token: Token, dto: AddToOrderReservationDto): Promise<AugmentedReservation> {
         let reservation = await this.reservationRepository.findOne({ id: id, token: token.value, order_id: undefined });
         if (reservation !== undefined) {
-            dto.updateModel(reservation);
+            reservation.updateFromAddToOrderDto(dto);
             let savedReservation = await this.reservationRepository.save(reservation);
             let augmentedReservation = await this.augmentReservation(savedReservation);
             return augmentedReservation;

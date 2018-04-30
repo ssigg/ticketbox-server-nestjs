@@ -77,9 +77,10 @@ describe('ReservationsService', () => {
 
     it('Updates reduction state of a reservation if reservation exists and is not ordered', async () => {
         let reservationMock = new Reservation();
-        let updateReductionReservationDtoMock = new UpdateReductionReservationDto();
-        let updateReductionReservationDtoMockUpdateModelSpy = spyOn(updateReductionReservationDtoMock, 'updateModel').and.callThrough();
-        updateReductionReservationDtoMock.is_reduced = true;
+        let updateReductionReservationDtoMock = {
+            is_reduced: true
+        };
+        let reservationMockUpdateFromUpdateReductionDtoSpy = spyOn(reservationMock, 'updateFromUpdateReductionDto').and.callThrough();
 
         let eventMock = new Event();
         let seatMock = new Seat();
@@ -96,7 +97,7 @@ describe('ReservationsService', () => {
         let augmentedReservation = await reservationsService.updateReduction(1, { value: 'token', timestamp: 0, expirationTimestamp: 0 }, updateReductionReservationDtoMock);
         
         expect(reservationRepositoryFindOneSpy).toHaveBeenCalledWith({ id: 1, token: 'token', order_id: undefined });
-        expect(updateReductionReservationDtoMockUpdateModelSpy).toHaveBeenCalledWith(reservationMock);
+        expect(reservationMockUpdateFromUpdateReductionDtoSpy).toHaveBeenCalledWith(updateReductionReservationDtoMock);
         expect(reservationRepositorySaveSpy).toHaveBeenCalledWith(reservationMock);
 
         expect(augmentedReservation.isReduced).toEqual(true);
@@ -104,9 +105,9 @@ describe('ReservationsService', () => {
     });
 
     it('Returns undefined when a not existing reservation is updated', async () => {
-        let updateReductionReservationDtoMock = new UpdateReductionReservationDto();
-        let updateReductionReservationDtoMockUpdateModelSpy = spyOn(updateReductionReservationDtoMock, 'updateModel').and.callThrough();
-        updateReductionReservationDtoMock.is_reduced = true;
+        let updateReductionReservationDtoMock = {
+            is_reduced: true
+        };
 
         let reservationRepositoryFindOneSpy = spyOn(reservationRepository, 'findOne').and.returnValue(undefined);
         let reservationRepositorySaveSpy = spyOn(reservationRepository, 'save');
@@ -114,18 +115,18 @@ describe('ReservationsService', () => {
         let reservation = await reservationsService.updateReduction(1, { value: 'token', timestamp: 0, expirationTimestamp: 0 }, updateReductionReservationDtoMock);
         
         expect(reservationRepositoryFindOneSpy).toHaveBeenCalledWith({ id: 1, token: 'token', order_id: undefined });
-        expect(updateReductionReservationDtoMockUpdateModelSpy).not.toHaveBeenCalled();
         expect(reservationRepositorySaveSpy).not.toHaveBeenCalled();
         expect(reservation).toEqual(undefined);
     });
 
     it('Adds the reservation to an order if reservation exists and is not ordered', async () => {
         let reservationMock = new Reservation();
-        let addToOrderReservationDtoMock = new AddToOrderReservationDto();
-        let addToOrderReservationDtoMockUpdateModelSpy = spyOn(addToOrderReservationDtoMock, 'updateModel').and.callThrough();
-        addToOrderReservationDtoMock.order_id = 1;
-        addToOrderReservationDtoMock.order_kind = OrderKind.Reservation;
-
+        let addToOrderReservationDtoMock = {
+            order_id: 1,
+            order_kind: OrderKind.Reservation
+        };
+        let reservationMockUpdateFromAddToOrderDtoSpy = spyOn(reservationMock, 'updateFromAddToOrderDto').and.callThrough();
+        
         let eventMock = new Event();
         let seatMock = new Seat();
         let categoryMock = new Category();
@@ -139,7 +140,7 @@ describe('ReservationsService', () => {
         let augmentedReservation = await reservationsService.addToOrder(1, { value: 'token', timestamp: 0, expirationTimestamp: 0 }, addToOrderReservationDtoMock);
         
         expect(reservationRepositoryFindOneSpy).toHaveBeenCalledWith({ id: 1, token: 'token', order_id: undefined });
-        expect(addToOrderReservationDtoMockUpdateModelSpy).toHaveBeenCalledWith(reservationMock);
+        expect(reservationMockUpdateFromAddToOrderDtoSpy).toHaveBeenCalledWith(addToOrderReservationDtoMock);
         expect(reservationRepositorySaveSpy).toHaveBeenCalledWith(reservationMock);
         
         expect(augmentedReservation.order_id).toEqual(1);
@@ -149,10 +150,10 @@ describe('ReservationsService', () => {
     });
 
     it('Returns undefined when a not existing reservation is added to an order', async () => {
-        let addToOrderReservationDtoMock = new AddToOrderReservationDto();
-        let addToOrderReservationDtoMockUpdateModelSpy = spyOn(addToOrderReservationDtoMock, 'updateModel').and.callThrough();
-        addToOrderReservationDtoMock.order_id = 1;
-        addToOrderReservationDtoMock.order_kind = OrderKind.Reservation;
+        let addToOrderReservationDtoMock = {
+            order_id: 1,
+            order_kind: OrderKind.Reservation
+        };
 
         let reservationRepositoryFindOneSpy = spyOn(reservationRepository, 'findOne').and.returnValue(undefined);
         let reservationRepositorySaveSpy = spyOn(reservationRepository, 'save');
@@ -160,7 +161,6 @@ describe('ReservationsService', () => {
         let reservation = await reservationsService.addToOrder(1, { value: 'token', timestamp: 0, expirationTimestamp: 0 }, addToOrderReservationDtoMock);
         
         expect(reservationRepositoryFindOneSpy).toHaveBeenCalledWith({ id: 1, token: 'token', order_id: undefined });
-        expect(addToOrderReservationDtoMockUpdateModelSpy).not.toHaveBeenCalled();
         expect(reservationRepositorySaveSpy).not.toHaveBeenCalled();
         expect(reservation).toEqual(undefined);
     });

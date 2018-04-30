@@ -27,9 +27,33 @@ export class Event {
 
     @Column()
     visible: boolean;
+
+    updateFromDto(dto: EventDto): void {
+        if (dto.name !== undefined) {
+            this.name = dto.name;
+        }
+        if (dto.location !== undefined) {
+            this.location = dto.location;
+        }
+        if (dto.location_address !== undefined) {
+            this.location_address = dto.location_address;
+        }
+        if (dto.location_directions_public_transport !== undefined) {
+            this.location_directions_public_transport = dto.location_directions_public_transport;
+        }
+        if (dto.location_directions_car !== undefined) {
+            this.location_directions_car = dto.location_directions_car;
+        }
+        if (dto.dateandtime !== undefined) {
+            this.dateandtime = dto.dateandtime;
+        }
+        if (dto.visible !== undefined) {
+            this.visible = dto.visible;
+        }
+    }
 }
 
-export class EventDto implements DtoInterface<Event> {
+export interface EventDto {
     name?: string;
     location?: string;
     location_address?: string;
@@ -37,30 +61,6 @@ export class EventDto implements DtoInterface<Event> {
     location_directions_car?: string;
     dateandtime?: string;
     visible?: boolean;
-
-    updateModel(model: Event): void {
-        if (this.name !== undefined) {
-            model.name = this.name;
-        }
-        if (this.location !== undefined) {
-            model.location = this.location;
-        }
-        if (this.location_address !== undefined) {
-            model.location_address = this.location_address;
-        }
-        if (this.location_directions_public_transport !== undefined) {
-            model.location_directions_public_transport = this.location_directions_public_transport;
-        }
-        if (this.location_directions_car !== undefined) {
-            model.location_directions_car = this.location_directions_car;
-        }
-        if (this.dateandtime !== undefined) {
-            model.dateandtime = this.dateandtime;
-        }
-        if (this.visible !== undefined) {
-            model.visible = this.visible;
-        }
-    }
 }
 
 export class EventWithBlocks {

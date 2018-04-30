@@ -11,15 +11,15 @@ export class TokenService {
     }
 
     getToken(): Token {
-        return new Token(this.uuidFactory.create(), Date.now(), this.tokenExpirationDurationInSeconds);
+        return new Token(this.uuidFactory.create(), Date.now() / 1000, this.tokenExpirationDurationInSeconds);
     }
 }
 
 export class Token {
-    constructor(value: string, timestamp: number, tokenExpirationDurationInMilliseconds: number) {
+    constructor(value: string, timestamp: number, tokenExpirationDurationInSeconds: number) {
         this.value = value;
         this.timestamp = timestamp;
-        this.expirationTimestamp = timestamp + tokenExpirationDurationInMilliseconds;
+        this.expirationTimestamp = timestamp + tokenExpirationDurationInSeconds;
     }
     value: string;
     timestamp: number;

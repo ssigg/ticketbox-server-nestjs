@@ -17,24 +17,24 @@ export class Block implements ThinBlock {
 
     @Column({nullable: true})
     seatplan_image_data_url: string;
+
+    updateFromDto(dto: BlockDto): void {
+        if (dto.name !== undefined) {
+            this.name = dto.name;
+        }
+        if (dto.numbered !== undefined) {
+            this.numbered = dto.numbered;
+        }
+        if (dto.seatplan_image_data_url !== undefined) {
+            this.seatplan_image_data_url = dto.seatplan_image_data_url;
+        }
+    }
 }
 
-export class BlockDto implements DtoInterface<Block> {
+export interface BlockDto {
     name?: string;
     numbered?: boolean;
     seatplan_image_data_url?: string;
-    
-    updateModel(model: Block): void {
-        if (this.name !== undefined) {
-            model.name = this.name;
-        }
-        if (this.numbered !== undefined) {
-            model.numbered = this.numbered;
-        }
-        if (this.seatplan_image_data_url !== undefined) {
-            model.seatplan_image_data_url = this.seatplan_image_data_url;
-        }
-    }
 }
 
 export interface ThinBlock {

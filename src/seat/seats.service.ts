@@ -52,7 +52,7 @@ export class SeatsService {
 
     private async createOneSeat(dto: SeatDto): Promise<Seat> {
         let seat = await this.seatRepository.create();
-        dto.updateModel(seat);
+        seat.updateFromDto(dto);
         let savedSeat = await this.seatRepository.save(seat);
         return savedSeat;
     }

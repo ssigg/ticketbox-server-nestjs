@@ -27,28 +27,30 @@ describe('SeatsService', () => {
         let seatMock1 = new Seat();
         let seatMock2 = new Seat();
 
-        let seatDtoMock1 = new SeatDto();
-        seatDtoMock1.block_id = 1;
-        seatDtoMock1.name = 's';
-        seatDtoMock1.x0 = 1;
-        seatDtoMock1.y0 = 2;
-        seatDtoMock1.x1 = 3;
-        seatDtoMock1.y1 = 4;
-        seatDtoMock1.x2 = 5;
-        seatDtoMock1.y2 = 6;
-        seatDtoMock1.x3 = 7;
-        seatDtoMock1.y3 = 8;
-        let seatDtoMock2 = new SeatDto();
-        seatDtoMock2.block_id = 1;
-        seatDtoMock2.name = 's';
-        seatDtoMock2.x0 = 1;
-        seatDtoMock2.y0 = 2;
-        seatDtoMock2.x1 = 3;
-        seatDtoMock2.y1 = 4;
-        seatDtoMock2.x2 = 5;
-        seatDtoMock2.y2 = 6;
-        seatDtoMock2.x3 = 7;
-        seatDtoMock2.y3 = 8;
+        let seatDtoMock1 = {
+            block_id: 1,
+            name: 's',
+            x0: 1,
+            y0: 2,
+            x1: 3,
+            y1: 4,
+            x2: 5,
+            y2: 6,
+            x3: 7,
+            y3: 8
+        };
+        let seatDtoMock2 = {
+            block_id: 1,
+            name: 's',
+            x0: 1,
+            y0: 2,
+            x1: 3,
+            y1: 4,
+            x2: 5,
+            y2: 6,
+            x3: 7,
+            y3: 8
+        };
 
         let seatRepositoryCreateSpy = spyOn(seatRepository, 'create').and.returnValues(seatMock1, seatMock2);
         let seatRepositorySaveSpy = spyOn(seatRepository, 'save').and.returnValues(seatMock1, seatMock2);
@@ -66,13 +68,15 @@ describe('SeatsService', () => {
         let seatMock1 = new Seat();
         let seatMock2 = new Seat();
 
-        let seatDtoMock1 = new SeatDto();
-        seatDtoMock1.block_id = 1;
-        seatDtoMock1.name = 's';
+        let seatDtoMock1 = {
+            block_id: 1,
+            name: 's'
+        };
         
-        let seatDtoMock2 = new SeatDto();
-        seatDtoMock2.block_id = 1;
-        seatDtoMock2.name = 's';
+        let seatDtoMock2 = {
+            block_id: 1,
+            name: 's'
+        };
 
         let seatRepositoryCreateSpy = spyOn(seatRepository, 'create').and.returnValues(seatMock1, seatMock2);
         let seatRepositorySaveSpy = spyOn(seatRepository, 'save').and.returnValues(seatMock1, seatMock2);

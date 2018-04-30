@@ -53,14 +53,15 @@ describe('EventsService', () => {
 
     it('Creates event with given property values', async () => {
         let eventMock = new Event();
-        let eventDtoMock = new EventDto();
-        eventDtoMock.name = 'dto.name';
-        eventDtoMock.location = 'dto.loc';
-        eventDtoMock.location_address = 'dto.loc.addr.';
-        eventDtoMock.location_directions_car = 'dto.loc.dir.car';
-        eventDtoMock.location_directions_public_transport = 'dto.loc.dir.pub.trsp.';
-        eventDtoMock.dateandtime = 'model.dat';
-        eventDtoMock.visible = true;
+        let eventDtoMock = {
+            name: 'dto.name',
+            location: 'dto.loc',
+            location_address: 'dto.loc.addr.',
+            location_directions_car: 'dto.loc.dir.car',
+            location_directions_public_transport: 'dto.loc.dir.pub.trsp.',
+            dateandtime: 'model.dat',
+            visible: true
+        };
 
         let eventRepositoryCreateSpy = spyOn(eventRepository, 'create').and.returnValue(eventMock);
         let eventRepositorySaveSpy = spyOn(eventRepository, 'save').and.returnValue(eventMock);
@@ -89,14 +90,15 @@ describe('EventsService', () => {
         eventMock.dateandtime = 'model.dat';
         eventMock.visible = false;
 
-        let eventDtoMock = new EventDto();
-        eventDtoMock.name = 'dto.name';
-        eventDtoMock.location = 'dto.loc';
-        eventDtoMock.location_address = 'dto.loc.addr.';
-        eventDtoMock.location_directions_car = 'dto.loc.dir.car';
-        eventDtoMock.location_directions_public_transport = 'dto.loc.dir.pub.trsp.';
-        eventDtoMock.dateandtime = 'model.dat';
-        eventDtoMock.visible = true;
+        let eventDtoMock = {
+            name: 'dto.name',
+            location: 'dto.loc',
+            location_address: 'dto.loc.addr.',
+            location_directions_car: 'dto.loc.dir.car',
+            location_directions_public_transport: 'dto.loc.dir.pub.trsp.',
+            dateandtime: 'model.dat',
+            visible: true
+        };
 
         let eventRepositoryFindOneByIdSpy = spyOn(eventRepository, 'findOneById').and.returnValue(eventMock);
         let eventRepositorySaveSpy = spyOn(eventRepository, 'save').and.returnValue(eventMock);
@@ -119,8 +121,9 @@ describe('EventsService', () => {
         let eventMock = new Event();
         eventMock.visible = true;
 
-        let eventDtoMock = new EventDto();
-        eventDtoMock.visible = false;
+        let eventDtoMock = {
+            visible: false
+        };
 
         let eventRepositoryFindOneByIdSpy = spyOn(eventRepository, 'findOneById').and.returnValue(eventMock);
         let eventRepositorySaveSpy = spyOn(eventRepository, 'save').and.returnValue(eventMock);
@@ -133,7 +136,7 @@ describe('EventsService', () => {
         let eventMock = new Event();
         eventMock.visible = true;
 
-        let eventDtoMock = new EventDto();
+        let eventDtoMock = { };
 
         let eventRepositoryFindOneByIdSpy = spyOn(eventRepository, 'findOneById').and.returnValue(eventMock);
         let eventRepositorySaveSpy = spyOn(eventRepository, 'save').and.returnValue(eventMock);

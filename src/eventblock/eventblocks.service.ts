@@ -27,14 +27,14 @@ export class EventblocksService {
 
     async create(dto: EventblockDto): Promise<Eventblock> {
         let eventblock = await this.eventblockRepository.create();
-        dto.updateModel(eventblock);
+        eventblock.updateFromDto(dto);
         let savedEventblock = await this.eventblockRepository.save(eventblock);
         return savedEventblock;
     }
 
     async update(id: number, dto: EventblockDto): Promise<Eventblock> {
         let eventblock = await this.eventblockRepository.findOneById(id);
-        dto.updateModel(eventblock);
+        eventblock.updateFromDto(dto);
         let savedEventblock = await this.eventblockRepository.save(eventblock);
         return savedEventblock;
     }
