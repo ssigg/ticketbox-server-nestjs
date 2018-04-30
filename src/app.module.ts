@@ -14,8 +14,9 @@ import { Eventblock } from './eventblock/eventblock.entity';
 import { EventblocksModule } from './eventblock/eventblocks.module';
 import { SeatsAdminModule } from './seat/seats.module';
 import { Reservation } from './reservation/reservation.entity';
-import { UuidFactory } from './uuid.factory';
+import { UuidFactory } from './utils/uuid.factory';
 import { ReservationsModule } from './reservation/reservations.module';
+import { TokenService } from './utils/token.service';
 
 @Module({
   imports: [
@@ -35,7 +36,7 @@ import { ReservationsModule } from './reservation/reservations.module';
     ReservationsModule
   ],
   controllers: [],
-  components: [ UuidFactory ],
+  components: [ UuidFactory, TokenService ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewaresConsumer): void | MiddlewaresConsumer {

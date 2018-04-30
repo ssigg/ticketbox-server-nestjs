@@ -1,6 +1,7 @@
 import { Controller, Param, Body, Get, Delete, Put, Post, Session, HttpStatus, HttpException } from "@nestjs/common";
 import { ReservationsService } from "./reservations.service";
 import { Reservation, AugmentedReservation, CreateReservationDto } from "./reservation.entity";
+import { Token } from "../utils/token.service";
 
 @Controller('reservations')
 export class ReservationsController {
@@ -88,7 +89,7 @@ export class ReservationsController {
      * ]
      */
     @Get()
-    public async findMine(@Session() session): Promise<AugmentedReservation[]> {
+    public async findMine(@Session() session: { token: Token }): Promise<AugmentedReservation[]> {
         return this.reservationsService.findMyReservations(session.token);
     }
 
@@ -188,7 +189,7 @@ export class ReservationsController {
      * HTTP/1.1 409 Conflict
      */
     @Post()
-    public async create(@Body() body, @Session() session): Promise<AugmentedReservation> {
+    public async create(@Body() body, @Session() session: { token: Token }): Promise<AugmentedReservation> {
         try {
             return this.reservationsService.create(body.event_id, body.seat_id, body.category_id, session.token);
         } catch(e) {
@@ -284,7 +285,7 @@ export class ReservationsController {
      * }
      */
     @Put(':id')
-    public async updateReduction(@Param() param, @Body() body, @Session() session): Promise<AugmentedReservation> {
+    public async updateReduction(@Param() param, @Body() body, @Session() session: { token: Token }): Promise<AugmentedReservation> {
         return await this.reservationsService.updateReduction(param.id, session.token, body);
     }
 
@@ -304,4 +305,29 @@ export class ReservationsController {
     public async delete(@Param() param): Promise<void> {
         return await this.reservationsService.delete(param.id);
     }
+}
+
+@Controller('reservations-expiration-timestamp')
+export class ReservationsExpirationTimestampController {
+    constructor() { }
+
+    /**
+     * @api {get} /reservations-expiration-timestamp Get reservation expiration timestamp
+     * @apiName GetReservationExpirationTimestamp
+     * @apiGroup Reservation
+     * @apiPermission none
+     * @apiVersion 1.0.0
+     * 
+     * @apiSuccess {Number} value Unix timestamp when reservations will expire
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *   "value": 1521293290
+     * }
+     */
+     @Get()
+     public getExpirationTimestamp(@Session() session: { token: Token }): { value: number } {
+        return { value: session.token.expirationTimestamp };
+     }
 }
