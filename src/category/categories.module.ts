@@ -17,6 +17,6 @@ export class CategoriesAdminModule implements NestModule {
     configure(consumer: MiddlewaresConsumer): void {
         consumer
             .apply(passport.authenticate('jwt', { session: false }))
-            .forRoutes({ path: '/admin/categories/*', method: RequestMethod.ALL });
+            .forRoutes({ path: '/admin/categories*', method: RequestMethod.POST & RequestMethod.GET & RequestMethod.PUT & RequestMethod.DELETE });
     }
 }

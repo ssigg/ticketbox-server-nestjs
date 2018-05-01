@@ -17,6 +17,6 @@ export class BlocksAdminModule implements NestModule {
     configure(consumer: MiddlewaresConsumer): void {
         consumer
             .apply(passport.authenticate('jwt', { session: false }))
-            .forRoutes({ path: '/admin/blocks/*', method: RequestMethod.ALL });
+            .forRoutes({ path: '/admin/blocks*', method: RequestMethod.POST & RequestMethod.GET & RequestMethod.PUT & RequestMethod.DELETE });
     }
  }
