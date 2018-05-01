@@ -11,28 +11,28 @@ export class Seat {
     @Column()
     name: string;
 
-    @Column({nullable: true})
+    @Column({ nullable: true, type: "decimal" })
     x0: number;
 
-    @Column({nullable: true})
+    @Column({ nullable: true, type: "decimal" })
     y0: number;
 
-    @Column({nullable: true})
+    @Column({ nullable: true, type: "decimal" })
     x1: number;
 
-    @Column({nullable: true})
+    @Column({ nullable: true, type: "decimal" })
     y1: number;
 
-    @Column({nullable: true})
+    @Column({ nullable: true, type: "decimal" })
     x2: number;
 
-    @Column({nullable: true})
+    @Column({ nullable: true, type: "decimal" })
     y2: number;
 
-    @Column({nullable: true})
+    @Column({ nullable: true, type: "decimal" })
     x3: number;
 
-    @Column({nullable: true})
+    @Column({ nullable: true, type: "decimal" })
     y3: number;
 
     updateFromDto(dto: SeatDto): void {

@@ -11,10 +11,10 @@ export class Category {
     @Column()
     color: string;
 
-    @Column()
+    @Column({ type: "decimal" })
     price: number;
 
-    @Column()
+    @Column({ type: "decimal" })
     price_reduced: number;
 
     updateFromDto(dto: CategoryDto): void {
