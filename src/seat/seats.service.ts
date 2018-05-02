@@ -34,7 +34,7 @@ export class SeatsService {
         
         if (reservation === undefined) {
             return new AugmentedSeat(seat, SeatState.Free);
-        } else if (reservation.order_id !== undefined) {
+        } else if (reservation.order_id !== null) {
             if (reservation.order_kind === OrderKind.Reservation) {
                 return new AugmentedSeat(seat, SeatState.Ordered);
             } else if (reservation.order_kind === OrderKind.BoxofficePurchase) {

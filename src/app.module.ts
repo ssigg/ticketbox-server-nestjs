@@ -11,7 +11,7 @@ import { Seat } from './seat/seat.entity';
 import { BlocksAdminModule } from './block/blocks.module';
 import { Category } from './category/category.entity';
 import { Eventblock } from './eventblock/eventblock.entity';
-import { EventblocksModule } from './eventblock/eventblocks.module';
+import { EventblocksModule, EventblocksAdminModule } from './eventblock/eventblocks.module';
 import { SeatsAdminModule } from './seat/seats.module';
 import { Reservation } from './reservation/reservation.entity';
 import { UuidFactory } from './utils/uuid.factory';
@@ -24,7 +24,7 @@ import { TokenService } from './utils/token.service';
       type: 'postgres',
       entities: [ Event, Category, Block, Eventblock, Seat, Reservation ],
       url: process.env.DATABASE_URL,
-      synchronize: true,
+      synchronize: true
     }),
     AuthModule,
     EventsModule,
@@ -32,6 +32,7 @@ import { TokenService } from './utils/token.service';
     EventsAdminModule,
     BlocksAdminModule,
     EventblocksModule,
+    EventblocksAdminModule,
     SeatsAdminModule,
     ReservationsModule,
     ReservationsAdminModule

@@ -39,7 +39,7 @@ export class EventsController {
      * ]
      */
     @Get()
-    public findAll(): Promise<Event[]> {
+    public async findAll(): Promise<Event[]> {
         return this.eventsService.findAllVisible();
     }
 
@@ -86,7 +86,7 @@ export class EventsController {
      * }
      */
     @Get(':id')
-    public find(@Param() params): Promise<EventWithBlocks> {
+    public async find(@Param() params): Promise<EventWithBlocks> {
         return this.eventsService.find(params.id);
     }
 }
@@ -127,7 +127,7 @@ export class EventsAdminController {
      * ]
      */
     @Get()
-    public findAll(): Promise<Event[]> {
+    public async findAll(): Promise<Event[]> {
         return this.eventsService.findAll();
     }
 
@@ -174,7 +174,7 @@ export class EventsAdminController {
      * }
      */
     @Get(':id')
-    public find(@Param() params): Promise<EventWithBlocks> {
+    public async find(@Param() params): Promise<EventWithBlocks> {
         return this.eventsService.find(params.id);
     }
 
@@ -221,7 +221,7 @@ export class EventsAdminController {
      * }
      */
     @Post()
-    public create(@Body() body): Promise<Event> {
+    public async create(@Body() body): Promise<Event> {
         return this.eventsService.create(body);
     }
 
@@ -269,7 +269,7 @@ export class EventsAdminController {
      * }
      */
     @Put(':id')
-    public update(@Param() params, @Body() body): Promise<Event> {
+    public async update(@Param() params, @Body() body): Promise<Event> {
         return this.eventsService.update(params.id, body);
     }
 
@@ -286,7 +286,7 @@ export class EventsAdminController {
      * HTTP/1.1 200 OK
      */
     @Delete(':id')
-    public delete(@Param() params): Promise<DeleteResult> {
+    public async delete(@Param() params): Promise<DeleteResult> {
         return this.eventsService.delete(params.id);
     }
 }

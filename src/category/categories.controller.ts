@@ -33,7 +33,7 @@ export class CategoriesAdminController {
      * ]
      */
     @Get()
-    public findAll(): Promise<Category[]> {
+    public async findAll(): Promise<Category[]> {
         return this.categoriesService.findAll();
     }
 
@@ -61,7 +61,7 @@ export class CategoriesAdminController {
      * }
      */
     @Get(':id')
-    public find(@Param() params): Promise<Category> {
+    public async find(@Param() params): Promise<Category> {
         return this.categoriesService.find(params.id);
     }
 
@@ -102,7 +102,7 @@ export class CategoriesAdminController {
      * }
      */
     @Post()
-    public create(@Body() body): Promise<Category> {
+    public async create(@Body() body): Promise<Category> {
         return this.categoriesService.create(body);
     }
 
@@ -143,7 +143,7 @@ export class CategoriesAdminController {
      * }
      */
     @Put(':id')
-    public update(@Param() params, @Body() body): Promise<Category> {
+    public async update(@Param() params, @Body() body): Promise<Category> {
         return this.categoriesService.update(params.id, body);
     }
 
@@ -160,7 +160,7 @@ export class CategoriesAdminController {
      * HTTP/1.1 200 OK
      */
     @Delete(':id')
-    public delete(@Param() params): Promise<DeleteResult> {
+    public async delete(@Param() params): Promise<DeleteResult> {
         return this.categoriesService.delete(params.id);
     }
 }

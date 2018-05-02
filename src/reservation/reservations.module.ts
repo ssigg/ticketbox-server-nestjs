@@ -21,7 +21,7 @@ export class ReservationsModule { }
 
 @Module({
     imports: [ TypeOrmModule.forFeature([ Event, Category, Seat, Reservation ]) ],
-    components: [ AuthService, JwtStrategy, ReservationsService ],
+    components: [ AuthService, JwtStrategy, UuidFactory, ReservationsService ],
     controllers: [ ReservationsAdminController ]
 })
 export class ReservationsAdminModule implements NestModule {

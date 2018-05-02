@@ -1,7 +1,7 @@
 import { EventblocksService } from "./eventblocks.service";
-import { EventblocksController } from "./eventblocks.controller";
+import { EventblocksController, EventblocksAdminController } from "./eventblocks.controller";
 import { Event } from "../event/event.entity";
-import { MergedEventblock, MergedEventblockPart } from "./eventblock.entity";
+import { MergedEventblock, MergedEventblockPart, Eventblock } from "./eventblock.entity";
 import { Category } from "../category/category.entity";
 import { Seat, AugmentedSeat, SeatState } from "../seat/seat.entity";
 import { HttpException, HttpStatus } from "@nestjs/common";
@@ -34,5 +34,30 @@ describe('EventblockController', () => {
         await eventblocksController.find({ key: '1-2' }, { token: 'token' }).catch(_ => rejected = true);
         expect(rejected).toEqual(true, 'Promise has to be rejected when no eventblock can be found.');
         expect(blockServiceFindSpy).toHaveBeenCalledWith('1-2', 'token');
+    });
+});
+
+describe('EventblockController', () => {
+    let eventblocksService: EventblocksService;
+    let eventblocksAdminController: EventblocksAdminController;
+
+    beforeEach(() => {
+        eventblocksService = new EventblocksService(null, null, null, null, null, null);
+        eventblocksAdminController = new EventblocksAdminController(eventblocksService);
+    });
+
+    it('Creates eventblock using eventblocks service', async () => {
+        let eventblockMock = new Eventblock();
+        let eventblocksServiceCreateSpy = spyOn(eventblocksService, 'create').and.returnValue(eventblockMock);
+        let body = { event_id: 1, block_id: 2, category_id: 3 };
+        let event = await eventblocksAdminController.create(body);
+        expect(eventblocksServiceCreateSpy).toHaveBeenCalledWith(body);
+        expect(event).toEqual(eventblockMock);
+    });
+
+    it('Deletes an eventblock using eventblocks service', () => {
+        let eventblocksServiceDeleteSpy = spyOn(eventblocksService, 'delete');
+        eventblocksAdminController.delete({ id: 1 });
+        expect(eventblocksServiceDeleteSpy).toHaveBeenCalledTimes(1);
     });
 });

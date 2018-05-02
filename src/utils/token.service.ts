@@ -11,7 +11,7 @@ export class TokenService {
     }
 
     getToken(): Token {
-        return new Token(this.uuidFactory.create(), Date.now() / 1000, this.tokenExpirationDurationInSeconds);
+        return new Token(this.uuidFactory.create(), Math.round(Date.now() / 1000), this.tokenExpirationDurationInSeconds);
     }
 }
 
