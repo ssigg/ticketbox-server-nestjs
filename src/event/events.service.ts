@@ -36,7 +36,7 @@ export class EventsService {
     }
 
     async update(id: number, dto: EventDto): Promise<Event> {
-        let event = await this.eventRepository.findOne(id);
+        let event = await this.eventRepository.findOne({ id: id });
         event.updateFromDto(dto);
         let savedEvent = await this.eventRepository.save(event);
         return savedEvent;

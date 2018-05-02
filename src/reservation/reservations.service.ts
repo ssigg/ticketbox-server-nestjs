@@ -83,9 +83,9 @@ export class ReservationsService {
     }
 
     private async augmentReservation(reservation: Reservation) {
-        let event = await this.eventRepository.findOne(reservation.event_id);
-        let seat = await this.seatRepository.findOne(reservation.seat_id);
-        let category = await this.categoryRepository.findOne(reservation.category_id);
+        let event = await this.eventRepository.findOne({ id: reservation.event_id });
+        let seat = await this.seatRepository.findOne({ id: reservation.seat_id });
+        let category = await this.categoryRepository.findOne({ id: reservation.category_id });
         let price = reservation.is_reduced ? category.price_reduced : category.price;
         return new AugmentedReservation(reservation.id, reservation.unique_id, event, seat, category, reservation.is_reduced, price, reservation.order_id);
     }

@@ -16,7 +16,7 @@ export class BlocksService {
     }
 
     async find(id: number): Promise<Block> {
-        return await this.blockRepository.findOne(id);
+        return await this.blockRepository.findOne({ id: id });
     }
 
     async create(dto: BlockDto): Promise<Block> {
@@ -27,7 +27,7 @@ export class BlocksService {
     }
 
     async update(id: number, dto: BlockDto): Promise<Block> {
-        let block = await this.blockRepository.findOne(id);
+        let block = await this.blockRepository.findOne({ id: id });
         block.updateFromDto(dto);
         let savedBlock = await this.blockRepository.save(block);
         return savedBlock;

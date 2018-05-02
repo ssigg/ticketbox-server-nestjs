@@ -34,7 +34,7 @@ export class EventblocksService {
     }
 
     async update(id: number, dto: EventblockDto): Promise<Eventblock> {
-        let eventblock = await this.eventblockRepository.findOne(id);
+        let eventblock = await this.eventblockRepository.findOne({ id: id });
         eventblock.updateFromDto(dto);
         let savedEventblock = await this.eventblockRepository.save(eventblock);
         return savedEventblock;
@@ -52,13 +52,13 @@ export class EventblocksService {
     }
 
     private async augmentEventblockThin(eventblock: Eventblock): Promise<ThinAugmentedEventblock> {
-        let block = await this.blockRepository.findOne(eventblock.block_id);
+        let block = await this.blockRepository.findOne({ id: eventblock.block_id });
         return new ThinAugmentedEventblock(eventblock, block);
     }
 
     async getMergedEventblock(key: string, token: string): Promise<MergedEventblock> {
         let keyParts = key.split('-');
-        let eventblocks = await Promise.all(keyParts.map(async p => await this.eventblockRepository.findOne(p)));
+        let eventblocks = await Promise.all(keyParts.map(async p => await this.eventblockRepository.findOne({ id: parseInt(p) })));
         if (!eventblocks.some(eb => eb == undefined)) {
             let augmentedEventblocks = await Promise.all(eventblocks.map(async eb => await this.augmentEventblockFull(eb, token)));
             let mergedEventblock = augmentedEventblocks.reduce<MergedEventblock[]>((pv, cv, ci, a) => this.appendBlock(pv, cv), [])[0];
@@ -69,9 +69,9 @@ export class EventblocksService {
     }
 
     private async augmentEventblockFull(eventblock: Eventblock, token: string): Promise<AugmentedEventblock> {
-        let block = await this.blockRepository.findOne(eventblock.block_id);
-        let event = await this.eventRepository.findOne(eventblock.event_id);
-        let category = await this.categoryRepository.findOne(eventblock.category_id);
+        let block = await this.blockRepository.findOne({ id: eventblock.block_id });
+        let event = await this.eventRepository.findOne({ id: eventblock.event_id });
+        let category = await this.categoryRepository.findOne({ id: eventblock.category_id });
         let seats = await this.seatRepository.find({ block_id: eventblock.block_id });
         let augmentedSeats = await Promise.all(seats.map(async s => await this.seatsService.augmentSeat(s, event, token)));
         return new AugmentedEventblock(eventblock, event, block, category, augmentedSeats);
