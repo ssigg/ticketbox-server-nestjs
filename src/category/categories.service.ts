@@ -2,6 +2,7 @@ import { Component } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm/repository/Repository";
 import { Category, CategoryDto } from "./category.entity";
+import { DeleteResult } from "typeorm/query-builder/result/DeleteResult";
 
 @Component()
 export class CategoriesService {
@@ -15,7 +16,7 @@ export class CategoriesService {
     }
 
     async find(id: number): Promise<Category> {
-        return await this.categoryRepository.findOneById(id);
+        return await this.categoryRepository.findOne(id);
     }
 
     async create(dto: CategoryDto): Promise<Category> {
@@ -26,13 +27,13 @@ export class CategoriesService {
     }
 
     async update(id: number, dto: CategoryDto): Promise<Category> {
-        let category = await this.categoryRepository.findOneById(id);
+        let category = await this.categoryRepository.findOne(id);
         category.updateFromDto(dto);
         let savedCategory = await this.categoryRepository.save(category);
         return savedCategory;
     }
 
-    async delete(id: number): Promise<void> {
+    async delete(id: number): Promise<DeleteResult> {
         return await this.categoryRepository.delete({ id: id });
     }
 }

@@ -15,7 +15,7 @@ import { EventblocksModule } from './eventblock/eventblocks.module';
 import { SeatsAdminModule } from './seat/seats.module';
 import { Reservation } from './reservation/reservation.entity';
 import { UuidFactory } from './utils/uuid.factory';
-import { ReservationsModule } from './reservation/reservations.module';
+import { ReservationsModule, ReservationsAdminModule } from './reservation/reservations.module';
 import { TokenService } from './utils/token.service';
 
 @Module({
@@ -33,7 +33,8 @@ import { TokenService } from './utils/token.service';
     BlocksAdminModule,
     EventblocksModule,
     SeatsAdminModule,
-    ReservationsModule
+    ReservationsModule,
+    ReservationsAdminModule
   ],
   controllers: [],
   components: [ UuidFactory, TokenService ],

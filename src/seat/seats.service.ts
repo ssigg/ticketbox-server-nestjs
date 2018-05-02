@@ -5,6 +5,7 @@ import { Event } from "../event/event.entity";
 import { Seat, SeatDto, AugmentedSeat, SeatState } from "./seat.entity";
 import { Component } from "@nestjs/common";
 import { Reservation, OrderKind } from "../reservation/reservation.entity";
+import { DeleteResult } from "typeorm/query-builder/result/DeleteResult";
 
 @Component()
 export class SeatsService {
@@ -24,7 +25,7 @@ export class SeatsService {
         return savedSeats;
     }
 
-    async delete(id: number): Promise<void> {
+    async delete(id: number): Promise<DeleteResult> {
         return await this.seatRepository.delete({ id: id });
     }
 

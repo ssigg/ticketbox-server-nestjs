@@ -62,11 +62,11 @@ describe('EventblocksService', () => {
             event_id: 6
         };
 
-        let eventblockRepositoryFindOneByIdSpy = spyOn(eventblockRepository, 'findOneById').and.returnValue(eventblockMock);
+        let eventblockRepositoryfindOneSpy = spyOn(eventblockRepository, 'findOne').and.returnValue(eventblockMock);
         let eventblockRepositorySaveSpy = spyOn(eventblockRepository, 'save').and.returnValue(eventblockMock);
         let eventblock = await eventblocksService.update(1, eventblockDtoMock);
 
-        expect(eventblockRepositoryFindOneByIdSpy).toHaveBeenCalledTimes(1);
+        expect(eventblockRepositoryfindOneSpy).toHaveBeenCalledTimes(1);
         expect(eventblockRepositorySaveSpy).toHaveBeenCalledWith(eventblockMock);
         
         expect(eventblock).toEqual(eventblockMock);
@@ -83,11 +83,11 @@ describe('EventblocksService', () => {
 
         let eventblockDtoMock = { };
 
-        let eventblockRepositoryFindOneByIdSpy = spyOn(eventblockRepository, 'findOneById').and.returnValue(eventblockMock);
+        let eventblockRepositoryfindOneSpy = spyOn(eventblockRepository, 'findOne').and.returnValue(eventblockMock);
         let eventblockRepositorySaveSpy = spyOn(eventblockRepository, 'save').and.returnValue(eventblockMock);
         let eventblock = await eventblocksService.update(1, eventblockDtoMock);
 
-        expect(eventblockRepositoryFindOneByIdSpy).toHaveBeenCalledTimes(1);
+        expect(eventblockRepositoryfindOneSpy).toHaveBeenCalledTimes(1);
         expect(eventblockRepositorySaveSpy).toHaveBeenCalledWith(eventblockMock);
         
         expect(eventblock).toEqual(eventblockMock);
@@ -118,11 +118,11 @@ describe('EventblocksService', () => {
         blockMock2.seatplan_image_data_url = 'u';
 
         let eventblockRepositoryFindSpy = spyOn(eventblockRepository, 'find').and.returnValue([ eventblockMock1, eventblockMock2 ]);
-        let blockRepositoryFindOneByIdSpy = spyOn(blockRepository, 'findOneById').and.returnValues(blockMock1, blockMock2);
+        let blockRepositoryfindOneSpy = spyOn(blockRepository, 'findOne').and.returnValues(blockMock1, blockMock2);
         let thinMergedEventblocks = await eventblocksService.getThinMergedEventblocks(1);
 
         expect(eventblockRepositoryFindSpy).toHaveBeenCalledTimes(1);
-        expect(blockRepositoryFindOneByIdSpy).toHaveBeenCalledTimes(2);
+        expect(blockRepositoryfindOneSpy).toHaveBeenCalledTimes(2);
         expect(thinMergedEventblocks.length).toEqual(1);
         expect(thinMergedEventblocks[0].id).toContain('1');
         expect(thinMergedEventblocks[0].id).toContain('2');
@@ -153,11 +153,11 @@ describe('EventblocksService', () => {
         blockMock3.seatplan_image_data_url = 'u';
 
         let eventblockRepositoryFindSpy = spyOn(eventblockRepository, 'find').and.returnValue([ eventblockMock1, eventblockMock2, eventblockMock3 ]);
-        let blockRepositoryFindOneByIdSpy = spyOn(blockRepository, 'findOneById').and.returnValues(blockMock1, blockMock2, blockMock3);
+        let blockRepositoryfindOneSpy = spyOn(blockRepository, 'findOne').and.returnValues(blockMock1, blockMock2, blockMock3);
         let thinMergedEventblocks = await eventblocksService.getThinMergedEventblocks(1);
 
         expect(eventblockRepositoryFindSpy).toHaveBeenCalledTimes(1);
-        expect(blockRepositoryFindOneByIdSpy).toHaveBeenCalledTimes(3);
+        expect(blockRepositoryfindOneSpy).toHaveBeenCalledTimes(3);
         expect(thinMergedEventblocks.length).toEqual(2);
         expect(thinMergedEventblocks.map(b => b.id)).toContain("1-3");
         expect(thinMergedEventblocks.map(b => b.id)).toContain("2");
@@ -175,11 +175,11 @@ describe('EventblocksService', () => {
         blockMock2.seatplan_image_data_url = 'u';
 
         let eventblockRepositoryFindSpy = spyOn(eventblockRepository, 'find').and.returnValue([ new Eventblock(), new Eventblock() ]);
-        let blockRepositoryFindOneByIdSpy = spyOn(blockRepository, 'findOneById').and.returnValues(blockMock1, blockMock2);
+        let blockRepositoryfindOneSpy = spyOn(blockRepository, 'findOne').and.returnValues(blockMock1, blockMock2);
         let thinMergedEventblocks = await eventblocksService.getThinMergedEventblocks(1);
 
         expect(eventblockRepositoryFindSpy).toHaveBeenCalledTimes(1);
-        expect(blockRepositoryFindOneByIdSpy).toHaveBeenCalledTimes(2);
+        expect(blockRepositoryfindOneSpy).toHaveBeenCalledTimes(2);
         expect(thinMergedEventblocks.length).toEqual(2);
     });
 
@@ -199,11 +199,11 @@ describe('EventblocksService', () => {
         blockMock2.seatplan_image_data_url = 'u';
 
         let eventblockRepositoryFindSpy = spyOn(eventblockRepository, 'find').and.returnValue([ eventblockMock1, eventblockMock2 ]);
-        let blockRepositoryFindOneByIdSpy = spyOn(blockRepository, 'findOneById').and.returnValues(blockMock1, blockMock2);
+        let blockRepositoryfindOneSpy = spyOn(blockRepository, 'findOne').and.returnValues(blockMock1, blockMock2);
         let thinMergedEventblocks = await eventblocksService.getThinMergedEventblocks(1);
 
         expect(eventblockRepositoryFindSpy).toHaveBeenCalledTimes(1);
-        expect(blockRepositoryFindOneByIdSpy).toHaveBeenCalledTimes(2);
+        expect(blockRepositoryfindOneSpy).toHaveBeenCalledTimes(2);
         expect(thinMergedEventblocks.length).toEqual(2);
     });
 
@@ -223,11 +223,11 @@ describe('EventblocksService', () => {
         blockMock2.seatplan_image_data_url = 'v';
 
         let eventblockRepositoryFindSpy = spyOn(eventblockRepository, 'find').and.returnValue([ eventblockMock1, eventblockMock2 ]);
-        let blockRepositoryFindOneByIdSpy = spyOn(blockRepository, 'findOneById').and.returnValues(blockMock1, blockMock2);
+        let blockRepositoryfindOneSpy = spyOn(blockRepository, 'findOne').and.returnValues(blockMock1, blockMock2);
         let thinMergedEventblocks = await eventblocksService.getThinMergedEventblocks(1);
 
         expect(eventblockRepositoryFindSpy).toHaveBeenCalledTimes(1);
-        expect(blockRepositoryFindOneByIdSpy).toHaveBeenCalledTimes(2);
+        expect(blockRepositoryfindOneSpy).toHaveBeenCalledTimes(2);
         expect(thinMergedEventblocks.length).toEqual(2);
     });
 
@@ -268,10 +268,10 @@ describe('EventblocksService', () => {
         let seatMock22 = new Seat();
         let augmentedSeatMock22 = new AugmentedSeat(seatMock22, SeatState.Free);
 
-        let eventblockRepositoryFindOneByIdSpy = spyOn(eventblockRepository, 'findOneById').and.returnValues(eventblockMock1, eventblockMock2);
-        let blockRepositoryFindOneByIdSpy = spyOn(blockRepository, 'findOneById').and.returnValues(blockMock1, blockMock2);
-        let eventRepositoryFindOneByIdSpy = spyOn(eventRepository, 'findOneById').and.returnValue(eventMock);
-        let categoryRepositoryFindOneByIdSpy = spyOn(categoryRepository, 'findOneById').and.returnValues(categoryMock1, categoryMock2);
+        let eventblockRepositoryfindOneSpy = spyOn(eventblockRepository, 'findOne').and.returnValues(eventblockMock1, eventblockMock2);
+        let blockRepositoryfindOneSpy = spyOn(blockRepository, 'findOne').and.returnValues(blockMock1, blockMock2);
+        let eventRepositoryfindOneSpy = spyOn(eventRepository, 'findOne').and.returnValue(eventMock);
+        let categoryRepositoryfindOneSpy = spyOn(categoryRepository, 'findOne').and.returnValues(categoryMock1, categoryMock2);
         let seatRepositoryFindSpy = spyOn(seatRepository, 'find').and.returnValues([ seatMock11, seatMock12 ], [ seatMock21, seatMock22 ]);
         let reservationRepositoryFindOneSpy = spyOn(reservationRepository, 'findOne').and.returnValues(undefined, undefined, undefined, undefined);
         
@@ -307,10 +307,10 @@ describe('EventblocksService', () => {
         let seatMock12 = new Seat();
         let augmentedSeatMock12 = new AugmentedSeat(seatMock12, SeatState.Free);
 
-        let eventblockRepositoryFindOneByIdSpy = spyOn(eventblockRepository, 'findOneById').and.returnValues(eventblockMock1, undefined);
-        let blockRepositoryFindOneByIdSpy = spyOn(blockRepository, 'findOneById').and.returnValue(blockMock1);
-        let eventRepositoryFindOneByIdSpy = spyOn(eventRepository, 'findOneById').and.returnValue(eventMock);
-        let categoryRepositoryFindOneByIdSpy = spyOn(categoryRepository, 'findOneById').and.returnValue(categoryMock1);
+        let eventblockRepositoryfindOneSpy = spyOn(eventblockRepository, 'findOne').and.returnValues(eventblockMock1, undefined);
+        let blockRepositoryfindOneSpy = spyOn(blockRepository, 'findOne').and.returnValue(blockMock1);
+        let eventRepositoryfindOneSpy = spyOn(eventRepository, 'findOne').and.returnValue(eventMock);
+        let categoryRepositoryfindOneSpy = spyOn(categoryRepository, 'findOne').and.returnValue(categoryMock1);
         let seatRepositoryFindSpy = spyOn(seatRepository, 'find').and.returnValue([ seatMock11, seatMock12 ]);
         let reservationRepositoryFindOneSpy = spyOn(reservationRepository, 'findOne').and.returnValues(undefined, undefined);
         

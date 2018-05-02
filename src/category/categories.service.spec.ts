@@ -21,9 +21,9 @@ describe('CategoriesService', () => {
 
     it('Fetches category with given id from repository', async () => {
         let categoryMock = new Category();
-        let categoryRepositoryFindOneByIdSpy = spyOn(categoryRepository, 'findOneById').and.returnValue(categoryMock);
+        let categoryRepositoryfindOneSpy = spyOn(categoryRepository, 'findOne').and.returnValue(categoryMock);
         let category = await categoriesService.find(1);
-        expect(categoryRepositoryFindOneByIdSpy).toHaveBeenCalledWith(1);
+        expect(categoryRepositoryfindOneSpy).toHaveBeenCalledWith(1);
         expect(category).toEqual(categoryMock);
     });
 
@@ -64,11 +64,11 @@ describe('CategoriesService', () => {
             price_reduced: 11
         };
 
-        let categoryRepositoryFindOneByIdSpy = spyOn(categoryRepository, 'findOneById').and.returnValue(categoryMock);
+        let categoryRepositoryfindOneSpy = spyOn(categoryRepository, 'findOne').and.returnValue(categoryMock);
         let categoryRepositorySaveSpy = spyOn(categoryRepository, 'save').and.returnValue(categoryMock);
         let category = await categoriesService.update(1, categoryDtoMock);
 
-        expect(categoryRepositoryFindOneByIdSpy).toHaveBeenCalledTimes(1);
+        expect(categoryRepositoryfindOneSpy).toHaveBeenCalledTimes(1);
         expect(categoryRepositorySaveSpy).toHaveBeenCalledWith(categoryMock);
         
         expect(category).toEqual(categoryMock);
@@ -87,11 +87,11 @@ describe('CategoriesService', () => {
 
         let categoryDtoMock = { };
 
-        let categoryRepositoryFindOneByIdSpy = spyOn(categoryRepository, 'findOneById').and.returnValue(categoryMock);
+        let categoryRepositoryfindOneSpy = spyOn(categoryRepository, 'findOne').and.returnValue(categoryMock);
         let categoryRepositorySaveSpy = spyOn(categoryRepository, 'save').and.returnValue(categoryMock);
         let category = await categoriesService.update(1, categoryDtoMock);
 
-        expect(categoryRepositoryFindOneByIdSpy).toHaveBeenCalledTimes(1);
+        expect(categoryRepositoryfindOneSpy).toHaveBeenCalledTimes(1);
         expect(categoryRepositorySaveSpy).toHaveBeenCalledWith(categoryMock);
         
         expect(category).toEqual(categoryMock);

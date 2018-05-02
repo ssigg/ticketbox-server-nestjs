@@ -22,9 +22,9 @@ describe('BlocksService', () => {
 
     it('Fetches block with given id from repository', async () => {
         let blockMock = new Block();
-        let blockRepositoryFindOneByIdSpy = spyOn(blockRepository, 'findOneById').and.returnValue(blockMock);
+        let blockRepositoryfindOneSpy = spyOn(blockRepository, 'findOne').and.returnValue(blockMock);
         let block = await blocksService.find(1);
-        expect(blockRepositoryFindOneByIdSpy).toHaveBeenCalledWith(1);
+        expect(blockRepositoryfindOneSpy).toHaveBeenCalledWith(1);
         expect(block).toEqual(blockMock);
     });
 
@@ -61,11 +61,11 @@ describe('BlocksService', () => {
             seatplan_image_data_url: 'dto.url'
         };
 
-        let blockRepositoryFindOneByIdSpy = spyOn(blockRepository, 'findOneById').and.returnValue(blockMock);
+        let blockRepositoryfindOneSpy = spyOn(blockRepository, 'findOne').and.returnValue(blockMock);
         let blockRepositorySaveSpy = spyOn(blockRepository, 'save').and.returnValue(blockMock);
         let block = await blocksService.update(1, blockDtoMock);
 
-        expect(blockRepositoryFindOneByIdSpy).toHaveBeenCalledTimes(1);
+        expect(blockRepositoryfindOneSpy).toHaveBeenCalledTimes(1);
         expect(blockRepositorySaveSpy).toHaveBeenCalledWith(blockMock);
         
         expect(block).toEqual(blockMock);
@@ -82,7 +82,7 @@ describe('BlocksService', () => {
             numbered: false
         };
 
-        let blockRepositoryFindOneByIdSpy = spyOn(blockRepository, 'findOneById').and.returnValue(blockMock);
+        let blockRepositoryfindOneSpy = spyOn(blockRepository, 'findOne').and.returnValue(blockMock);
         let blockRepositorySaveSpy = spyOn(blockRepository, 'save').and.returnValue(blockMock);
         let block = await blocksService.update(1, blockDtoMock);
         
@@ -95,7 +95,7 @@ describe('BlocksService', () => {
 
         let blockDtoMock = { };
 
-        let blockRepositoryFindOneByIdSpy = spyOn(blockRepository, 'findOneById').and.returnValue(blockMock);
+        let blockRepositoryfindOneSpy = spyOn(blockRepository, 'findOne').and.returnValue(blockMock);
         let blockRepositorySaveSpy = spyOn(blockRepository, 'save').and.returnValue(blockMock);
         let block = await blocksService.update(1, blockDtoMock);
         

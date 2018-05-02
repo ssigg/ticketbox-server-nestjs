@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Delete, Query, Body, Param } from "@nestjs/common";
 import { SeatsService } from "./seats.service";
 import { Seat } from "./seat.entity";
+import { DeleteResult } from "typeorm/query-builder/result/DeleteResult";
 
 @Controller('admin/seats')
 export class SeatsAdminController {
@@ -128,7 +129,7 @@ export class SeatsAdminController {
      * HTTP/1.1 200 OK
      */
     @Delete(':id')
-    public delete(@Param() params): Promise<void> {
+    public delete(@Param() params): Promise<DeleteResult> {
         return this.seatsService.delete(params.id);
     }
 }

@@ -1,4 +1,4 @@
-import { ReservationsController, ReservationsExpirationTimestampController } from './reservations.controller';
+import { ReservationsController, ReservationsExpirationTimestampController, ReservationsAdminController } from './reservations.controller';
 import { ReservationsService } from './reservations.service';
 import { AugmentedReservation } from './reservation.entity';
 
@@ -60,5 +60,23 @@ describe('ReservationsExpirationTimestampController', () => {
     it('Returns the token expiration timestamp', () => {
         let timestamp = reservationsController.getExpirationTimestamp({ token: { value: 'token', timestamp: 0, expirationTimestamp: 42 } });
         expect(timestamp.value).toEqual(42);
+    });
+});
+
+describe('ReservationsAdminController', () => {
+    let reservationsService: ReservationsService;
+    let reservationsAdminController: ReservationsAdminController;
+
+    beforeEach(() => {
+        reservationsService = new ReservationsService(null, null, null, null, null);
+        reservationsAdminController = new ReservationsAdminController(reservationsService);
+    });
+
+    it('Fetches all ordered reservations from reservations service', async () => {
+        let reservationMock = new AugmentedReservation(1, 'unique', null, null, null, false, 0, 2);
+        let reservationsServiceFindMineSpy = spyOn(reservationsService, 'findAllOrderedReservations').and.returnValue([ reservationMock ]);
+        let reservations = reservationsAdminController.findAllOrdered();
+        expect(reservationsServiceFindMineSpy).toHaveBeenCalled();
+        expect(await reservations).toEqual([ reservationMock ]);
     });
 });

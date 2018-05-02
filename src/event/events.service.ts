@@ -4,6 +4,7 @@ import { Event, EventDto, EventWithBlocks } from "./event.entity";
 import { Repository } from "typeorm/repository/Repository";
 import { BlocksService } from "../block/blocks.service";
 import { EventblocksService } from "../eventblock/eventblocks.service";
+import { DeleteResult } from "typeorm/query-builder/result/DeleteResult";
 
 @Component()
 export class EventsService {
@@ -22,7 +23,7 @@ export class EventsService {
     }
 
     async find(id: number): Promise<EventWithBlocks> {
-        let event = await this.eventRepository.findOneById(id);
+        let event = await this.eventRepository.findOne(id);
         let thinMergedEventBlocks = await this.eventblocksService.getThinMergedEventblocks(event.id);
         return new EventWithBlocks(event, thinMergedEventBlocks);
     }
@@ -35,13 +36,13 @@ export class EventsService {
     }
 
     async update(id: number, dto: EventDto): Promise<Event> {
-        let event = await this.eventRepository.findOneById(id);
+        let event = await this.eventRepository.findOne(id);
         event.updateFromDto(dto);
         let savedEvent = await this.eventRepository.save(event);
         return savedEvent;
     }
 
-    async delete(id: number): Promise<void> {
+    async delete(id: number): Promise<DeleteResult> {
         return await this.eventRepository.delete({ id: id });
     }
 }

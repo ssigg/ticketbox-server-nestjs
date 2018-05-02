@@ -1,6 +1,7 @@
 import { Controller, Param, Body, Get, Delete, Put, Post } from "@nestjs/common";
 import { EventsService } from "./events.service";
 import { Event, EventWithBlocks } from "./event.entity";
+import { DeleteResult } from "typeorm/query-builder/result/DeleteResult";
 
 @Controller('events')
 export class EventsController {
@@ -285,7 +286,7 @@ export class EventsAdminController {
      * HTTP/1.1 200 OK
      */
     @Delete(':id')
-    public delete(@Param() params): Promise<void> {
+    public delete(@Param() params): Promise<DeleteResult> {
         return this.eventsService.delete(params.id);
     }
 }
