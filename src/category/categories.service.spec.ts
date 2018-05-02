@@ -23,7 +23,7 @@ describe('CategoriesService', () => {
         let categoryMock = new Category();
         let categoryRepositoryfindOneSpy = spyOn(categoryRepository, 'findOne').and.returnValue(categoryMock);
         let category = await categoriesService.find(1);
-        expect(categoryRepositoryfindOneSpy).toHaveBeenCalledWith(1);
+        expect(categoryRepositoryfindOneSpy).toHaveBeenCalledWith({ id: 1 });
         expect(category).toEqual(categoryMock);
     });
 

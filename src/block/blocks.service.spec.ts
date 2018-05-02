@@ -24,7 +24,7 @@ describe('BlocksService', () => {
         let blockMock = new Block();
         let blockRepositoryfindOneSpy = spyOn(blockRepository, 'findOne').and.returnValue(blockMock);
         let block = await blocksService.find(1);
-        expect(blockRepositoryfindOneSpy).toHaveBeenCalledWith(1);
+        expect(blockRepositoryfindOneSpy).toHaveBeenCalledWith({ id: 1 });
         expect(block).toEqual(blockMock);
     });
 

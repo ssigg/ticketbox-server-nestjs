@@ -161,6 +161,7 @@ describe('SeatsService', () => {
         let eventMock = new Event();
         let reservationMock = new Reservation();
         reservationMock.id = 1;
+        reservationMock.order_id = null;
         let reservationRepositoryFindOneSpy = spyOn(reservationRepository, 'findOne').and.returnValue(reservationMock);
         
         let augmentedSeat = await seatsService.augmentSeat(seatMock, eventMock, 'token');
@@ -176,6 +177,7 @@ describe('SeatsService', () => {
         let reservationMock = new Reservation();
         reservationMock.id = 1;
         reservationMock.token = 'token';
+        reservationMock.order_id = null;
         let reservationRepositoryFindOneSpy = spyOn(reservationRepository, 'findOne').and.returnValue(reservationMock);
         
         let augmentedSeat = await seatsService.augmentSeat(seatMock, eventMock, 'token');
@@ -183,5 +185,20 @@ describe('SeatsService', () => {
         expect(augmentedSeat.seat).toEqual(seatMock);
         expect(augmentedSeat.state).toEqual(SeatState.ReservedByMyself);
         expect(augmentedSeat.reservation_id).toEqual(1);
+    });
+
+    it('Throws error when order kind is unknown', async () => {
+        let seatMock = new Seat();
+        let eventMock = new Event();
+        let reservationMock = new Reservation();
+        reservationMock.id = 1;
+        reservationMock.token = 'token';
+        reservationMock.order_id = 1;
+        reservationMock.order_kind = undefined;
+        let reservationRepositoryFindOneSpy = spyOn(reservationRepository, 'findOne').and.returnValue(reservationMock);
+        
+        let rejected: boolean;
+        await seatsService.augmentSeat(seatMock, eventMock, 'token').catch(_ => rejected = true);
+        expect(rejected).toEqual(true, 'Promise has to be rejected when order_kind is unknown.');
     });
 });

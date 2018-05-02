@@ -46,7 +46,7 @@ describe('EventsService', () => {
         let eventRepositoryfindOneSpy = spyOn(eventRepository, 'findOne').and.returnValue(eventMock);
         let blocksServiceGetMergedEventblocksSpy = spyOn(eventblocksService, 'getThinMergedEventblocks').and.returnValue([]);
         let eventWithBlocks = await eventsService.find(1);
-        expect(eventRepositoryfindOneSpy).toHaveBeenCalledWith(1);
+        expect(eventRepositoryfindOneSpy).toHaveBeenCalledWith({ id: 1 });
         expect(blocksServiceGetMergedEventblocksSpy).toHaveBeenCalledWith(42);
         expect(eventWithBlocks).toEqual(eventWithBlocksMock);
     });

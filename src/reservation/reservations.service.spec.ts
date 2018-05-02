@@ -81,9 +81,9 @@ describe('ReservationsService', () => {
         
         expect(reservationRepositoryCreateSpy).toHaveBeenCalledTimes(1);
         expect(reservationRepositorySaveSpy).toHaveBeenCalledWith(reservationMock);
-        expect(eventRepositoryfindOneSpy).toHaveBeenCalledWith(2);
-        expect(seatRepositoryfindOneSpy).toHaveBeenCalledWith(1);
-        expect(categoryRespositoryfindOneSpy).toHaveBeenCalledWith(3);
+        expect(eventRepositoryfindOneSpy).toHaveBeenCalledWith({ id: 2 });
+        expect(seatRepositoryfindOneSpy).toHaveBeenCalledWith({ id: 1 });
+        expect(categoryRespositoryfindOneSpy).toHaveBeenCalledWith({ id: 3 });
 
         expect(augmentedReservation.id).toEqual(reservationMock.id);
         expect(augmentedReservation.unique_id).toEqual(reservationMock.unique_id);
