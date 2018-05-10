@@ -16,7 +16,6 @@ import { SeatsAdminModule } from './seat/seats.module';
 import { Reservation } from './reservation/reservation.entity';
 import { UuidFactory } from './utils/uuid.factory';
 import { ReservationsModule, ReservationsAdminModule } from './reservation/reservations.module';
-import { TokenService } from './utils/token.service';
 
 @Module({
   imports: [
@@ -38,7 +37,7 @@ import { TokenService } from './utils/token.service';
     ReservationsAdminModule
   ],
   controllers: [],
-  components: [ UuidFactory, TokenService ],
+  components: [ UuidFactory ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewaresConsumer): void | MiddlewaresConsumer {

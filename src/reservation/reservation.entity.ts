@@ -87,7 +87,7 @@ export interface AddToOrderReservationDto {
 }
 
 export class AugmentedReservation {
-    constructor(id: number, unique_id: string, event: Event, seat: Seat, category: Category, isReduced: boolean, price: number, order_id: number) {
+    constructor(id: number, unique_id: string, event: Event, seat: Seat, category: Category, isReduced: boolean, price: number, order_id: number, timestamp: number) {
         this.id = id;
         this.unique_id = unique_id;
         this.event = event;
@@ -96,6 +96,7 @@ export class AugmentedReservation {
         this.isReduced = isReduced;
         this.price = price;
         this.order_id = order_id;
+        this.timestamp = timestamp;
     }
     id: number;
     unique_id: string;
@@ -105,4 +106,5 @@ export class AugmentedReservation {
     isReduced: boolean;
     price: number;
     order_id: number;
+    timestamp: number;
 }

@@ -1,12 +1,12 @@
-import { Controller, Param, Body, Get, Delete, Put, Post, Session, HttpStatus, HttpException } from "@nestjs/common";
-import { ReservationsService } from "./reservations.service";
+import { Controller, Param, Body, Get, Delete, Put, Post, HttpStatus, HttpException } from "@nestjs/common";
 import { Reservation, AugmentedReservation, CreateReservationDto } from "./reservation.entity";
-import { Token } from "../utils/token.service";
 import { DeleteResult } from "typeorm/query-builder/result/DeleteResult";
+import { BasketService } from "./basket.service";
+import { ReservationsService } from "./reservations.service";
 
 @Controller('reservations')
 export class ReservationsController {
-    constructor(private readonly reservationsService: ReservationsService) { }
+    constructor(private readonly basketService: BasketService) { }
     
     /**
      * @api {get} /reservations List user reservations
@@ -90,8 +90,8 @@ export class ReservationsController {
      * ]
      */
     @Get()
-    public async findMine(@Session() session: { token: Token }): Promise<AugmentedReservation[]> {
-        return this.reservationsService.findMyReservations(session.token);
+    public async findMine(): Promise<AugmentedReservation[]> {
+        return this.basketService.getReservations();
     }
 
     /**
@@ -190,9 +190,9 @@ export class ReservationsController {
      * HTTP/1.1 409 Conflict
      */
     @Post()
-    public async create(@Body() body, @Session() session: { token: Token }): Promise<AugmentedReservation> {
+    public async create(@Body() body): Promise<AugmentedReservation> {
         try {
-            return this.reservationsService.create(body.event_id, body.seat_id, body.category_id, session.token);
+            return this.basketService.addReservation(body.event_id, body.seat_id, body.category_id);
         } catch(e) {
             throw new HttpException('This seat cannot be reserved because a different user has it reserved already.', HttpStatus.CONFLICT);
         }
@@ -286,8 +286,8 @@ export class ReservationsController {
      * }
      */
     @Put(':id')
-    public async updateReduction(@Param() param, @Body() body, @Session() session: { token: Token }): Promise<AugmentedReservation> {
-        return await this.reservationsService.updateReduction(param.id, session.token, body);
+    public async updateReduction(@Param() param, @Body() body: { isReduced: boolean }): Promise<AugmentedReservation> {
+        return await this.basketService.updateReduction(param.id, body.isReduced);
     }
 
     /**
@@ -304,13 +304,13 @@ export class ReservationsController {
      */
     @Delete(':id')
     public async delete(@Param() param): Promise<DeleteResult> {
-        return await this.reservationsService.delete(param.id);
+        return await this.basketService.removeReservation(param.id);
     }
 }
 
 @Controller('reservations-expiration-timestamp')
 export class ReservationsExpirationTimestampController {
-    constructor() { }
+    constructor(private readonly basketService: BasketService) { }
 
     /**
      * @api {get} /reservations-expiration-timestamp Get reservation expiration timestamp
@@ -328,9 +328,10 @@ export class ReservationsExpirationTimestampController {
      * }
      */
      @Get()
-     public getExpirationTimestamp(@Session() session: { token: Token }): { value: number } {
-        return { value: session.token.expirationTimestamp };
-     }
+    public async getExpirationTimestamp(): Promise<{ value: number }> {
+        let expirationTimestampInSeconds = await this.basketService.getExpirationTimestampInSeconds()
+        return { value: expirationTimestampInSeconds };
+    }
 }
 
 @Controller('admin/reservations')

@@ -6,7 +6,6 @@ import { Event } from "../event/event.entity";
 import { Seat } from "../seat/seat.entity";
 import { Category } from "../category/category.entity";
 import { UuidFactory } from "../utils/uuid.factory";
-import { Token } from "../utils/token.service";
 import { DeleteResult } from "typeorm/query-builder/result/DeleteResult";
 
 @Component()
@@ -23,8 +22,8 @@ export class ReservationsService {
         private readonly uuidFactory: UuidFactory
     ) { }
 
-    async findMyReservations(token: Token): Promise<AugmentedReservation[]> {
-        let reservations = await this.reservationRepository.find({ token: token.value });
+    async findMyReservations(token: string): Promise<AugmentedReservation[]> {
+        let reservations = await this.reservationRepository.find({ token: token });
         let augmentedReservations = await Promise.all(reservations.map(async r => await this.augmentReservation(r)));
         return augmentedReservations;
     }
@@ -35,16 +34,16 @@ export class ReservationsService {
         return augmentedReservations;
     }
 
-    async create(event_id: number, seat_id: number, category_id: number, token: Token): Promise<AugmentedReservation> {
+    async create(event_id: number, seat_id: number, category_id: number, token: string, timestamp: number): Promise<AugmentedReservation> {
         let dto = {
             event_id: event_id,
             seat_id: seat_id,
             category_id: category_id,
-            token: token.value,
+            token: token,
             unique_id: this.uuidFactory.create(),
             is_reduced: false,
             is_scanned: false,
-            timestamp: token.timestamp
+            timestamp: timestamp
         };
 
         let reservation = await this.reservationRepository.create();
@@ -54,8 +53,8 @@ export class ReservationsService {
         return augmentedReservation;
     }
 
-    async updateReduction(id: number, token: Token, dto: UpdateReductionReservationDto): Promise<AugmentedReservation> {
-        let reservation = await this.reservationRepository.findOne({ id: id, token: token.value, order_id: undefined });
+    async updateReduction(id: number, token: string, dto: UpdateReductionReservationDto): Promise<AugmentedReservation> {
+        let reservation = await this.reservationRepository.findOne({ id: id, token: token, order_id: IsNull() });
         if (reservation !== undefined) {
             reservation.updateFromUpdateReductionDto(dto);
             let savedReservation = await this.reservationRepository.save(reservation);
@@ -66,8 +65,8 @@ export class ReservationsService {
         }
     }
 
-    async addToOrder(id: number, token: Token, dto: AddToOrderReservationDto): Promise<AugmentedReservation> {
-        let reservation = await this.reservationRepository.findOne({ id: id, token: token.value, order_id: undefined });
+    async addToOrder(id: number, token: string, dto: AddToOrderReservationDto): Promise<AugmentedReservation> {
+        let reservation = await this.reservationRepository.findOne({ id: id, token: token, order_id: IsNull() });
         if (reservation !== undefined) {
             reservation.updateFromAddToOrderDto(dto);
             let savedReservation = await this.reservationRepository.save(reservation);
@@ -82,11 +81,15 @@ export class ReservationsService {
         return await this.reservationRepository.delete({ id: id });
     }
 
-    private async augmentReservation(reservation: Reservation) {
+    async purgeReservations(token: string): Promise<DeleteResult> {
+        return await this.reservationRepository.delete({ token: token, order_id: IsNull() });
+    }
+
+    private async augmentReservation(reservation: Reservation): Promise<AugmentedReservation> {
         let event = await this.eventRepository.findOne({ id: reservation.event_id });
         let seat = await this.seatRepository.findOne({ id: reservation.seat_id });
         let category = await this.categoryRepository.findOne({ id: reservation.category_id });
         let price = reservation.is_reduced ? category.price_reduced : category.price;
-        return new AugmentedReservation(reservation.id, reservation.unique_id, event, seat, category, reservation.is_reduced, price, reservation.order_id);
+        return new AugmentedReservation(reservation.id, reservation.unique_id, event, seat, category, reservation.is_reduced, price, reservation.order_id, reservation.timestamp);
     }
 }

@@ -1,13 +1,13 @@
 import * as uuidv4 from 'uuid/v4';
 import { Middleware, NestMiddleware, ExpressMiddleware } from "@nestjs/common";
-import { TokenService } from './utils/token.service';
+import { BasketService } from './reservation/basket.service';
 
 @Middleware()
 export class SessionTokenMiddleware implements NestMiddleware {
-    constructor(private readonly tokenService: TokenService) { }
+    constructor(private readonly basketService: BasketService) { }
     resolve(): ExpressMiddleware {
         return (req, res, next) => {
-            req.session.token = (req.session.token || this.tokenService.getToken());
+            req.session.token = this.basketService.initializeAndReturnToken(req.session.token);
             next();
         };
     }

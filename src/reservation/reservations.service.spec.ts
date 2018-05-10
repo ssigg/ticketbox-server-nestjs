@@ -34,7 +34,7 @@ describe('ReservationsService', () => {
         let seatRepositoryfindOneSpy = spyOn(seatRepository, 'findOne').and.returnValue(seatMock);
         let categoryRespositoryfindOneSpy = spyOn(categoryRepository, 'findOne').and.returnValue(categoryMock);
 
-        let augmentedReservations = await reservationsService.findMyReservations({ value: 'token', timestamp: 0, expirationTimestamp: 0 });
+        let augmentedReservations = await reservationsService.findMyReservations('token');
 
         expect(reservationRepositoryFindSpy).toHaveBeenCalledWith({ token: 'token' });
         expect(augmentedReservations.length).toEqual(1);
@@ -77,7 +77,7 @@ describe('ReservationsService', () => {
         let eventRepositoryfindOneSpy = spyOn(eventRepository, 'findOne').and.returnValue(eventMock);
         let seatRepositoryfindOneSpy = spyOn(seatRepository, 'findOne').and.returnValue(seatMock);
         let categoryRespositoryfindOneSpy = spyOn(categoryRepository, 'findOne').and.returnValue(categoryMock);
-        let augmentedReservation = await reservationsService.create(2, 1, 3, { value: 'token', timestamp: 0, expirationTimestamp: 0 });
+        let augmentedReservation = await reservationsService.create(2, 1, 3, 'token', 0);
         
         expect(reservationRepositoryCreateSpy).toHaveBeenCalledTimes(1);
         expect(reservationRepositorySaveSpy).toHaveBeenCalledWith(reservationMock);
@@ -114,9 +114,9 @@ describe('ReservationsService', () => {
         let seatRepositoryfindOneSpy = spyOn(seatRepository, 'findOne').and.returnValue(seatMock);
         let categoryRespositoryfindOneSpy = spyOn(categoryRepository, 'findOne').and.returnValue(categoryMock);
 
-        let augmentedReservation = await reservationsService.updateReduction(1, { value: 'token', timestamp: 0, expirationTimestamp: 0 }, updateReductionReservationDtoMock);
+        let augmentedReservation = await reservationsService.updateReduction(1, 'token', updateReductionReservationDtoMock);
         
-        expect(reservationRepositoryFindOneSpy).toHaveBeenCalledWith({ id: 1, token: 'token', order_id: undefined });
+        expect(reservationRepositoryFindOneSpy).toHaveBeenCalledWith({ id: 1, token: 'token', order_id: IsNull() });
         expect(reservationMockUpdateFromUpdateReductionDtoSpy).toHaveBeenCalledWith(updateReductionReservationDtoMock);
         expect(reservationRepositorySaveSpy).toHaveBeenCalledWith(reservationMock);
 
@@ -132,9 +132,9 @@ describe('ReservationsService', () => {
         let reservationRepositoryFindOneSpy = spyOn(reservationRepository, 'findOne').and.returnValue(undefined);
         let reservationRepositorySaveSpy = spyOn(reservationRepository, 'save');
 
-        let reservation = await reservationsService.updateReduction(1, { value: 'token', timestamp: 0, expirationTimestamp: 0 }, updateReductionReservationDtoMock);
+        let reservation = await reservationsService.updateReduction(1, 'token', updateReductionReservationDtoMock);
         
-        expect(reservationRepositoryFindOneSpy).toHaveBeenCalledWith({ id: 1, token: 'token', order_id: undefined });
+        expect(reservationRepositoryFindOneSpy).toHaveBeenCalledWith({ id: 1, token: 'token', order_id: IsNull() });
         expect(reservationRepositorySaveSpy).not.toHaveBeenCalled();
         expect(reservation).toEqual(undefined);
     });
@@ -157,9 +157,9 @@ describe('ReservationsService', () => {
         let seatRepositoryfindOneSpy = spyOn(seatRepository, 'findOne').and.returnValue(seatMock);
         let categoryRespositoryfindOneSpy = spyOn(categoryRepository, 'findOne').and.returnValue(categoryMock);
 
-        let augmentedReservation = await reservationsService.addToOrder(1, { value: 'token', timestamp: 0, expirationTimestamp: 0 }, addToOrderReservationDtoMock);
+        let augmentedReservation = await reservationsService.addToOrder(1, 'token', addToOrderReservationDtoMock);
         
-        expect(reservationRepositoryFindOneSpy).toHaveBeenCalledWith({ id: 1, token: 'token', order_id: undefined });
+        expect(reservationRepositoryFindOneSpy).toHaveBeenCalledWith({ id: 1, token: 'token', order_id: IsNull() });
         expect(reservationMockUpdateFromAddToOrderDtoSpy).toHaveBeenCalledWith(addToOrderReservationDtoMock);
         expect(reservationRepositorySaveSpy).toHaveBeenCalledWith(reservationMock);
         
@@ -178,9 +178,9 @@ describe('ReservationsService', () => {
         let reservationRepositoryFindOneSpy = spyOn(reservationRepository, 'findOne').and.returnValue(undefined);
         let reservationRepositorySaveSpy = spyOn(reservationRepository, 'save');
 
-        let reservation = await reservationsService.addToOrder(1, { value: 'token', timestamp: 0, expirationTimestamp: 0 }, addToOrderReservationDtoMock);
+        let reservation = await reservationsService.addToOrder(1, 'token', addToOrderReservationDtoMock);
         
-        expect(reservationRepositoryFindOneSpy).toHaveBeenCalledWith({ id: 1, token: 'token', order_id: undefined });
+        expect(reservationRepositoryFindOneSpy).toHaveBeenCalledWith({ id: 1, token: 'token', order_id: IsNull() });
         expect(reservationRepositorySaveSpy).not.toHaveBeenCalled();
         expect(reservation).toEqual(undefined);
     });
