@@ -192,7 +192,7 @@ export class ReservationsController {
     @Post()
     public async create(@Body() body): Promise<AugmentedReservation> {
         try {
-            return this.basketService.addReservation(body.event_id, body.seat_id, body.category_id);
+            return await this.basketService.addReservation(body.event_id, body.seat_id, body.category_id);
         } catch(e) {
             throw new HttpException('This seat cannot be reserved because a different user has it reserved already.', HttpStatus.CONFLICT);
         }
