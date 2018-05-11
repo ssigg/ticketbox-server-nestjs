@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Delete, Query, Body, Param } from "@nestjs/common";
-import { SeatsService } from "./seats.service";
-import { Seat } from "./seat.entity";
-import { DeleteResult } from "typeorm/query-builder/result/DeleteResult";
+import { Controller, Get, Post, Delete, Query, Body, Param } from '@nestjs/common';
+import { SeatsService } from './seats.service';
+import { Seat } from './seat.entity';
+import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
 
 @Controller('admin/seats')
 export class SeatsAdminController {
@@ -13,7 +13,7 @@ export class SeatsAdminController {
      * @apiGroup Seat
      * @apiPermission admin
      * @apiVersion 1.0.0
-     * 
+     *
      * @apiSuccess {Number} id Seat id
      * @apiSuccess {String} name Seat name
      * @apiSuccess {Number} x0 Coordinate
@@ -24,7 +24,7 @@ export class SeatsAdminController {
      * @apiSuccess {Number} y2 Coordinate
      * @apiSuccess {Number} x3 Coordinate
      * @apiSuccess {Number} y3 Coordinate
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * [
@@ -54,7 +54,7 @@ export class SeatsAdminController {
      * @apiGroup Seat
      * @apiPermission admin
      * @apiVersion 1.0.0
-     * 
+     *
      * @apiParam {String} name Seat name
      * @apiParam {Number} x0 Coordinate
      * @apiParam {Number} y0 Coordinate
@@ -64,7 +64,7 @@ export class SeatsAdminController {
      * @apiParam {Number} y2 Coordinate
      * @apiParam {Number} x3 Coordinate
      * @apiParam {Number} y3 Coordinate
-     * 
+     *
      * @apiParamExample {json} Request-Example:
      * [
      *     {
@@ -81,7 +81,7 @@ export class SeatsAdminController {
      *         "y3": null
      *     }
      * ]
-     * 
+     *
      * @apiSuccess (Created 201) {Number} id Seat id
      * @apiSuccess (Created 201) {String} name Seat name
      * @apiSuccess (Created 201) {Number} x0 Coordinate
@@ -92,7 +92,7 @@ export class SeatsAdminController {
      * @apiSuccess (Created 201) {Number} y2 Coordinate
      * @apiSuccess (Created 201) {Number} x3 Coordinate
      * @apiSuccess (Created 201) {Number} y3 Coordinate
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 201 Created
      * [
@@ -122,9 +122,9 @@ export class SeatsAdminController {
      * @apiGroup Seat
      * @apiPermission admin
      * @apiVersion 1.0.0
-     * 
+     *
      * @apiParam {Number} id Seat id
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      */

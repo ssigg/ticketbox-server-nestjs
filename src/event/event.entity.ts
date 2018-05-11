@@ -1,5 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
-import { ThinMergedEventblockInterface } from "../eventblock/eventblock.entity";
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { ThinMergedEventblockInterface } from '../eventblock/eventblock.entity';
 
 @Entity()
 export class Event {

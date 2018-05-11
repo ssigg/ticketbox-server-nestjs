@@ -1,10 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, Index } from "typeorm";
-import { Event } from "../event/event.entity";
-import { Seat } from "../seat/seat.entity";
-import { Category } from "../category/category.entity";
+import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm';
+import { Event } from '../event/event.entity';
+import { Seat } from '../seat/seat.entity';
+import { Category } from '../category/category.entity';
 
 @Entity()
-@Index(["seat_id", "event_id"], { unique: true })
+@Index(['seat_id', 'event_id'], { unique: true })
 export class Reservation {
     @PrimaryGeneratedColumn()
     id: number;

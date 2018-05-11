@@ -38,7 +38,7 @@ import { Order } from './order/order.entity';
     ReservationsAdminModule
   ],
   controllers: [],
-  components: [ UuidFactory ],
+  components: [ UuidFactory ]
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewaresConsumer): void | MiddlewaresConsumer {

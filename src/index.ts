@@ -14,8 +14,8 @@ async function bootstrap() {
 	}));
 	instance.use(bodyParser.json({limit: '5mb'}));
 	instance.use(bodyParser.urlencoded({limit: '5mb', extended: true}));
-	
-	let app = await NestFactory.create(AppModule, instance);
+
+	const app = await NestFactory.create(AppModule, instance);
 	if (process.env.PORT) {
 		await app.listen((Number)(process.env.PORT));
 	} else {

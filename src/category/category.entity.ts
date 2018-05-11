@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
 export class Category {
@@ -11,10 +11,10 @@ export class Category {
     @Column()
     color: string;
 
-    @Column({ type: "real" })
+    @Column({ type: 'real' })
     price: number;
 
-    @Column({ type: "real" })
+    @Column({ type: 'real' })
     price_reduced: number;
 
     updateFromDto(dto: CategoryDto): void {

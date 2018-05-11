@@ -7,6 +7,15 @@
         "no-unused-expression": true
     },
     "rules": {
+        "trailing-comma": [
+            true, {
+                "multiline": "never",
+                "singleline": "never"
+            }
+        ],
+        "no-bitwise": [
+            false
+        ],
         "eofline": false,
         "quotemark": [
             true,
@@ -19,8 +28,11 @@
         "ordered-imports": [
             false
         ],
+        "object-literal-shorthand": [
+            false
+        ],
         "max-line-length": [
-            150
+            false
         ],
         "member-ordering": [
             false

@@ -1,11 +1,11 @@
 
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm/repository/Repository";
-import { Event } from "../event/event.entity";
-import { Seat, SeatDto, AugmentedSeat, SeatState } from "./seat.entity";
-import { Component } from "@nestjs/common";
-import { Reservation, OrderKind } from "../reservation/reservation.entity";
-import { DeleteResult } from "typeorm/query-builder/result/DeleteResult";
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm/repository/Repository';
+import { Event } from '../event/event.entity';
+import { Seat, SeatDto, AugmentedSeat, SeatState } from './seat.entity';
+import { Component } from '@nestjs/common';
+import { Reservation, OrderKind } from '../reservation/reservation.entity';
+import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
 
 @Component()
 export class SeatsService {
@@ -13,7 +13,7 @@ export class SeatsService {
         @InjectRepository(Seat)
         private readonly seatRepository: Repository<Seat>,
         @InjectRepository(Reservation)
-        private readonly reservationRepository: Repository<Reservation>,
+        private readonly reservationRepository: Repository<Reservation>
     ) { }
 
     async findAllInBlock(blockId: number): Promise<Seat[]> {
@@ -21,7 +21,7 @@ export class SeatsService {
     }
 
     async create(dtos: SeatDto[]): Promise<Seat[]> {
-        let savedSeats = await Promise.all(dtos.map(async dto => this.createOneSeat(dto)));
+        const savedSeats = await Promise.all(dtos.map(async dto => this.createOneSeat(dto)));
         return savedSeats;
     }
 
@@ -30,8 +30,8 @@ export class SeatsService {
     }
 
     async augmentSeat(seat: Seat, event: Event, token: string): Promise<AugmentedSeat> {
-        let reservation = await this.reservationRepository.findOne({ seat_id: seat.id, event_id: event.id });
-        
+        const reservation = await this.reservationRepository.findOne({ seat_id: seat.id, event_id: event.id });
+
         if (reservation === undefined) {
             return new AugmentedSeat(seat, SeatState.Free);
         } else if (reservation.order_id !== null) {
@@ -52,9 +52,9 @@ export class SeatsService {
     }
 
     private async createOneSeat(dto: SeatDto): Promise<Seat> {
-        let seat = await this.seatRepository.create();
+        const seat = await this.seatRepository.create();
         seat.updateFromDto(dto);
-        let savedSeat = await this.seatRepository.save(seat);
+        const savedSeat = await this.seatRepository.save(seat);
         return savedSeat;
     }
 }

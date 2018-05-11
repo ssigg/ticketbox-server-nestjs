@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Put, Delete , Param, Body} from "@nestjs/common";
-import { CategoriesService } from "./categories.service";
-import { Category } from "./category.entity";
-import { DeleteResult } from "typeorm/query-builder/result/DeleteResult";
+import { Controller, Get, Post, Put, Delete , Param, Body} from '@nestjs/common';
+import { CategoriesService } from './categories.service';
+import { Category } from './category.entity';
+import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
 
 @Controller('admin/categories')
 export class CategoriesAdminController {
@@ -13,13 +13,13 @@ export class CategoriesAdminController {
      * @apiGroup Category
      * @apiPermission admin
      * @apiVersion 1.0.0
-     * 
+     *
      * @apiSuccess {Number} id Category id
      * @apiSuccess {String} name Category name
      * @apiSuccess {String} color Category color
      * @apiSuccess {Number} price Normal price
      * @apiSuccess {Number} price_reduced Reduced price
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * [
@@ -43,13 +43,13 @@ export class CategoriesAdminController {
      * @apiGroup Category
      * @apiPermission admin
      * @apiVersion 1.0.0
-     * 
+     *
      * @apiSuccess {Number} id Category id
      * @apiSuccess {String} name Category name
      * @apiSuccess {String} color Category color
      * @apiSuccess {Number} price Normal price
      * @apiSuccess {Number} price_reduced Reduced price
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
@@ -71,12 +71,12 @@ export class CategoriesAdminController {
      * @apiGroup Category
      * @apiPermission admin
      * @apiVersion 1.0.0
-     * 
+     *
      * @apiParam {String} name Category name
      * @apiParam {String} [color] Category color
      * @apiParam {Number} price Normal price
      * @apiParam {Number} price_reduced Reduced price
-     * 
+     *
      * @apiParamExample {json} Request-Example:
      * {
      *   "name": "Example Category",
@@ -84,13 +84,13 @@ export class CategoriesAdminController {
      *   "price" 20,
      *   "price_reduced": 10
      * }
-     * 
+     *
      * @apiSuccess (Created 201) {Number} id Category id
      * @apiSuccess (Created 201) {String} name Category name
      * @apiSuccess (Created 201) {String} color Category color
      * @apiSuccess (Created 201) {Number} price Normal price
      * @apiSuccess (Created 201) {Number} price_reduced Reduced price
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 201 Created
      * {
@@ -112,12 +112,12 @@ export class CategoriesAdminController {
      * @apiGroup Category
      * @apiPermission admin
      * @apiVersion 1.0.0
-     * 
+     *
      * @apiParam {String} name Category name
      * @apiParam {String} [color] Category color
      * @apiParam {Number} price Normal price
      * @apiParam {Number} price_reduced Reduced price
-     * 
+     *
      * @apiParamExample {json} Request-Example:
      * {
      *   "name": "Example Category",
@@ -125,13 +125,13 @@ export class CategoriesAdminController {
      *   "price" 20,
      *   "price_reduced": 10
      * }
-     * 
+     *
      * @apiSuccess {Number} id Category id
      * @apiSuccess {String} name Category name
      * @apiSuccess {String} color Category color
      * @apiSuccess {Number} price Normal price
      * @apiSuccess {Number} price_reduced Reduced price
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
@@ -153,9 +153,9 @@ export class CategoriesAdminController {
      * @apiGroup Category
      * @apiPermission admin
      * @apiVersion 1.0.0
-     * 
+     *
      * @apiParam {Number} id Category id
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      */

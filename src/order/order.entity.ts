@@ -1,5 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
-import { AugmentedReservation } from "../reservation/reservation.entity";
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { AugmentedReservation } from '../reservation/reservation.entity';
 
 @Entity()
 export class Order {

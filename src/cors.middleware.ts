@@ -1,4 +1,4 @@
-import { Middleware, NestMiddleware, ExpressMiddleware } from "@nestjs/common";
+import { Middleware, NestMiddleware, ExpressMiddleware } from '@nestjs/common';
 
 @Middleware()
 export class CorsMiddleware implements NestMiddleware {

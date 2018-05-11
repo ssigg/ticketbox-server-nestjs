@@ -1,9 +1,9 @@
-import { Component } from "@nestjs/common";
+import { Component } from '@nestjs/common';
 
 @Component()
 export class TokenTimeService {
-    private readonly expirationDuration: number = parseInt(process.env.TOKEN_EXPIRATION_DURATION_IN_SECONDS || '600');
-    
+    private readonly expirationDuration: number = parseInt(process.env.TOKEN_EXPIRATION_DURATION_IN_SECONDS || '600', 10);
+
     getTokenExpirationDuration(): number {
         return this.expirationDuration;
     }

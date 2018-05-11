@@ -3,10 +3,12 @@ import { UuidFactory } from '../utils/uuid.factory';
 import { ReservationsService } from './reservations.service';
 import { TokenTimeService } from '../utils/token-time.service';
 import { AugmentedReservation } from './reservation.entity';
+import { OrdersService } from '../order/orders.service';
 
 describe('BasketService', () => {
     let uuidFactory: UuidFactory;
     let reservationsService: ReservationsService;
+    let ordersService: OrdersService;
     let tokenTimeService: TokenTimeService;
     let basketService: BasketService;
 
@@ -29,14 +31,15 @@ describe('BasketService', () => {
     beforeEach(async () => {
         uuidFactory = new UuidFactory();
         reservationsService = new ReservationsService(null, null, null, null, null);
+        ordersService = new OrdersService(null, null);
         tokenTimeService = new TokenTimeService();
-        basketService = new BasketService(uuidFactory, reservationsService, tokenTimeService);
+        basketService = new BasketService(uuidFactory, reservationsService, ordersService, tokenTimeService);
 
         // 850            900             950                1000              1100
         // -----------------------------------------------------------------------------> time
         // ^              ^               ^                  ^                 ^
         // beforePast     past            afterPast          now               future
-        // 
+        //
         //                |-----------------------------------------|
         //                              expiration duration = 140
 
@@ -59,23 +62,21 @@ describe('BasketService', () => {
     });
 
     it('Initializes with the given token and returns it', async () => {
-        let givenToken = 'given';
-        let uuidFactoryCreateSpy = spyOn(uuidFactory, 'create');
-        
-        let token = await basketService.initializeAndReturnToken(givenToken);
-        
+        const uuidFactoryCreateSpy = spyOn(uuidFactory, 'create');
+
+        const token = await basketService.initializeAndReturnToken('given');
+
         expect(uuidFactoryCreateSpy).not.toHaveBeenCalled();
-        expect(token).toEqual(givenToken);
+        expect(token).toEqual('given');
     });
 
     it('Initializes without token, generates a new one and returns it', async () => {
-        let generatedToken = 'generated';
-        let uuidFactoryCreateSpy = spyOn(uuidFactory, 'create').and.returnValue(generatedToken);
-        
-        let token = await basketService.initializeAndReturnToken(undefined);
-        
+        const uuidFactoryCreateSpy = spyOn(uuidFactory, 'create').and.returnValue('generated');
+
+        const token = await basketService.initializeAndReturnToken(undefined);
+
         expect(uuidFactoryCreateSpy).toHaveBeenCalledTimes(1);
-        expect(token).toEqual(generatedToken);
+        expect(token).toEqual('generated');
     });
 
     it('Returns existing reservations', async () => {
@@ -83,7 +84,7 @@ describe('BasketService', () => {
         reservationsServiceFindMyReservationsSpy.and.returnValue(repositoryReservations);
         tokenTimeServiceGetTokenExpirationDurationSpy.and.returnValue(expirationDuration);
 
-        let reservations = await basketService.getReservations();
+        const reservations = await basketService.getReservations();
 
         expect(tokenTimeServiceGetPurgeTimestampSpy).toHaveBeenCalledTimes(1);
         expect(reservationsServicePurgeReservationsByTimestampSpy).toHaveBeenCalledWith(past);
@@ -101,7 +102,7 @@ describe('BasketService', () => {
         reservationsServiceFindMyReservationsSpy.and.returnValue(repositoryReservations);
         tokenTimeServiceGetTokenExpirationDurationSpy.and.returnValue(expirationDuration);
 
-        let reservations = await basketService.getReservations();
+        const reservations = await basketService.getReservations();
 
         expect(tokenTimeServiceGetPurgeTimestampSpy).toHaveBeenCalledTimes(1);
         expect(reservationsServicePurgeReservationsByTimestampSpy).toHaveBeenCalledWith(past);
@@ -116,9 +117,9 @@ describe('BasketService', () => {
         tokenTimeServiceGetPurgeTimestampSpy.and.returnValue(past);
         reservationsServiceFindMyReservationsSpy.and.returnValue([]);
         tokenTimeServiceGetTokenExpirationDurationSpy.and.returnValue(expirationDuration);
-        let reservationsServiceCreateSpy = spyOn(reservationsService, 'create').and.returnValue(augmentedReservation);
+        const reservationsServiceCreateSpy = spyOn(reservationsService, 'create').and.returnValue(augmentedReservation);
 
-        let reservation = await basketService.addReservation(11, 22, 33);
+        const reservation = await basketService.addReservation(11, 22, 33);
 
         expect(tokenTimeServiceGetPurgeTimestampSpy).toHaveBeenCalledTimes(1);
         expect(reservationsServicePurgeReservationsByTimestampSpy).toHaveBeenCalledWith(past);
@@ -133,9 +134,9 @@ describe('BasketService', () => {
         tokenTimeServiceGetPurgeTimestampSpy.and.returnValue(past);
         reservationsServiceFindMyReservationsSpy.and.returnValue(repositoryReservations);
         tokenTimeServiceGetTokenExpirationDurationSpy.and.returnValue(expirationDuration);
-        let reservationsServiceCreateSpy = spyOn(reservationsService, 'create').and.returnValue(augmentedReservation);
+        const reservationsServiceCreateSpy = spyOn(reservationsService, 'create').and.returnValue(augmentedReservation);
 
-        let reservation = await basketService.addReservation(11, 22, 33);
+        const reservation = await basketService.addReservation(11, 22, 33);
 
         expect(tokenTimeServiceGetPurgeTimestampSpy).toHaveBeenCalledTimes(1);
         expect(reservationsServicePurgeReservationsByTimestampSpy).toHaveBeenCalledWith(past);
@@ -150,7 +151,7 @@ describe('BasketService', () => {
         tokenTimeServiceGetPurgeTimestampSpy.and.returnValue(past);
         reservationsServiceFindMyReservationsSpy.and.returnValue(repositoryReservations);
         tokenTimeServiceGetTokenExpirationDurationSpy.and.returnValue(expirationDuration);
-        let reservationsServiceDeleteSpy = spyOn(reservationsService, 'delete');
+        const reservationsServiceDeleteSpy = spyOn(reservationsService, 'delete');
 
         await basketService.removeReservation(augmentedReservation.id);
 
@@ -166,15 +167,15 @@ describe('BasketService', () => {
         tokenTimeServiceGetPurgeTimestampSpy.and.returnValue(past);
         reservationsServiceFindMyReservationsSpy.and.returnValue([]);
         tokenTimeServiceGetTokenExpirationDurationSpy.and.returnValue(expirationDuration);
-        let reservationsServiceDeleteSpy = spyOn(reservationsService, 'delete');
+        const reservationsServiceDeleteSpy = spyOn(reservationsService, 'delete');
 
         await basketService.removeReservation(augmentedReservation.id);
 
         expect(tokenTimeServiceGetPurgeTimestampSpy).toHaveBeenCalledTimes(1);
         expect(reservationsServicePurgeReservationsByTimestampSpy).toHaveBeenCalledWith(past);
         expect(reservationsServiceFindMyReservationsSpy).toHaveBeenCalledWith(givenToken);
-        expect(tokenTimeServiceGetNowSpy).not.toHaveBeenCalled()
-        expect(tokenTimeServiceGetTokenExpirationDurationSpy).not.toHaveBeenCalled()
+        expect(tokenTimeServiceGetNowSpy).not.toHaveBeenCalled();
+        expect(tokenTimeServiceGetTokenExpirationDurationSpy).not.toHaveBeenCalled();
         expect(reservationsServiceDeleteSpy).not.toHaveBeenCalled();
     });
 
@@ -182,7 +183,7 @@ describe('BasketService', () => {
         tokenTimeServiceGetPurgeTimestampSpy.and.returnValue(past);
         reservationsServiceFindMyReservationsSpy.and.returnValue(repositoryReservations);
         tokenTimeServiceGetTokenExpirationDurationSpy.and.returnValue(expirationDuration);
-        let reservationsServiceUpdateReductionSpy = spyOn(reservationsService, 'updateReduction');
+        const reservationsServiceUpdateReductionSpy = spyOn(reservationsService, 'updateReduction');
 
         await basketService.updateReduction(augmentedReservation.id, true);
 
@@ -198,7 +199,7 @@ describe('BasketService', () => {
         tokenTimeServiceGetPurgeTimestampSpy.and.returnValue(past);
         reservationsServiceFindMyReservationsSpy.and.returnValue([]);
         tokenTimeServiceGetTokenExpirationDurationSpy.and.returnValue(expirationDuration);
-        let reservationsServiceUpdateReductionSpy = spyOn(reservationsService, 'updateReduction');
+        const reservationsServiceUpdateReductionSpy = spyOn(reservationsService, 'updateReduction');
 
         let rejected: boolean;
         await basketService.updateReduction(augmentedReservation.id, true).catch(_ => rejected = true);
@@ -207,8 +208,8 @@ describe('BasketService', () => {
         expect(tokenTimeServiceGetPurgeTimestampSpy).toHaveBeenCalledTimes(1);
         expect(reservationsServicePurgeReservationsByTimestampSpy).toHaveBeenCalledWith(past);
         expect(reservationsServiceFindMyReservationsSpy).toHaveBeenCalledWith(givenToken);
-        expect(tokenTimeServiceGetNowSpy).not.toHaveBeenCalled()
-        expect(tokenTimeServiceGetTokenExpirationDurationSpy).not.toHaveBeenCalled()
+        expect(tokenTimeServiceGetNowSpy).not.toHaveBeenCalled();
+        expect(tokenTimeServiceGetTokenExpirationDurationSpy).not.toHaveBeenCalled();
         expect(reservationsServiceUpdateReductionSpy).not.toHaveBeenCalled();
     });
 
@@ -216,8 +217,8 @@ describe('BasketService', () => {
         reservationsServiceFindMyReservationsSpy.and.returnValue(repositoryReservations);
         tokenTimeServiceGetTokenExpirationDurationSpy.and.returnValue(expirationDuration);
 
-        let expirationTimestamp = await basketService.getExpirationTimestamp();
-       
+        const expirationTimestamp = await basketService.getExpirationTimestamp();
+
         expect(expirationTimestamp).toEqual(afterPast + expirationDuration);
     });
 
@@ -225,8 +226,8 @@ describe('BasketService', () => {
         reservationsServiceFindMyReservationsSpy.and.returnValue([]);
         tokenTimeServiceGetTokenExpirationDurationSpy.and.returnValue(expirationDuration);
 
-        let expirationTimestamp = await basketService.getExpirationTimestamp();
-       
+        const expirationTimestamp = await basketService.getExpirationTimestamp();
+
         expect(expirationTimestamp).toEqual(0);
     });
 });

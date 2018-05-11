@@ -1,11 +1,11 @@
-import { Component } from "@nestjs/common";
-import { UuidFactory } from "../utils/uuid.factory";
-import { Reservation, AugmentedReservation, OrderKind } from "../reservation/reservation.entity";
-import { ReservationsService } from "../reservation/reservations.service";
-import { OrdersService } from "../order/orders.service";
-import { DeleteResult } from "typeorm";
-import { TokenTimeService } from "../utils/token-time.service";
-import { OrderDto, Order, AugmentedOrder } from "../order/order.entity";
+import { Component } from '@nestjs/common';
+import { UuidFactory } from '../utils/uuid.factory';
+import { Reservation, AugmentedReservation, OrderKind } from '../reservation/reservation.entity';
+import { ReservationsService } from '../reservation/reservations.service';
+import { OrdersService } from '../order/orders.service';
+import { DeleteResult } from 'typeorm';
+import { TokenTimeService } from '../utils/token-time.service';
+import { OrderDto, Order, AugmentedOrder } from '../order/order.entity';
 
 @Component()
 export class BasketService {
@@ -29,7 +29,7 @@ export class BasketService {
     }
 
     async getReservations(): Promise<AugmentedReservation[]> {
-        let basket = await this.basketContainer.getBasket();
+        const basket = await this.basketContainer.getBasket();
         if (basket !== undefined) {
             return basket.getReservations();
         } else {
@@ -38,12 +38,12 @@ export class BasketService {
     }
 
     async addReservation(event_id: number, seat_id: number, category_id: number): Promise<AugmentedReservation> {
-        let basket = await this.basketContainer.getOrCreateBasket();
+        const basket = await this.basketContainer.getOrCreateBasket();
         return basket.addReservation(event_id, seat_id, category_id);
     }
 
     async removeReservation(id: number): Promise<DeleteResult> {
-        let basket = await this.basketContainer.getBasket();
+        const basket = await this.basketContainer.getBasket();
         if (basket !== undefined) {
             return basket.removeReservation(id);
         } else {
@@ -52,16 +52,16 @@ export class BasketService {
     }
 
     async updateReduction(id: number, isReduced: boolean): Promise<AugmentedReservation> {
-        let basket = await this.basketContainer.getBasket();
+        const basket = await this.basketContainer.getBasket();
         if (basket !== undefined) {
             return await basket.updateReduction(id, isReduced);
         } else {
-            return new Promise<AugmentedReservation>((resolve, reject) => reject("Reservation has timed out."));
+            return new Promise<AugmentedReservation>((resolve, reject) => reject('Reservation has timed out.'));
         }
     }
 
     async getExpirationTimestamp(): Promise<number> {
-        let basket = await this.basketContainer.getBasket();
+        const basket = await this.basketContainer.getBasket();
         if (basket !== undefined) {
             return basket.getExpirationTimestamp();
         } else {
@@ -75,7 +75,7 @@ class BasketContainer {
     private readonly ordersService: OrdersService;
     private readonly token: string;
     private readonly tokenTimeService: TokenTimeService;
-    
+
     private basket: Basket = undefined;
 
     constructor(reservationsService: ReservationsService, ordersService: OrdersService, token: string, tokenTimeService: TokenTimeService) {
@@ -105,11 +105,11 @@ class BasketContainer {
     }
 
     private async createBasketIfReservationsAvailable(): Promise<Basket> {
-        let purgeTimestamp = this.tokenTimeService.getPurgeTimestamp();
+        const purgeTimestamp = this.tokenTimeService.getPurgeTimestamp();
         await this.reservationsService.purgeReservationsByTimestamp(purgeTimestamp);
-        let reservations = await this.reservationsService.findMyReservations(this.token);
+        const reservations = await this.reservationsService.findMyReservations(this.token);
         if (reservations.length > 0) {
-            let timestamp = reservations[0].timestamp;
+            const timestamp = reservations[0].timestamp;
             return new Basket(this.reservationsService, this.ordersService, this.token, this.tokenTimeService, timestamp, reservations);
         } else {
             return undefined;
@@ -117,7 +117,7 @@ class BasketContainer {
     }
 
     private createEmptyBasket(): Basket {
-        let now = this.tokenTimeService.getNow();
+        const now = this.tokenTimeService.getNow();
         return new Basket(this.reservationsService, this.ordersService, this.token, this.tokenTimeService, now, []);
     }
 
@@ -137,7 +137,7 @@ class Basket {
     private readonly tokenTimeService: TokenTimeService;
     private readonly timestamp: number;
     private readonly expirationTimestamp: number;
-    
+
     private reservations: AugmentedReservation[];
     private isPurged: boolean = false;
 
@@ -158,28 +158,28 @@ class Basket {
 
     async addReservation(event_id: number, seat_id: number, category_id: number): Promise<AugmentedReservation> {
         this.throwIfPurged();
-        let reservation = await this.reservationsService.create(event_id, seat_id, category_id, this.token, this.timestamp);
+        const reservation = await this.reservationsService.create(event_id, seat_id, category_id, this.token, this.timestamp);
         this.reservations.push(reservation);
         return reservation;
     }
 
     async removeReservation(id: number): Promise<DeleteResult> {
         this.throwIfPurged();
-        let deleteResult = await this.reservationsService.delete(id);
-        this.reservations = this.reservations.filter(r => r.id != id);
+        const deleteResult = await this.reservationsService.delete(id);
+        this.reservations = this.reservations.filter(r => r.id !== id);
         return deleteResult;
     }
 
     async updateReduction(id: number, isReduced: boolean): Promise<AugmentedReservation> {
         this.throwIfPurged();
-        let reservation = await this.reservationsService.updateReduction(id, this.token, { is_reduced: isReduced });
-        this.reservations = this.reservations.filter(r => r.id != id).concat(reservation);
+        const reservation = await this.reservationsService.updateReduction(id, this.token, { is_reduced: isReduced });
+        this.reservations = this.reservations.filter(r => r.id !== id).concat(reservation);
         return reservation;
     }
 
     async createOrder(orderDto: OrderDto): Promise<AugmentedOrder> {
         this.throwIfPurged();
-        let augmentedOrder = await this.ordersService.create(orderDto, this.token, this.reservations);
+        const augmentedOrder = await this.ordersService.create(orderDto, this.token, this.reservations);
         return augmentedOrder;
     }
 
@@ -201,7 +201,7 @@ class Basket {
 
     private throwIfPurged(): void {
         if (this.isPurged) {
-            throw new Error("You cannot access a purged basket.");
+            throw new Error('You cannot access a purged basket.');
         }
     }
 }

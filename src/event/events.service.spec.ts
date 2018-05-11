@@ -1,14 +1,14 @@
-import { Repository } from "typeorm";
-import { EventsService } from "./events.service";
-import { BlocksService } from "../block/blocks.service";
-import { EventblocksService } from "../eventblock/eventblocks.service";
-import { Event, EventDto, EventWithBlocks } from "./event.entity";
-import { Block } from "../block/block.entity";
-import { Category } from "../category/category.entity";
-import { Seat } from "../seat/seat.entity";
-import { Eventblock } from "../eventblock/eventblock.entity";
-import { Reservation } from "../reservation/reservation.entity";
-import { SeatsService } from "../seat/seats.service";
+import { Repository } from 'typeorm';
+import { EventsService } from './events.service';
+import { BlocksService } from '../block/blocks.service';
+import { EventblocksService } from '../eventblock/eventblocks.service';
+import { Event, EventDto, EventWithBlocks } from './event.entity';
+import { Block } from '../block/block.entity';
+import { Category } from '../category/category.entity';
+import { Seat } from '../seat/seat.entity';
+import { Eventblock } from '../eventblock/eventblock.entity';
+import { Reservation } from '../reservation/reservation.entity';
+import { SeatsService } from '../seat/seats.service';
 
 describe('EventsService', () => {
     let eventRepository: Repository<Event>;
@@ -24,36 +24,36 @@ describe('EventsService', () => {
     });
 
     it('Fetches all events from repository', async () => {
-        let eventMock = new Event();
-        let eventRepositoryFindSpy = spyOn(eventRepository, 'find').and.returnValue([eventMock]);
-        let events = await eventsService.findAll();
+        const eventMock = new Event();
+        const eventRepositoryFindSpy = spyOn(eventRepository, 'find').and.returnValue([eventMock]);
+        const events = await eventsService.findAll();
         expect(eventRepositoryFindSpy).toHaveBeenCalledTimes(1);
         expect(events).toEqual([eventMock]);
     });
 
     it('Fetches visible events from repository', async () => {
-        let eventMock = new Event();
-        let eventRepositoryFindSpy = spyOn(eventRepository, 'find').and.returnValue([eventMock]);
-        let events = await eventsService.findAllVisible();
+        const eventMock = new Event();
+        const eventRepositoryFindSpy = spyOn(eventRepository, 'find').and.returnValue([eventMock]);
+        const events = await eventsService.findAllVisible();
         expect(eventRepositoryFindSpy).toHaveBeenCalledWith({ visible: true });
         expect(events).toEqual([eventMock]);
     });
 
     it('Fetches event with given id from repository', async () => {
-        let eventMock = new Event();
+        const eventMock = new Event();
         eventMock.id = 42;
-        let eventWithBlocksMock = new EventWithBlocks(eventMock, []);
-        let eventRepositoryfindOneSpy = spyOn(eventRepository, 'findOne').and.returnValue(eventMock);
-        let blocksServiceGetMergedEventblocksSpy = spyOn(eventblocksService, 'getThinMergedEventblocks').and.returnValue([]);
-        let eventWithBlocks = await eventsService.find(1);
+        const eventWithBlocksMock = new EventWithBlocks(eventMock, []);
+        const eventRepositoryfindOneSpy = spyOn(eventRepository, 'findOne').and.returnValue(eventMock);
+        const blocksServiceGetMergedEventblocksSpy = spyOn(eventblocksService, 'getThinMergedEventblocks').and.returnValue([]);
+        const eventWithBlocks = await eventsService.find(1);
         expect(eventRepositoryfindOneSpy).toHaveBeenCalledWith({ id: 1 });
         expect(blocksServiceGetMergedEventblocksSpy).toHaveBeenCalledWith(42);
         expect(eventWithBlocks).toEqual(eventWithBlocksMock);
     });
 
     it('Creates event with given property values', async () => {
-        let eventMock = new Event();
-        let eventDtoMock = {
+        const eventMock = new Event();
+        const eventDtoMock = {
             name: 'dto.name',
             location: 'dto.loc',
             location_address: 'dto.loc.addr.',
@@ -63,13 +63,13 @@ describe('EventsService', () => {
             visible: true
         };
 
-        let eventRepositoryCreateSpy = spyOn(eventRepository, 'create').and.returnValue(eventMock);
-        let eventRepositorySaveSpy = spyOn(eventRepository, 'save').and.returnValue(eventMock);
-        let event = await eventsService.create(eventDtoMock);
-        
+        const eventRepositoryCreateSpy = spyOn(eventRepository, 'create').and.returnValue(eventMock);
+        const eventRepositorySaveSpy = spyOn(eventRepository, 'save').and.returnValue(eventMock);
+        const event = await eventsService.create(eventDtoMock);
+
         expect(eventRepositoryCreateSpy).toHaveBeenCalledTimes(1);
         expect(eventRepositorySaveSpy).toHaveBeenCalledWith(eventMock);
-        
+
         expect(event).toEqual(eventMock);
         expect(event.name).toEqual(eventDtoMock.name);
         expect(event.location).toEqual(eventDtoMock.location);
@@ -81,7 +81,7 @@ describe('EventsService', () => {
     });
 
     it('Updates event with given property values', async () => {
-        let eventMock = new Event();
+        const eventMock = new Event();
         eventMock.name = 'model.name';
         eventMock.location = 'model.loc';
         eventMock.location_address = 'model.loc.addr';
@@ -90,7 +90,7 @@ describe('EventsService', () => {
         eventMock.dateandtime = 'model.dat';
         eventMock.visible = false;
 
-        let eventDtoMock = {
+        const eventDtoMock = {
             name: 'dto.name',
             location: 'dto.loc',
             location_address: 'dto.loc.addr.',
@@ -100,13 +100,13 @@ describe('EventsService', () => {
             visible: true
         };
 
-        let eventRepositoryfindOneSpy = spyOn(eventRepository, 'findOne').and.returnValue(eventMock);
-        let eventRepositorySaveSpy = spyOn(eventRepository, 'save').and.returnValue(eventMock);
-        let event = await eventsService.update(1, eventDtoMock);
+        const eventRepositoryfindOneSpy = spyOn(eventRepository, 'findOne').and.returnValue(eventMock);
+        const eventRepositorySaveSpy = spyOn(eventRepository, 'save').and.returnValue(eventMock);
+        const event = await eventsService.update(1, eventDtoMock);
 
         expect(eventRepositoryfindOneSpy).toHaveBeenCalledTimes(1);
         expect(eventRepositorySaveSpy).toHaveBeenCalledWith(eventMock);
-        
+
         expect(event).toEqual(eventMock);
         expect(event.name).toEqual(eventDtoMock.name);
         expect(event.location).toEqual(eventDtoMock.location);
@@ -118,35 +118,35 @@ describe('EventsService', () => {
     });
 
     it('Updates event with false visibility', async () => {
-        let eventMock = new Event();
+        const eventMock = new Event();
         eventMock.visible = true;
 
-        let eventDtoMock = {
+        const eventDtoMock = {
             visible: false
         };
 
-        let eventRepositoryfindOneSpy = spyOn(eventRepository, 'findOne').and.returnValue(eventMock);
-        let eventRepositorySaveSpy = spyOn(eventRepository, 'save').and.returnValue(eventMock);
-        let event = await eventsService.update(1, eventDtoMock);
-        
+        const eventRepositoryfindOneSpy = spyOn(eventRepository, 'findOne').and.returnValue(eventMock);
+        const eventRepositorySaveSpy = spyOn(eventRepository, 'save').and.returnValue(eventMock);
+        const event = await eventsService.update(1, eventDtoMock);
+
         expect(event.visible).toEqual(eventDtoMock.visible);
     });
 
     it('Updates event with no visibility', async () => {
-        let eventMock = new Event();
+        const eventMock = new Event();
         eventMock.visible = true;
 
-        let eventDtoMock = { };
+        const eventDtoMock = { };
 
-        let eventRepositoryfindOneSpy = spyOn(eventRepository, 'findOne').and.returnValue(eventMock);
-        let eventRepositorySaveSpy = spyOn(eventRepository, 'save').and.returnValue(eventMock);
-        let event = await eventsService.update(1, eventDtoMock);
-        
+        const eventRepositoryfindOneSpy = spyOn(eventRepository, 'findOne').and.returnValue(eventMock);
+        const eventRepositorySaveSpy = spyOn(eventRepository, 'save').and.returnValue(eventMock);
+        const event = await eventsService.update(1, eventDtoMock);
+
         expect(event.visible).toEqual(eventMock.visible);
     });
 
     it('Deletes event with given id using repository', async () => {
-        let eventRepositoryDeleteSpy = spyOn(eventRepository, 'delete');
+        const eventRepositoryDeleteSpy = spyOn(eventRepository, 'delete');
         await eventsService.delete(1);
         expect(eventRepositoryDeleteSpy).toHaveBeenCalledWith({ id: 1 });
     });

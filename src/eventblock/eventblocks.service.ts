@@ -1,14 +1,14 @@
-import { Component } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { Event } from "../event/event.entity";
-import { Block, BlockDto } from "../block/block.entity";
-import { Eventblock, EventblockDto, ThinMergedEventblockInterface, ThinMergedEventblock, MergedEventblock, MergedEventblockPart, ComparableMergedEventblockInterface } from "./eventblock.entity";
-import { Category } from "../category/category.entity";
-import { Seat, AugmentedSeat, SeatState } from "../seat/seat.entity";
-import { Reservation, OrderKind } from "../reservation/reservation.entity";
-import { SeatsService } from "../seat/seats.service";
-import { DeleteResult } from "typeorm/query-builder/result/DeleteResult";
+import { Component } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Event } from '../event/event.entity';
+import { Block, BlockDto } from '../block/block.entity';
+import { Eventblock, EventblockDto, ThinMergedEventblockInterface, ThinMergedEventblock, MergedEventblock, MergedEventblockPart, ComparableMergedEventblockInterface } from './eventblock.entity';
+import { Category } from '../category/category.entity';
+import { Seat, AugmentedSeat, SeatState } from '../seat/seat.entity';
+import { Reservation, OrderKind } from '../reservation/reservation.entity';
+import { SeatsService } from '../seat/seats.service';
+import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
 
 @Component()
 export class EventblocksService {
@@ -27,16 +27,16 @@ export class EventblocksService {
     ) { }
 
     async create(dto: EventblockDto): Promise<Eventblock> {
-        let eventblock = await this.eventblockRepository.create();
+        const eventblock = await this.eventblockRepository.create();
         eventblock.updateFromDto(dto);
-        let savedEventblock = await this.eventblockRepository.save(eventblock);
+        const savedEventblock = await this.eventblockRepository.save(eventblock);
         return savedEventblock;
     }
 
     async update(id: number, dto: EventblockDto): Promise<Eventblock> {
-        let eventblock = await this.eventblockRepository.findOne({ id: id });
+        const eventblock = await this.eventblockRepository.findOne({ id: id });
         eventblock.updateFromDto(dto);
-        let savedEventblock = await this.eventblockRepository.save(eventblock);
+        const savedEventblock = await this.eventblockRepository.save(eventblock);
         return savedEventblock;
     }
 
@@ -45,23 +45,23 @@ export class EventblocksService {
     }
 
     async getThinMergedEventblocks(event_id: number): Promise<ThinMergedEventblockInterface[]> {
-        let eventblocks = await this.eventblockRepository.find({ event_id: event_id });
-        let augmentedEventblocks = await Promise.all(eventblocks.map(async eb => await this.augmentEventblockThin(eb)));
-        let mergedEventblocks = augmentedEventblocks.reduce<ThinMergedEventblock[]>((pv, cv, ci, a) => this.appendBlock(pv, cv), []);
+        const eventblocks = await this.eventblockRepository.find({ event_id: event_id });
+        const augmentedEventblocks = await Promise.all(eventblocks.map(async eb => await this.augmentEventblockThin(eb)));
+        const mergedEventblocks = augmentedEventblocks.reduce<ThinMergedEventblock[]>((pv, cv, ci, a) => this.appendBlock(pv, cv), []);
         return mergedEventblocks;
     }
 
     private async augmentEventblockThin(eventblock: Eventblock): Promise<ThinAugmentedEventblock> {
-        let block = await this.blockRepository.findOne({ id: eventblock.block_id });
+        const block = await this.blockRepository.findOne({ id: eventblock.block_id });
         return new ThinAugmentedEventblock(eventblock, block);
     }
 
     async getMergedEventblock(key: string, token: string): Promise<MergedEventblock> {
-        let keyParts = key.split('-');
-        let eventblocks = await Promise.all(keyParts.map(async p => await this.eventblockRepository.findOne({ id: parseInt(p) })));
-        if (!eventblocks.some(eb => eb == undefined)) {
-            let augmentedEventblocks = await Promise.all(eventblocks.map(async eb => await this.augmentEventblockFull(eb, token)));
-            let mergedEventblock = augmentedEventblocks.reduce<MergedEventblock[]>((pv, cv, ci, a) => this.appendBlock(pv, cv), [])[0];
+        const keyParts = key.split('-');
+        const eventblocks = await Promise.all(keyParts.map(async p => await this.eventblockRepository.findOne({ id: parseInt(p, 10) })));
+        if (!eventblocks.some(eb => eb === undefined)) {
+            const augmentedEventblocks = await Promise.all(eventblocks.map(async eb => await this.augmentEventblockFull(eb, token)));
+            const mergedEventblock = augmentedEventblocks.reduce<MergedEventblock[]>((pv, cv, ci, a) => this.appendBlock(pv, cv), [])[0];
             return mergedEventblock;
         } else {
             return undefined;
@@ -69,17 +69,17 @@ export class EventblocksService {
     }
 
     private async augmentEventblockFull(eventblock: Eventblock, token: string): Promise<AugmentedEventblock> {
-        let block = await this.blockRepository.findOne({ id: eventblock.block_id });
-        let event = await this.eventRepository.findOne({ id: eventblock.event_id });
-        let category = await this.categoryRepository.findOne({ id: eventblock.category_id });
-        let seats = await this.seatRepository.find({ block_id: eventblock.block_id });
-        let augmentedSeats = await Promise.all(seats.map(async s => await this.seatsService.augmentSeat(s, event, token)));
+        const block = await this.blockRepository.findOne({ id: eventblock.block_id });
+        const event = await this.eventRepository.findOne({ id: eventblock.event_id });
+        const category = await this.categoryRepository.findOne({ id: eventblock.category_id });
+        const seats = await this.seatRepository.find({ block_id: eventblock.block_id });
+        const augmentedSeats = await Promise.all(seats.map(async s => await this.seatsService.augmentSeat(s, event, token)));
         return new AugmentedEventblock(eventblock, event, block, category, augmentedSeats);
     }
 
     private appendBlock<TMergedEventblock extends ComparableMergedEventblockInterface>(previousValue: TMergedEventblock[], newValue: AugmentedEventblockInterface<TMergedEventblock>): TMergedEventblock[]  {
-        let block = newValue.block;
-        let matching = previousValue.find(mb => this.canMerge(mb, block));
+        const block = newValue.block;
+        const matching = previousValue.find(mb => this.canMerge(mb, block));
         if (matching !== undefined) { // we found a block to merge
             newValue.appendToMergedEventblock(matching);
         } else { // no block found, create a new one
@@ -89,9 +89,9 @@ export class EventblocksService {
     }
 
     private canMerge(mergedEventblock: ComparableMergedEventblockInterface, block: Block): boolean {
-        return mergedEventblock.name == block.name &&
-               mergedEventblock.numbered == block.numbered &&
-               mergedEventblock.seatplan_image_data_url == block.seatplan_image_data_url;
+        return mergedEventblock.name === block.name &&
+               mergedEventblock.numbered === block.numbered &&
+               mergedEventblock.seatplan_image_data_url === block.seatplan_image_data_url;
     }
 }
 
@@ -133,7 +133,7 @@ class AugmentedEventblock implements AugmentedEventblockInterface<MergedEventblo
     seats: AugmentedSeat[];
 
     createMergedEventblock(): MergedEventblock {
-        let parts = [ new MergedEventblockPart(this.eventblock.id, this.category, this.seats) ];
+        const parts = [ new MergedEventblockPart(this.eventblock.id, this.category, this.seats) ];
         return new MergedEventblock('' + this.eventblock.id, this.block.name, this.block.numbered, this.event, this.block.seatplan_image_data_url, parts);
     }
 

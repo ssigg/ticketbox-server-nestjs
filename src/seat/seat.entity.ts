@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
 export class Seat {
@@ -11,34 +11,34 @@ export class Seat {
     @Column()
     name: string;
 
-    @Column({ nullable: true, type: "real" })
+    @Column({ nullable: true, type: 'real' })
     x0: number;
 
-    @Column({ nullable: true, type: "real" })
+    @Column({ nullable: true, type: 'real' })
     y0: number;
 
-    @Column({ nullable: true, type: "real" })
+    @Column({ nullable: true, type: 'real' })
     x1: number;
 
-    @Column({ nullable: true, type: "real" })
+    @Column({ nullable: true, type: 'real' })
     y1: number;
 
-    @Column({ nullable: true, type: "real" })
+    @Column({ nullable: true, type: 'real' })
     x2: number;
 
-    @Column({ nullable: true, type: "real" })
+    @Column({ nullable: true, type: 'real' })
     y2: number;
 
-    @Column({ nullable: true, type: "real" })
+    @Column({ nullable: true, type: 'real' })
     x3: number;
 
-    @Column({ nullable: true, type: "real" })
+    @Column({ nullable: true, type: 'real' })
     y3: number;
 
     updateFromDto(dto: SeatDto): void {
         this.block_id = dto.block_id;
         this.name = dto.name;
-        
+
         if (dto.x0 !== undefined) {
             this.x0 = dto.x0;
         }

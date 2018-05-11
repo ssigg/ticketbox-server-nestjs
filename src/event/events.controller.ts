@@ -1,19 +1,19 @@
-import { Controller, Param, Body, Get, Delete, Put, Post } from "@nestjs/common";
-import { EventsService } from "./events.service";
-import { Event, EventWithBlocks } from "./event.entity";
-import { DeleteResult } from "typeorm/query-builder/result/DeleteResult";
+import { Controller, Param, Body, Get, Delete, Put, Post } from '@nestjs/common';
+import { EventsService } from './events.service';
+import { Event, EventWithBlocks } from './event.entity';
+import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
 
 @Controller('events')
 export class EventsController {
     constructor(private readonly eventsService: EventsService) { }
-    
+
     /**
      * @api {get} /events Get all visible events
      * @apiName GetVisibleEvents
      * @apiGroup Event
      * @apiPermission none
      * @apiVersion 1.0.0
-     * 
+     *
      * @apiSuccess {Number} id Event id
      * @apiSuccess {String} name Event name
      * @apiSuccess {String} location Location name
@@ -22,7 +22,7 @@ export class EventsController {
      * @apiSuccess {String} location_directions_car Directions for car drivers
      * @apiSuccess {String} dateandtime Textual description of the event date and time
      * @apiSuccess {Boolean} visible Visibility of the event
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * [
@@ -49,9 +49,9 @@ export class EventsController {
      * @apiGroup Event
      * @apiPermission none
      * @apiVersion 1.0.0
-     * 
+     *
      * @apiParam {Number} id Event id
-     * 
+     *
      * @apiSuccess {Number} id Event id
      * @apiSuccess {String} name Event name
      * @apiSuccess {String} location Location name
@@ -64,7 +64,7 @@ export class EventsController {
      * @apiSuccess {String} blocks.id Block key
      * @apiSuccess {String} blocks.name Block name
      * @apiSuccess {Boolean} blocks.numbered Is this a numbered block?
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
@@ -101,7 +101,7 @@ export class EventsAdminController {
      * @apiGroup Event
      * @apiPermission admin
      * @apiVersion 1.0.0
-     * 
+     *
      * @apiSuccess {Number} id Event id
      * @apiSuccess {String} name Event name
      * @apiSuccess {String} location Location name
@@ -110,7 +110,7 @@ export class EventsAdminController {
      * @apiSuccess {String} location_directions_car Directions for car drivers
      * @apiSuccess {String} dateandtime Textual description of the event date and time
      * @apiSuccess {Boolean} visible Visibility of the event
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * [
@@ -137,9 +137,9 @@ export class EventsAdminController {
      * @apiGroup Event
      * @apiPermission admin
      * @apiVersion 1.0.0
-     * 
+     *
      * @apiParam {Number} id Event id
-     * 
+     *
      * @apiSuccess {Number} id Event id
      * @apiSuccess {String} name Event name
      * @apiSuccess {String} location Location name
@@ -152,7 +152,7 @@ export class EventsAdminController {
      * @apiSuccess {String} blocks.id Block key
      * @apiSuccess {String} blocks.name Block name
      * @apiSuccess {Boolean} blocks.numbered Is this a numbered block?
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
@@ -184,7 +184,7 @@ export class EventsAdminController {
      * @apiGroup Event
      * @apiPermission admin
      * @apiVersion 1.0.0
-     * 
+     *
      * @apiParam {String} name Event name
      * @apiParam {String} [location] Location name
      * @apiParam {String} [location_address] Location address
@@ -192,12 +192,12 @@ export class EventsAdminController {
      * @apiParam {String} [location_directions_car] Directions for car drivers
      * @apiParam {String} [dateandtime] Textual description of the event date and time
      * @apiParam {Boolean} [visible] Visibility of the event
-     * 
+     *
      * @apiParamExample {json} Request-Example:
      * {
      *   "name": "Example Event"
      * }
-     * 
+     *
      * @apiSuccess (Created 201) {Number} id Event id
      * @apiSuccess (Created 201) {String} name Name
      * @apiSuccess (Created 201) {String} location Location name
@@ -206,7 +206,7 @@ export class EventsAdminController {
      * @apiSuccess (Created 201) {String} location_directions_car Directions for car drivers
      * @apiSuccess (Created 201) {String} dateandtime Textual description of the event date and time
      * @apiSuccess (Created 201) {Boolean} visible Visibility of the event
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 201 Created
      * {
@@ -231,7 +231,7 @@ export class EventsAdminController {
      * @apiGroup Event
      * @apiPermission admin
      * @apiVersion 1.0.0
-     * 
+     *
      * @apiParam {Number} id Event id
      * @apiParam {String} name Event name
      * @apiParam {String} [location] Location name
@@ -240,12 +240,12 @@ export class EventsAdminController {
      * @apiParam {String} [location_directions_car] Directions for car drivers
      * @apiParam {String} [dateandtime] Textual description of the event date and time
      * @apiParam {Boolean} [visible] Visibility of the event
-     * 
+     *
      * @apiParamExample {json} Request-Example:
      * {
      *   "name": "Example Event"
      * }
-     * 
+     *
      * @apiSuccess {Number} id Event id
      * @apiSuccess {String} name Name
      * @apiSuccess {String} location Location name
@@ -254,7 +254,7 @@ export class EventsAdminController {
      * @apiSuccess {String} location_directions_car Directions for car drivers
      * @apiSuccess {String} dateandtime Textual description of the event date and time
      * @apiSuccess {Boolean} visible Visibility of the event
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
@@ -279,9 +279,9 @@ export class EventsAdminController {
      * @apiGroup Event
      * @apiPermission admin
      * @apiVersion 1.0.0
-     * 
+     *
      * @apiParam {Number} id Event id
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      */

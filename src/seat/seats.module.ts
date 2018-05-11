@@ -1,7 +1,7 @@
 import * as passport from 'passport';
-import { Module, MiddlewaresConsumer, RequestMethod } from "@nestjs/common";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { NestModule } from "@nestjs/common/interfaces";
+import { Module, MiddlewaresConsumer, RequestMethod } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { NestModule } from '@nestjs/common/interfaces';
 import { AuthService } from '../auth/auth.service';
 import { JwtStrategy } from '../auth/jwt.strategy';
 import { SeatsAdminController } from './seats.controller';

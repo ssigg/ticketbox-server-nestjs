@@ -1,20 +1,20 @@
-import { Controller, Param, Body, Get, Delete, Put, Post, HttpStatus, HttpException } from "@nestjs/common";
-import { Reservation, AugmentedReservation, CreateReservationDto } from "./reservation.entity";
-import { DeleteResult } from "typeorm/query-builder/result/DeleteResult";
-import { BasketService } from "./basket.service";
-import { ReservationsService } from "./reservations.service";
+import { Controller, Param, Body, Get, Delete, Put, Post, HttpStatus, HttpException } from '@nestjs/common';
+import { Reservation, AugmentedReservation, CreateReservationDto } from './reservation.entity';
+import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
+import { BasketService } from './basket.service';
+import { ReservationsService } from './reservations.service';
 
 @Controller('reservations')
 export class ReservationsController {
     constructor(private readonly basketService: BasketService) { }
-    
+
     /**
      * @api {get} /reservations List user reservations
      * @apiName ListMyReservations
      * @apiGroup Reservation
      * @apiPermission none
      * @apiVersion 1.0.0
-     * 
+     *
      * @apiSuccess {Number} id Reservation id
      * @apiSuccess {String} unique_id Reservation's unique id
      * @apiSuccess {Event} event Reservation event
@@ -46,7 +46,7 @@ export class ReservationsController {
      * @apiSuccess {Boolean} isReduced Is this reservation reduced?
      * @apiSuccess {Number} price Reservation's price
      * @apiSuccess {Number} order_id Reservation order id (null if not ordered yet)
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * [
@@ -100,18 +100,18 @@ export class ReservationsController {
      * @apiGroup Reservation
      * @apiPermission none
      * @apiVersion 1.0.0
-     * 
+     *
      * @apiParam {Number} event_id: Event id
      * @apiParam {Number} seat_id: Seat id
      * @apiParam {Number} category_id: Category id
-     * 
+     *
      * @apiParamExample {json} Request-Example:
      * {
      *   "event_id": 1,
      *   "seat_id": 22,
      *   "category_id": 77
      * }
-     * 
+     *
      * @apiSuccess (Created 201) {Number} id Reservation id
      * @apiSuccess (Created 201) {String} unique_id Reservation's unique id
      * @apiSuccess (Created 201) {Event} event Reservation event
@@ -143,7 +143,7 @@ export class ReservationsController {
      * @apiSuccess (Created 201) {Boolean} isReduced Is this reservation reduced?
      * @apiSuccess (Created 201) {Number} price Reservation's price
      * @apiSuccess (Created 201) {Number} order_id Reservation order id (null if not ordered yet)
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 201 Created
      * {
@@ -183,9 +183,9 @@ export class ReservationsController {
      *   "price": 30,
      *   "order_id": null
      * }
-     * 
+     *
      * @apiError (SeatAlreadyReserved) 409 This seat cannot be reserved because a different user has it reserved already.
-     * 
+     *
      * @apiErrorExample {json} Error-Response:
      * HTTP/1.1 409 Conflict
      */
@@ -193,7 +193,7 @@ export class ReservationsController {
     public async create(@Body() body): Promise<AugmentedReservation> {
         try {
             return await this.basketService.addReservation(body.event_id, body.seat_id, body.category_id);
-        } catch(e) {
+        } catch (e) {
             throw new HttpException('This seat cannot be reserved because a different user has it reserved already.', HttpStatus.CONFLICT);
         }
     }
@@ -204,15 +204,15 @@ export class ReservationsController {
      * @apiGroup Reservation
      * @apiPermission none
      * @apiVersion 1.0.0
-     * 
+     *
      * @apiParam {Number} id Reservation id
      * @apiParam {Boolean} isReduced: New value of the reduction property
-     * 
+     *
      * @apiParamExample {json} Request-Example:
      * {
      *   "isReduced": true
      * }
-     * 
+     *
      * @apiSuccess {Number} id Reservation id
      * @apiSuccess {String} unique_id Reservation's unique id
      * @apiSuccess {Event} event Reservation event
@@ -244,7 +244,7 @@ export class ReservationsController {
      * @apiSuccess {Boolean} isReduced Is this reservation reduced?
      * @apiSuccess {Number} price Reservation's price
      * @apiSuccess {Number} order_id Reservation order id (null if not ordered yet)
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
@@ -296,9 +296,9 @@ export class ReservationsController {
      * @apiGroup Reservation
      * @apiPermission none
      * @apiVersion 1.0.0
-     * 
+     *
      * @apiParam {Number} id Reservation id
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      */
@@ -318,9 +318,9 @@ export class ReservationsExpirationTimestampController {
      * @apiGroup Reservation
      * @apiPermission none
      * @apiVersion 1.0.0
-     * 
+     *
      * @apiSuccess {Number} value Unix timestamp when reservations will expire
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
@@ -329,7 +329,7 @@ export class ReservationsExpirationTimestampController {
      */
      @Get()
     public async getExpirationTimestamp(): Promise<{ value: number }> {
-        let expirationTimestampInSeconds = await this.basketService.getExpirationTimestamp();
+        const expirationTimestampInSeconds = await this.basketService.getExpirationTimestamp();
         return { value: expirationTimestampInSeconds };
     }
 }
@@ -344,7 +344,7 @@ export class ReservationsAdminController {
      * @apiGroup Reservation
      * @apiPermission admin
      * @apiVersion 1.0.0
-     * 
+     *
      * @apiSuccess {Number} id Reservation id
      * @apiSuccess {String} unique_id Reservation's unique id
      * @apiSuccess {Event} event Reservation event
@@ -376,7 +376,7 @@ export class ReservationsAdminController {
      * @apiSuccess {Boolean} isReduced Is this reservation reduced?
      * @apiSuccess {Number} price Reservation's price
      * @apiSuccess {Number} order_id Reservation order id (null if not ordered yet)
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * [

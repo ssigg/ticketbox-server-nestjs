@@ -1,10 +1,10 @@
 import * as passport from 'passport';
-import { Module, MiddlewaresConsumer, RequestMethod } from "@nestjs/common";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { Event } from "./event.entity";
-import { EventsService } from "./events.service";
-import { EventsController, EventsAdminController } from "./events.controller";
-import { NestModule } from "@nestjs/common/interfaces";
+import { Module, MiddlewaresConsumer, RequestMethod } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Event } from './event.entity';
+import { EventsService } from './events.service';
+import { EventsController, EventsAdminController } from './events.controller';
+import { NestModule } from '@nestjs/common/interfaces';
 import { AuthService } from '../auth/auth.service';
 import { JwtStrategy } from '../auth/jwt.strategy';
 import { EventblocksService } from '../eventblock/eventblocks.service';

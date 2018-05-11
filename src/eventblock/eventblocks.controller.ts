@@ -1,7 +1,7 @@
-import { Controller, Get, Param, Body, HttpStatus, Session, HttpException, Post, Delete } from "@nestjs/common";
-import { EventblocksService } from "./eventblocks.service";
-import { MergedEventblock, Eventblock } from "./eventblock.entity";
-import { DeleteResult } from "typeorm";
+import { Controller, Get, Param, Body, HttpStatus, Session, HttpException, Post, Delete } from '@nestjs/common';
+import { EventblocksService } from './eventblocks.service';
+import { MergedEventblock, Eventblock } from './eventblock.entity';
+import { DeleteResult } from 'typeorm';
 
 @Controller('eventblocks')
 export class EventblocksController {
@@ -13,9 +13,9 @@ export class EventblocksController {
      * @apiGroup Eventblock
      * @apiPermission none
      * @apiVersion 1.0.0
-     * 
+     *
      * @apiParam {String} key Block key
-     * 
+     *
      * @apiSuccess {String} id Block id
      * @apiSuccess {String} name Block name
      * @apiSuccess {String} numbered Is this a numbered block?
@@ -51,7 +51,7 @@ export class EventblocksController {
      * @apiSuccess {Number} parts.seats.seat.y3 Coordinate
      * @apiSuccess {String} parts.seats.state Seat state (free|reservedbymyself|reserved|sold)
      * @apiSuccess {Number} parts.seats.reservation_id Reservation id
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
@@ -101,9 +101,9 @@ export class EventblocksController {
      *       }
      *   ]
      * }
-     * 
+     *
      * @apiError NotFound The eventblock with this key or at least one part of it could not be found.
-     * 
+     *
      * @apiErrorExample {json} Error-Response:
      * HTTP/1.1 404 Not Found
      * {
@@ -113,7 +113,7 @@ export class EventblocksController {
      */
     @Get(':key')
     public async find(@Param() params, @Session() session: { token: string }): Promise<MergedEventblock> {
-        let mergedEventblock = await this.eventblocksService.getMergedEventblock(params.key, session.token);
+        const mergedEventblock = await this.eventblocksService.getMergedEventblock(params.key, session.token);
         if (mergedEventblock === undefined) {
             throw new HttpException('The eventblock with this key or at least one part of it could not be found.', HttpStatus.NOT_FOUND);
         }
@@ -131,23 +131,23 @@ export class EventblocksAdminController {
      * @apiGroup Eventblock
      * @apiPermission admin
      * @apiVersion 1.0.0
-     * 
+     *
      * @apiParam {Number} event_id Event id
      * @apiParam {Number} block_id Block id
      * @apiParam {Number} category_id Category id
-     * 
+     *
      * @apiParamExample {json} Request-Example:
      * {
      *   "event_id": 1,
      *   "block_id": 2,
      *   "category_id": 3
      * }
-     * 
+     *
      * @apiSuccess (Created 201) {Number} id Eventblock id
      * @apiSuccess (Created 201) {Number} event_id Event id
      * @apiSuccess (Created 201) {Number} block_id Block id
      * @apiSuccess (Created 201) {Number} category_id Category id
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 201 Created
      * {
@@ -168,9 +168,9 @@ export class EventblocksAdminController {
      * @apiGroup Eventblock
      * @apiPermission admin
      * @apiVersion 1.0.0
-     * 
+     *
      * @apiParam {Number} id Eventblock id
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      */

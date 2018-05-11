@@ -1,6 +1,6 @@
 import * as passport from 'passport';
-import { Module, MiddlewaresConsumer, RequestMethod, NestModule } from "@nestjs/common";
-import { TypeOrmModule } from "@nestjs/typeorm";
+import { Module, MiddlewaresConsumer, RequestMethod, NestModule } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { EventblocksService } from './eventblocks.service';
 import { EventblocksController, EventblocksAdminController } from './eventblocks.controller';
 import { Event } from '../event/event.entity';

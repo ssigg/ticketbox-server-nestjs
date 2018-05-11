@@ -1,8 +1,8 @@
-import { Component } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm/repository/Repository";
-import { Category, CategoryDto } from "./category.entity";
-import { DeleteResult } from "typeorm/query-builder/result/DeleteResult";
+import { Component } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm/repository/Repository';
+import { Category, CategoryDto } from './category.entity';
+import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
 
 @Component()
 export class CategoriesService {
@@ -20,16 +20,16 @@ export class CategoriesService {
     }
 
     async create(dto: CategoryDto): Promise<Category> {
-        let category = await this.categoryRepository.create();
+        const category = await this.categoryRepository.create();
         category.updateFromDto(dto);
-        let savedCategory = await this.categoryRepository.save(category);
+        const savedCategory = await this.categoryRepository.save(category);
         return savedCategory;
     }
 
     async update(id: number, dto: CategoryDto): Promise<Category> {
-        let category = await this.categoryRepository.findOne({ id: id });
+        const category = await this.categoryRepository.findOne({ id: id });
         category.updateFromDto(dto);
-        let savedCategory = await this.categoryRepository.save(category);
+        const savedCategory = await this.categoryRepository.save(category);
         return savedCategory;
     }
 

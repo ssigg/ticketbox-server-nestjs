@@ -1,7 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
-import { Event } from "../event/event.entity"
-import { Category } from "../category/category.entity";
-import { Seat } from "../seat/seat.entity";
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Event } from '../event/event.entity';
+import { Category } from '../category/category.entity';
+import { Seat } from '../seat/seat.entity';
 
 @Entity()
 export class Block implements ThinBlock {
