@@ -3,7 +3,7 @@ import { UuidFactory } from "../utils/uuid.factory";
 import { Reservation, AugmentedReservation } from "../reservation/reservation.entity";
 import { ReservationsService } from "../reservation/reservations.service";
 import { DeleteResult } from "typeorm";
-import { TokenTimeService } from "./token-time.service";
+import { TokenTimeService } from "../utils/token-time.service";
 
 @Component()
 export class BasketService {
@@ -101,6 +101,8 @@ class BasketContainer {
     }
 
     private async createBasketIfReservationsAvailable(): Promise<Basket> {
+        let purgeTimestamp = this.tokenTimeService.getPurgeTimestamp();
+        await this.reservationsService.purgeReservationsByTimestamp(purgeTimestamp);
         let reservations = await this.reservationsService.findMyReservations(this.token);
         if (reservations.length > 0) {
             let expirationDuration = this.tokenTimeService.getTokenExpirationDuration();
@@ -182,7 +184,7 @@ class Basket {
     async purge(): Promise<DeleteResult> {
         this.throwIfPurged();
         this.isPurged = true;
-        return this.reservationsService.purgeReservations(this.token);
+        return this.reservationsService.purgeReservationsByToken(this.token);
     }
 
     private throwIfPurged(): void {

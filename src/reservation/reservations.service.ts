@@ -1,6 +1,6 @@
 import { Component } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository, Not, IsNull } from "typeorm";
+import { Repository, Not, IsNull, LessThan } from "typeorm";
 import { CreateReservationDto, Reservation, UpdateReductionReservationDto, AddToOrderReservationDto, AugmentedReservation } from "./reservation.entity";
 import { Event } from "../event/event.entity";
 import { Seat } from "../seat/seat.entity";
@@ -81,8 +81,12 @@ export class ReservationsService {
         return await this.reservationRepository.delete({ id: id });
     }
 
-    async purgeReservations(token: string): Promise<DeleteResult> {
+    async purgeReservationsByToken(token: string): Promise<DeleteResult> {
         return await this.reservationRepository.delete({ token: token, order_id: IsNull() });
+    }
+
+    async purgeReservationsByTimestamp(timestamp: number): Promise<DeleteResult> {
+        return await this.reservationRepository.delete({ timestamp: LessThan(timestamp), order_id: IsNull() });
     }
 
     private async augmentReservation(reservation: Reservation): Promise<AugmentedReservation> {

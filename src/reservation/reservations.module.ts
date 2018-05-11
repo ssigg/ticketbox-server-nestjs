@@ -11,7 +11,7 @@ import { UuidFactory } from "../utils/uuid.factory";
 import { AuthService } from "../auth/auth.service";
 import { JwtStrategy } from "../auth/jwt.strategy";
 import { BasketService } from './basket.service';
-import { TokenTimeService } from './token-time.service';
+import { TokenTimeService } from '../utils/token-time.service';
 
 @Module({
     imports: [ TypeOrmModule.forFeature([ Event, Category, Seat, Reservation ]) ],
