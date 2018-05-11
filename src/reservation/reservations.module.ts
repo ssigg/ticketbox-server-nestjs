@@ -12,16 +12,18 @@ import { AuthService } from "../auth/auth.service";
 import { JwtStrategy } from "../auth/jwt.strategy";
 import { BasketService } from './basket.service';
 import { TokenTimeService } from '../utils/token-time.service';
+import { OrdersService } from '../order/orders.service';
+import { Order } from '../order/order.entity';
 
 @Module({
-    imports: [ TypeOrmModule.forFeature([ Event, Category, Seat, Reservation ]) ],
-    components: [ UuidFactory, TokenTimeService, ReservationsService, BasketService ],
+    imports: [ TypeOrmModule.forFeature([ Event, Category, Seat, Reservation, Order ]) ],
+    components: [ UuidFactory, TokenTimeService, ReservationsService, OrdersService, BasketService ],
     controllers: [ ReservationsController, ReservationsExpirationTimestampController ]
 })
 export class ReservationsModule { }
 
 @Module({
-    imports: [ TypeOrmModule.forFeature([ Event, Category, Seat, Reservation ]) ],
+    imports: [ TypeOrmModule.forFeature([ Event, Category, Seat, Reservation, Order ]) ],
     components: [ AuthService, JwtStrategy, UuidFactory, ReservationsService ],
     controllers: [ ReservationsAdminController ]
 })

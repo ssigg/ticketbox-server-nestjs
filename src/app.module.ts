@@ -16,12 +16,13 @@ import { SeatsAdminModule } from './seat/seats.module';
 import { Reservation } from './reservation/reservation.entity';
 import { UuidFactory } from './utils/uuid.factory';
 import { ReservationsModule, ReservationsAdminModule } from './reservation/reservations.module';
+import { Order } from './order/order.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      entities: [ Event, Category, Block, Eventblock, Seat, Reservation ],
+      entities: [ Event, Category, Block, Eventblock, Seat, Reservation, Order ],
       url: process.env.DATABASE_URL,
       synchronize: true
     }),

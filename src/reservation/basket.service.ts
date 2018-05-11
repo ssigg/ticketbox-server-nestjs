@@ -1,16 +1,22 @@
 import { Component } from "@nestjs/common";
 import { UuidFactory } from "../utils/uuid.factory";
-import { Reservation, AugmentedReservation } from "../reservation/reservation.entity";
+import { Reservation, AugmentedReservation, OrderKind } from "../reservation/reservation.entity";
 import { ReservationsService } from "../reservation/reservations.service";
+import { OrdersService } from "../order/orders.service";
 import { DeleteResult } from "typeorm";
 import { TokenTimeService } from "../utils/token-time.service";
+import { OrderDto, Order, AugmentedOrder } from "../order/order.entity";
 
 @Component()
 export class BasketService {
     private token: string;
     private basketContainer: BasketContainer;
 
-    constructor(private readonly uuidFactory: UuidFactory, private readonly reservationsService: ReservationsService, private readonly tokenTimeService: TokenTimeService) { }
+    constructor(
+        private readonly uuidFactory: UuidFactory,
+        private readonly reservationsService: ReservationsService,
+        private readonly ordersService: OrdersService,
+        private readonly tokenTimeService: TokenTimeService) { }
 
     initializeAndReturnToken(token: string): string {
         if (token !== undefined && token !== null) {
@@ -18,7 +24,7 @@ export class BasketService {
         } else {
             this.token = this.uuidFactory.create();
         }
-        this.basketContainer = new BasketContainer(this.reservationsService, this.token, this.tokenTimeService);
+        this.basketContainer = new BasketContainer(this.reservationsService, this.ordersService, this.token, this.tokenTimeService);
         return this.token;
     }
 
@@ -66,13 +72,15 @@ export class BasketService {
 
 class BasketContainer {
     private readonly reservationsService: ReservationsService;
+    private readonly ordersService: OrdersService;
     private readonly token: string;
     private readonly tokenTimeService: TokenTimeService;
     
     private basket: Basket = undefined;
 
-    constructor(reservationsService: ReservationsService, token: string, tokenTimeService: TokenTimeService) {
+    constructor(reservationsService: ReservationsService, ordersService: OrdersService, token: string, tokenTimeService: TokenTimeService) {
         this.reservationsService = reservationsService;
+        this.ordersService = ordersService;
         this.token = token;
         this.tokenTimeService = tokenTimeService;
     }
@@ -81,7 +89,7 @@ class BasketContainer {
         if (this.basket === undefined) {
             this.basket = await this.createBasketIfReservationsAvailable();
         }
-        
+
         this.basket = this.purgeBasketIfInvalid(this.basket);
 
         return this.basket;
@@ -102,7 +110,7 @@ class BasketContainer {
         let reservations = await this.reservationsService.findMyReservations(this.token);
         if (reservations.length > 0) {
             let timestamp = reservations[0].timestamp;
-            return new Basket(this.reservationsService, this.token, this.tokenTimeService, timestamp, reservations);
+            return new Basket(this.reservationsService, this.ordersService, this.token, this.tokenTimeService, timestamp, reservations);
         } else {
             return undefined;
         }
@@ -110,7 +118,7 @@ class BasketContainer {
 
     private createEmptyBasket(): Basket {
         let now = this.tokenTimeService.getNow();
-        return new Basket(this.reservationsService, this.token, this.tokenTimeService, now, []);
+        return new Basket(this.reservationsService, this.ordersService, this.token, this.tokenTimeService, now, []);
     }
 
     private purgeBasketIfInvalid(basket: Basket): Basket {
@@ -124,6 +132,7 @@ class BasketContainer {
 
 class Basket {
     private readonly reservationsService: ReservationsService;
+    private readonly ordersService: OrdersService;
     private readonly token: string;
     private readonly tokenTimeService: TokenTimeService;
     private readonly timestamp: number;
@@ -132,8 +141,9 @@ class Basket {
     private reservations: AugmentedReservation[];
     private isPurged: boolean = false;
 
-    constructor(reservationsService: ReservationsService, token: string, tokenTimeService: TokenTimeService, timestamp: number, reservations: AugmentedReservation[]) {
+    constructor(reservationsService: ReservationsService, ordersService: OrdersService, token: string, tokenTimeService: TokenTimeService, timestamp: number, reservations: AugmentedReservation[]) {
         this.reservationsService = reservationsService;
+        this.ordersService = ordersService;
         this.token = token;
         this.tokenTimeService = tokenTimeService;
         this.timestamp = timestamp;
@@ -165,6 +175,12 @@ class Basket {
         let reservation = await this.reservationsService.updateReduction(id, this.token, { is_reduced: isReduced });
         this.reservations = this.reservations.filter(r => r.id != id).concat(reservation);
         return reservation;
+    }
+
+    async createOrder(orderDto: OrderDto): Promise<AugmentedOrder> {
+        this.throwIfPurged();
+        let augmentedOrder = await this.ordersService.create(orderDto, this.token, this.reservations);
+        return augmentedOrder;
     }
 
     isValid(): boolean {

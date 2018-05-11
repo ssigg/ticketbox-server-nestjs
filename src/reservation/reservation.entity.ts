@@ -18,7 +18,7 @@ export class Reservation {
     @Column()
     category_id: number;
 
-    @Column()
+    @Column({ unique: true })
     unique_id: string;
 
     @Column()
