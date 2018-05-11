@@ -1,4 +1,5 @@
 import * as express from 'express';
+import * as compression from 'compression';
 import * as cookieSession from 'cookie-session';
 import * as bodyParser from 'body-parser';
 import { NestFactory } from '@nestjs/core';
@@ -6,6 +7,7 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
 	const instance = new express();
+	instance.use(compression());
 	instance.use(cookieSession({
 		name: 'token',
 		secret: process.env.SESSION_SECRET || 'secret'
