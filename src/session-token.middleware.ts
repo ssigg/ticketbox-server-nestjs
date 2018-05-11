@@ -7,7 +7,8 @@ export class SessionTokenMiddleware implements NestMiddleware {
     constructor(private readonly basketService: BasketService) { }
     resolve(): ExpressMiddleware {
         return (req, res, next) => {
-            req.session.token = this.basketService.initializeAndReturnToken(req.session.token);
+            let token = this.basketService.initializeAndReturnToken(req.session.token);
+            req.session = { token: token };
             next();
         };
     }

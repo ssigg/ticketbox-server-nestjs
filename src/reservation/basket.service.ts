@@ -12,7 +12,7 @@ export class BasketService {
 
     constructor(private readonly uuidFactory: UuidFactory, private readonly reservationsService: ReservationsService, private readonly tokenTimeService: TokenTimeService) { }
 
-    async initializeAndReturnToken(token: string): Promise<string> {
+    initializeAndReturnToken(token: string): string {
         if (token !== undefined && token !== null) {
             this.token = token;
         } else {
