@@ -61,7 +61,7 @@ describe('ReservationsExpirationTimestampController', () => {
     });
 
     it('Returns the token expiration timestamp', async () => {
-        let basketServiceGetExpirationTimestampInSeconds = spyOn(basketService, 'getExpirationTimestampInSeconds').and.returnValue(42);
+        let basketServiceGetExpirationTimestampInSeconds = spyOn(basketService, 'getExpirationTimestamp').and.returnValue(42);
         let timestamp = await reservationsController.getExpirationTimestamp();
         expect(basketServiceGetExpirationTimestampInSeconds).toHaveBeenCalledTimes(1);
         expect(timestamp.value).toEqual(42);

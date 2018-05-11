@@ -329,7 +329,7 @@ export class ReservationsExpirationTimestampController {
      */
      @Get()
     public async getExpirationTimestamp(): Promise<{ value: number }> {
-        let expirationTimestampInSeconds = await this.basketService.getExpirationTimestampInSeconds()
+        let expirationTimestampInSeconds = await this.basketService.getExpirationTimestamp();
         return { value: expirationTimestampInSeconds };
     }
 }

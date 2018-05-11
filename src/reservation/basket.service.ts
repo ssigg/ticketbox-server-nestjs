@@ -1,4 +1,4 @@
-import { Component, Delete } from "@nestjs/common";
+import { Component } from "@nestjs/common";
 import { UuidFactory } from "../utils/uuid.factory";
 import { Reservation, AugmentedReservation } from "../reservation/reservation.entity";
 import { ReservationsService } from "../reservation/reservations.service";
@@ -54,10 +54,10 @@ export class BasketService {
         }
     }
 
-    async getExpirationTimestampInSeconds(): Promise<number> {
+    async getExpirationTimestamp(): Promise<number> {
         let basket = await this.basketContainer.getBasket();
         if (basket !== undefined) {
-            return basket.isValidUntilInSeconds();
+            return basket.getExpirationTimestamp();
         } else {
             return 0;
         }
@@ -88,11 +88,7 @@ class BasketContainer {
     }
 
     async getOrCreateBasket(): Promise<Basket> {
-        if (this.basket === undefined) {
-            this.basket = await this.createBasketIfReservationsAvailable();
-        }
-        
-        this.basket = this.purgeBasketIfInvalid(this.basket);
+        this.basket = await this.getBasket();
 
         if (this.basket === undefined) {
             this.basket = this.createEmptyBasket();
@@ -105,18 +101,16 @@ class BasketContainer {
         await this.reservationsService.purgeReservationsByTimestamp(purgeTimestamp);
         let reservations = await this.reservationsService.findMyReservations(this.token);
         if (reservations.length > 0) {
-            let expirationDuration = this.tokenTimeService.getTokenExpirationDuration();
             let timestamp = reservations[0].timestamp;
-            return new Basket(this.reservationsService, this.token, expirationDuration, timestamp, reservations);
+            return new Basket(this.reservationsService, this.token, this.tokenTimeService, timestamp, reservations);
         } else {
             return undefined;
         }
     }
 
     private createEmptyBasket(): Basket {
-        let expirationDuration = this.tokenTimeService.getTokenExpirationDuration();
         let now = this.tokenTimeService.getNow();
-        return new Basket(this.reservationsService, this.token, expirationDuration, now, []);
+        return new Basket(this.reservationsService, this.token, this.tokenTimeService, now, []);
     }
 
     private purgeBasketIfInvalid(basket: Basket): Basket {
@@ -131,17 +125,19 @@ class BasketContainer {
 class Basket {
     private readonly reservationsService: ReservationsService;
     private readonly token: string;
+    private readonly tokenTimeService: TokenTimeService;
     private readonly timestamp: number;
     private readonly expirationTimestamp: number;
     
     private reservations: AugmentedReservation[];
     private isPurged: boolean = false;
 
-    constructor(reservationsService: ReservationsService, token: string, tokenExpirationDuration: number, timestamp: number, reservations: AugmentedReservation[]) {
+    constructor(reservationsService: ReservationsService, token: string, tokenTimeService: TokenTimeService, timestamp: number, reservations: AugmentedReservation[]) {
         this.reservationsService = reservationsService;
-        this.timestamp = timestamp;
         this.token = token;
-        this.expirationTimestamp = this.timestamp + tokenExpirationDuration;
+        this.tokenTimeService = tokenTimeService;
+        this.timestamp = timestamp;
+        this.expirationTimestamp = this.timestamp + tokenTimeService.getTokenExpirationDuration();
         this.reservations = reservations;
     }
 
@@ -173,10 +169,10 @@ class Basket {
 
     isValid(): boolean {
         this.throwIfPurged();
-        return this.expirationTimestamp >= Math.round(Date.now() / 1000);
+        return this.expirationTimestamp >= this.tokenTimeService.getNow();
     }
 
-    isValidUntilInSeconds(): number {
+    getExpirationTimestamp(): number {
         this.throwIfPurged();
         return this.expirationTimestamp;
     }

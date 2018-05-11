@@ -1,4 +1,4 @@
-import { Repository, IsNull, Not } from "typeorm";
+import { Repository, IsNull, Not, LessThan } from "typeorm";
 import { Reservation, CreateReservationDto, UpdateReductionReservationDto, AddToOrderReservationDto, OrderKind, AugmentedReservation } from "./reservation.entity";
 import { ReservationsService } from "./reservations.service";
 import { Event } from "../event/event.entity";
@@ -189,5 +189,17 @@ describe('ReservationsService', () => {
         let reservationRepositoryDeleteSpy = spyOn(reservationRepository, 'delete');
         await reservationsService.delete(1);
         expect(reservationRepositoryDeleteSpy).toHaveBeenCalledWith({ id: 1 });
+    });
+
+    it('Purges reservations by token', async () => {
+        let reservationRepositoryDeleteSpy = spyOn(reservationRepository, 'delete');
+        await reservationsService.purgeReservationsByToken('token');
+        expect(reservationRepositoryDeleteSpy).toHaveBeenCalledWith({ token: 'token', order_id: IsNull() });
+    });
+
+    it('Purges reservations by timestamp', async () => {
+        let reservationRepositoryDeleteSpy = spyOn(reservationRepository, 'delete');
+        await reservationsService.purgeReservationsByTimestamp(1);
+        expect(reservationRepositoryDeleteSpy).toHaveBeenCalledWith({ timestamp: LessThan(1), order_id: IsNull() });
     });
 });
