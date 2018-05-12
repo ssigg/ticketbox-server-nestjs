@@ -17,6 +17,7 @@ import { Reservation } from './reservation/reservation.entity';
 import { UuidFactory } from './utils/uuid.factory';
 import { ReservationsModule, ReservationsAdminModule } from './reservation/reservations.module';
 import { Order } from './order/order.entity';
+import { OrdersModule } from './order/orders.module';
 
 @Module({
   imports: [
@@ -35,7 +36,8 @@ import { Order } from './order/order.entity';
     EventblocksAdminModule,
     SeatsAdminModule,
     ReservationsModule,
-    ReservationsAdminModule
+    ReservationsAdminModule,
+    OrdersModule
   ],
   controllers: [],
   components: [ UuidFactory ]

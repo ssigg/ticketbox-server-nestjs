@@ -31,7 +31,7 @@ export class BasketService {
     async getReservations(): Promise<AugmentedReservation[]> {
         const basket = await this.basketContainer.getBasket();
         if (basket !== undefined) {
-            return basket.getReservations();
+            return await basket.getReservations();
         } else {
             return [];
         }
@@ -39,13 +39,13 @@ export class BasketService {
 
     async addReservation(event_id: number, seat_id: number, category_id: number): Promise<AugmentedReservation> {
         const basket = await this.basketContainer.getOrCreateBasket();
-        return basket.addReservation(event_id, seat_id, category_id);
+        return await basket.addReservation(event_id, seat_id, category_id);
     }
 
     async removeReservation(id: number): Promise<DeleteResult> {
         const basket = await this.basketContainer.getBasket();
         if (basket !== undefined) {
-            return basket.removeReservation(id);
+            return await basket.removeReservation(id);
         } else {
             return new Promise<DeleteResult>((resolve, reject) => resolve());
         }
@@ -57,6 +57,24 @@ export class BasketService {
             return await basket.updateReduction(id, isReduced);
         } else {
             return new Promise<AugmentedReservation>((resolve, reject) => reject('Reservation has timed out.'));
+        }
+    }
+
+    async createOrder(values: { title: string, firstname: string, lastname: string, email: string, locale: string }): Promise<AugmentedOrder> {
+        const basket = await this.basketContainer.getBasket();
+        if (basket !== undefined) {
+            const dto = {
+                unique_id: this.uuidFactory.create(),
+                title: values.title,
+                firstname: values.firstname,
+                lastname: values.lastname,
+                email: values.email,
+                locale: values.locale,
+                timestamp: this.tokenTimeService.getNow()
+            };
+            return await basket.createOrder(dto);
+        } else {
+            return new Promise<AugmentedOrder>((resolve, reject) => reject('Reservations have timed out.'));
         }
     }
 
