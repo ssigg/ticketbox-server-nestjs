@@ -4,6 +4,7 @@ import { ReservationsService } from './reservations.service';
 import { TokenTimeService } from '../utils/token-time.service';
 import { AugmentedReservation } from './reservation.entity';
 import { OrdersService } from '../order/orders.service';
+import { AugmentedOrder } from '../order/order.entity';
 
 describe('BasketService', () => {
     let uuidFactory: UuidFactory;
@@ -222,12 +223,51 @@ describe('BasketService', () => {
         expect(expirationTimestamp).toEqual(afterPast + expirationDuration);
     });
 
-    it('Returns 0 when basket is empty', async () => {
+    it('Returns expiration timestamp 0 when basket is empty', async () => {
         reservationsServiceFindMyReservationsSpy.and.returnValue([]);
         tokenTimeServiceGetTokenExpirationDurationSpy.and.returnValue(expirationDuration);
 
         const expirationTimestamp = await basketService.getExpirationTimestamp();
 
         expect(expirationTimestamp).toEqual(0);
+    });
+
+    it('Creates an order', async () => {
+        tokenTimeServiceGetPurgeTimestampSpy.and.returnValue(past);
+        reservationsServiceFindMyReservationsSpy.and.returnValue(repositoryReservations);
+        tokenTimeServiceGetTokenExpirationDurationSpy.and.returnValue(expirationDuration);
+        const uuidFactoryCreateSpy = spyOn(uuidFactory, 'create').and.returnValue('uuid');
+        const augmentedOrderMock = new AugmentedOrder(1, 'unique', 'm', 'firstname', 'lastname', 'email', 'locale', 2, []);
+        const ordersServiceCreateSpy = spyOn(ordersService, 'create').and.returnValue(augmentedOrderMock);
+        const orderProperties = { title: 'm', firstname: 'John', lastname: 'Doe', email: 'john.doe@example.com', locale: 'en' };
+
+        const augmentedOrder = await basketService.createOrder(orderProperties);
+
+        const orderDto = {
+            unique_id: 'uuid',
+            title: orderProperties.title,
+            firstname: orderProperties.firstname,
+            lastname: orderProperties.lastname,
+            email: orderProperties.email,
+            locale: orderProperties.locale,
+            timestamp: now
+        };
+        expect(tokenTimeServiceGetPurgeTimestampSpy).toHaveBeenCalledTimes(1);
+        expect(reservationsServicePurgeReservationsByTimestampSpy).toHaveBeenCalledWith(past);
+        expect(reservationsServiceFindMyReservationsSpy).toHaveBeenCalledWith(givenToken);
+        expect(tokenTimeServiceGetNowSpy).toHaveBeenCalledTimes(2);
+        expect(tokenTimeServiceGetTokenExpirationDurationSpy).toHaveBeenCalledTimes(1);
+        expect(ordersServiceCreateSpy).toHaveBeenCalledWith(orderDto, givenToken, repositoryReservations);
+    });
+
+    it('Rejects if no reservations are in basket', async () => {
+        reservationsServiceFindMyReservationsSpy.and.returnValue([]);
+        tokenTimeServiceGetTokenExpirationDurationSpy.and.returnValue(expirationDuration);
+
+        const orderProperties = { title: 'm', firstname: 'John', lastname: 'Doe', email: 'john.doe@example.com', locale: 'en' };
+
+        let rejected: boolean;
+        await basketService.createOrder(orderProperties).catch(_ => rejected = true);
+        expect(rejected).toEqual(true, 'Promise has to be rejected when no reservations are in basket.');
     });
 });
