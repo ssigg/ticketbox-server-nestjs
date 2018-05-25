@@ -23,7 +23,7 @@ import { OrdersModule } from './order/orders.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      entities: [ Event, Category, Block, Eventblock, Seat, Reservation, Order ],
+      entities: [Event, Category, Block, Eventblock, Seat, Reservation, Order],
       url: process.env.DATABASE_URL,
       synchronize: true
     }),
@@ -40,11 +40,11 @@ import { OrdersModule } from './order/orders.module';
     OrdersModule
   ],
   controllers: [],
-  components: [ UuidFactory ]
+  components: []
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewaresConsumer): void | MiddlewaresConsumer {
-    consumer.apply([ CorsMiddleware, SessionTokenMiddleware ]).forRoutes({
+    consumer.apply(CorsMiddleware).forRoutes({
       path: '*', method: RequestMethod.ALL
     });
   }

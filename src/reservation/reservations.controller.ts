@@ -91,7 +91,7 @@ export class ReservationsController {
      */
     @Get()
     public async findMine(): Promise<AugmentedReservation[]> {
-        return this.basketService.getReservations();
+        return await this.basketService.getReservations();
     }
 
     /**

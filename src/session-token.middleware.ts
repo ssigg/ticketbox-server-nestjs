@@ -5,6 +5,7 @@ import { BasketService } from './reservation/basket.service';
 @Middleware()
 export class SessionTokenMiddleware implements NestMiddleware {
     constructor(private readonly basketService: BasketService) { }
+
     resolve(): ExpressMiddleware {
         return (req, res, next) => {
             const token = this.basketService.initializeAndReturnToken(req.session.token);

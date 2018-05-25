@@ -14,18 +14,25 @@ import { BasketService } from './basket.service';
 import { TokenTimeService } from '../utils/token-time.service';
 import { OrdersService } from '../order/orders.service';
 import { Order } from '../order/order.entity';
+import { SessionTokenMiddleware } from '../session-token.middleware';
 
 @Module({
-    imports: [ TypeOrmModule.forFeature([ Event, Category, Seat, Reservation, Order ]) ],
-    components: [ UuidFactory, TokenTimeService, ReservationsService, OrdersService, BasketService ],
-    controllers: [ ReservationsController, ReservationsExpirationTimestampController ]
+    imports: [TypeOrmModule.forFeature([Event, Category, Seat, Reservation, Order])],
+    components: [UuidFactory, TokenTimeService, ReservationsService, OrdersService, BasketService],
+    controllers: [ReservationsController, ReservationsExpirationTimestampController]
 })
-export class ReservationsModule { }
+export class ReservationsModule implements NestModule {
+    configure(consumer: MiddlewaresConsumer): void | MiddlewaresConsumer {
+        consumer.apply(SessionTokenMiddleware).forRoutes({
+            path: '*', method: RequestMethod.ALL
+        });
+    }
+}
 
 @Module({
-    imports: [ TypeOrmModule.forFeature([ Event, Category, Seat, Reservation, Order ]) ],
-    components: [ AuthService, JwtStrategy, UuidFactory, ReservationsService ],
-    controllers: [ ReservationsAdminController ]
+    imports: [TypeOrmModule.forFeature([Event, Category, Seat, Reservation, Order])],
+    components: [AuthService, JwtStrategy, UuidFactory, ReservationsService],
+    controllers: [ReservationsAdminController]
 })
 export class ReservationsAdminModule implements NestModule {
     configure(consumer: MiddlewaresConsumer): void {
